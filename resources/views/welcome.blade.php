@@ -3,11 +3,17 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
+        <title>POS-CFX</title>
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <script src='/js/bootstrap.bundle.min.js'></script>
+        <script src='/js/big.min.js'></script>
+        <script src="/js/chart.js"></script>
     </head>
-    <body class="antialiased">
-        <p>{{ Auth::user() }}</p>
-        <a href="{{ route("google.auth") }}"><button>asdasd</button></a>     
+    <body>
+        <div id="app">
+            <root :user='@json(Auth::user())' :google-auth='`{{ route("google.auth") }}`'></root>
+        </div>
     </body>
+    <script src="{{ asset('/js/main.js') }}">
+    </script>
 </html>

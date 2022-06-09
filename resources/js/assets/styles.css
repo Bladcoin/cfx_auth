@@ -1,0 +1,140 @@
+body {
+	overflow-y: scroll;
+}
+caption {
+	color: #000;
+}
+a, a:hover{
+	color: #F53838;
+}
+.bg-light {
+	background-color: #fbfbfb !important;
+}
+.text-primary {
+	color: #F53838 !important;
+}
+.alert-primary {
+	background: #FFECEC;
+	color: inherit;
+	border-color: #F53838;
+}
+.btn-primary {
+	background-color: #F53838;
+	border-color: #F53838;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:disabled {
+	background: #ffab4a;
+	border-color: #F53838;
+}
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:active:focus {
+	box-shadow: 0 0 0 0.25rem #FFECEC;
+}
+.btn-link,
+.btn-link:hover,
+.btn-link:focus,
+.btn-link:active,
+.btn-link:disabled {
+	color: #F53838;
+}
+#app {
+	position: relative;
+}
+.logo {
+	width: 250px;
+}
+.h-num {
+	margin-top: 0.25rem;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.intro-title {
+	color: #565a69;
+}
+
+.b-shadow {
+	box-shadow: rgb(0 0 0/5%) 0 6px 10px;
+}
+
+.table>:not(:first-child) {
+	border-top: 2px solid #dee2e6;
+}
+.table-striped>tbody>tr:nth-of-type(odd)>*{
+	--bs-table-accent-bg: #FFECEC;
+}
+.footer-item {
+	display: inline-block;
+	width: 180px;
+	color: inherit;
+}
+.preloader {
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	background: rgba(255,255,255,0.5);
+}
+
+.spinner {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -0.5rem 0 0 -0.5rem;
+}
+
+.nav-link {
+	color: #F53838;
+}
+
+.nav.nav-tabs {
+	flex-wrap: nowrap;
+	overflow-y: hidden;
+	margin-bottom: -1px;
+	width: 100%;
+}
+
+.nav.nav-tabs .nav-link {
+	transition: none;
+}
+
+.nav.nav-tabs .nav-link:not(.active) {
+	color: #ffab4a;
+}
+
+.nav.nav-tabs .nav-link.active {
+	background: rgba(250,250,250,0.8);
+	border-bottom: 0;
+	border-bottom: 2px solid #fbfbfb;
+	color: #F53838;
+}
+
+.pre-line {
+	white-space: pre-line;
+}
+
+.lang {
+	display: inline-block;
+	vertical-align: top;
+	margin-left: 0.5rem;
+	width: auto;
+	height: 1.5rem;
+	cursor: pointer;
+}
+.lang.active {
+	opacity: 0.5;
+	cursor: default;
+}
+
+.chart {
+	width: 100% !important;
+	height: 170px !important;
+}
