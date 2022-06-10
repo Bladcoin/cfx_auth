@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,12 +21,15 @@ class LoginController extends Controller
     public function newUser(RegisterRequest $request)
     {
         try {
-            User::create([
+            $user = User::create([
                 "email" => $request->email,
                 "password" => bcrypt($request->password),
                 "name" => $request->name
             ]);
 
+
+
+            event(new Registered($user));
             return response()->json([
                 "status" => 200,
                 "message" => "OK"
