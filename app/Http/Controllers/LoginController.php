@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -40,6 +41,26 @@ class LoginController extends Controller
                 "status" => 400,
                 "message" => $error
             ], 400);
+        }
+    }
+
+
+    public function login(LoginRequest $request)
+    {
+        try {
+            if (Auth::attempt(["email" => $request->email, "password" => $request->password])) {
+                $request->session()->regenerate();
+                return response()->json([
+                    "status" => 200,
+                    "message" => "OK"
+                ]);
+            }
+        } catch (\Throwable $error) {
+            $error = $error === "" ? "Произошла неизвестная ошибка! Попробуйте позже!" : $error;
+            return response()->json([
+                "status" => 400,
+                "message" => $error
+            ]);
         }
     }
 }
