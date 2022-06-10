@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-//import router from './router'
+import router from './router'
 import i18n from './i18n'
 import 'js-conflux-sdk/dist/js-conflux-sdk.umd.min'
 import 'bootstrap-icons/font/bootstrap-icons.css'
@@ -17,7 +17,7 @@ const api = axios.create({
 
 app.config.globalProperties.$api = api
 
-//app.use(router)
+app.use(router)
 app.use(i18n)
 app.use(VueAxios, axios)
 app.component('root', App)

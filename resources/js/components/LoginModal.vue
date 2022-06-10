@@ -67,6 +67,9 @@
 								<button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Забыли пароль?</button>
 							</div>
 						</div>
+						<div class="alert alert-danger mt-3" v-if="errorMessage">
+							{{ errorMessage }}
+						</div>
 					</form>
 				</div>
 			</div>
@@ -93,6 +96,7 @@ export default {
 		return {
 			submitted: false,
 			isLoading: false,
+			errorMessage: '',
 			form: {
 				email: '',
 				password: '',
@@ -108,7 +112,7 @@ export default {
 				},
 				password: {
 					required,
-					minLength: minLength(6),
+					minLength: minLength(1),
 				},
 			}
 		}
@@ -135,18 +139,33 @@ export default {
 					password: this.form.password,
 				})
 				this.isLoading = false
-				//window.location.href = '/'
+				window.location.href = '/'
 			} catch (e) {
 				this.isLoading = false
+				if (e.response.status === 400) {
+					this.errorMessage = 'Неверный email и/или пароль'
+				} else if (e.response.status === 422) {
+					console.log('error 422')
+					this.errorMessage = e.response.data.message
+				}
 				console.log(e)
 			}
 		},
 		reset() {
 			this.submitted = false
+			this.errorMessage = ''
 			this.form.email = ''
 			this.form.password = ''
 		},
-	}
+	},
+	watch: {
+		form: {
+			handler() {
+				this.errorMessage = ''
+			},
+			deep: true
+		},
+	},
 }
 </script>
 

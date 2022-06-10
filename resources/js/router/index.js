@@ -5,8 +5,16 @@ const router = createRouter({
 	routes: [
         {
             path: '/',
-            name: 'home',
-            component: () => import('../views/Home.vue')
+			name: 'root',
+            component: () => import('../views/Home.vue'),
+			alias: ['/login'],
+			children: [
+				//{
+					//path: 'login',
+					//name: 'login',
+					//component: () => import('~/views/Home'),
+				//},
+			]
         },
 	]
 })
