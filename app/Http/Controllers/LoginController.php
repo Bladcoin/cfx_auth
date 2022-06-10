@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+
+    public function index()
+    {
+
+        return view('welcome');
+    }
+
+    
     public function logout(Request $request)
     {
         Auth::logout();
@@ -50,12 +58,14 @@ class LoginController extends Controller
         try {
             if (Auth::attempt(["email" => $request->email, "password" => $request->password])) {
                 $request->session()->regenerate();
-                return response()->json([
-                    "status" => 200,
-                    "message" => "OK",
-                    "user" => Auth::user()
-                ]);
+            } else {
+                throw new \Throwable("Data invalid");
             }
+            return response()->json([
+                "status" => 200,
+                "message" => "OK",
+                "user" => Auth::user()
+            ]);
         } catch (\Throwable $error) {
             $error = $error === "" ? "Произошла неизвестная ошибка! Попробуйте позже!" : $error;
             return response()->json([

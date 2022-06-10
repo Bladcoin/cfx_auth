@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmailVerfifiedController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\LoginController;
 use GuzzleHttp\Psr7\Request;
@@ -36,18 +37,11 @@ Route::prefix("facebook")->group(function() {
 
 Route::post("/new-user", [LoginController::class, "newUser"]);
 
-Route::get('/email/verify', function () {
-    return view('verify-email');
-})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', [EmailVerfifiedController::class, "verifyNotification"])->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [EmailVerfifiedController::class, "verifyFromEmail"])->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::get("login", function() {
-    return view('welcome');
-})->name("login");
+Route::get("login", [LoginController::class, "index"])->name("login");
 
 Route::post("/app/login", [LoginController::class, "login"]);
 
