@@ -52,7 +52,8 @@ class LoginController extends Controller
                 $request->session()->regenerate();
                 return response()->json([
                     "status" => 200,
-                    "message" => "OK"
+                    "message" => "OK",
+                    "user" => Auth::user()
                 ]);
             }
         } catch (\Throwable $error) {
@@ -60,7 +61,7 @@ class LoginController extends Controller
             return response()->json([
                 "status" => 400,
                 "message" => $error
-            ]);
+            ], 400);
         }
     }
 }

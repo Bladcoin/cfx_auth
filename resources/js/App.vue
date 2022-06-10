@@ -47,6 +47,33 @@
 							</button>
 						</template>
 					</div>
+					<div class="col-auto" v-if="user">
+						<div class="dropdown">
+							<button class="btn btn-outline-danger dropdown-toggle" type="button" data-bs-toggle="dropdown">
+								<i class="bi bi-person-circle"></i>
+								{{ user.name }}
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+								<li><button class="dropdown-item" type="button">Action</button></li>
+								<li><button class="dropdown-item" type="button">Another action</button></li>
+								<li><button class="dropdown-item" type="button">Something else here</button></li>
+								<li><hr class="dropdown-divider"></li>
+								<li>
+									<button
+										class="position-relative dropdown-item"
+										type="button"
+										@click="logout"
+										:disabled="isLoggingOut"
+									>
+										<span :class="{invisible: isLoggingOut}">
+											Выйти
+										</span>
+										<span class="spinner spinner-border spinner-border-sm" v-if="isLoggingOut"></span>
+									</button>
+								</li>
+							</ul>
+						</div>
+					</div>
 					<div class="col-auto">
 						<img
 							src="./assets/img/en.svg"
@@ -331,6 +358,7 @@ export default {
 			eSpaceBlockNumber: 0,
 			eSpaceAccount: '',
 			coreAccount: '',
+			isLoggingOut: false,
 		}
 	},
 	async created() {
@@ -718,6 +746,17 @@ export default {
 		changeSpace(space) {
 			localStorage.setItem('space', space)
 			window.location.reload()
+		},
+		async logout() {
+			try {
+				this.isLoggingOut = true
+				await this.$api.post('/logout')
+				this.isLoggingOut = false
+				window.location.href = '/'
+			} catch (e) {
+				this.isLoggingOut = false
+				console.log(e)
+			}
 		}
 	}
 }

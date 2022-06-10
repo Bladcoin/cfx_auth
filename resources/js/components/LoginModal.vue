@@ -135,7 +135,7 @@ export default {
 					password: this.form.password,
 				})
 				this.isLoading = false
-				window.location.href = '/'
+				//window.location.href = '/'
 			} catch (e) {
 				this.isLoading = false
 				console.log(e)
