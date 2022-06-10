@@ -25,7 +25,8 @@ class RegisterRequest extends FormRequest
     {
         return [
             "email" => "email|required",
-            "password" => "required|min:6|max:20"
+            "password" => "required|min:6|max:20",
+            "name" => "required"
         ];
     }
 
@@ -35,7 +36,8 @@ class RegisterRequest extends FormRequest
             "email.email" => "Некорректный формат email",
             "password.required" => "Пароль обязателен для заполнения",
             "password.min" => "Пароль минимум должен содержать 6 символов",
-            "password.max" => "Пароль максимум должен содержать 20 символов"
+            "password.max" => "Пароль максимум должен содержать 20 символов",
+            "name.required" => "Поля имя обязательно для заполенения"
         ];
     }
 }

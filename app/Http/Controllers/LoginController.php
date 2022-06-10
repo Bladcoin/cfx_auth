@@ -22,7 +22,8 @@ class LoginController extends Controller
         try {
             User::create([
                 "email" => $request->email,
-                "password" => bcrypt($request->password)
+                "password" => bcrypt($request->password),
+                "name" => $request->name
             ]);
 
             return response()->json([
