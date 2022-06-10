@@ -13,7 +13,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,18 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "email" => "email|required",
+            "password" => "required|min:6|max:20",
+        ];
+    }
+
+    public function messages() {
+        return [
+            "email.required" => "Поля email обязательно для заполнения",
+            "email.email" => "Некорректный формат email",
+            "password.required" => "Пароль обязателен для заполнения",
+            "password.min" => "Пароль минимум должен содержать 6 символов",
+            "password.max" => "Пароль максимум должен содержать 20 символов",
         ];
     }
 }
