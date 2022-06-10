@@ -34,6 +34,7 @@ Route::prefix("facebook")->group(function() {
     Route::get("/auth/callback", [GoogleController::class, "authCallback"]);
 });
 
+Route::post("/new-user", [LoginController::class, "newUser"]);
 
 Route::get('/email/verify', function () {
     return view('verify-email');
@@ -47,7 +48,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
- 
+
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 

@@ -241,9 +241,17 @@
 		</div>
 	</div>
 
-	<LoginModal :googleAuth="googleAuth" />
-	<RegistrationModal :googleAuth="googleAuth" />
-	<ForgotEmailModal />
+	<LoginModal
+		:googleAuth="googleAuth"
+		:facebookAuth="facebookAuth"
+		v-if="!user"
+	/>
+	<RegistrationModal
+		:googleAuth="googleAuth"
+		:facebookAuth="facebookAuth"
+		v-if="!user"
+	/>
+	<ForgotEmailModal v-if="!user" />
 </template>
 
 <script>
@@ -277,6 +285,7 @@ export default {
 	props: {
 		user: Object,
 		googleAuth: String,
+		facebookAuth: String,
     },
 	data() {
 		return {

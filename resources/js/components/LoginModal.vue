@@ -12,8 +12,11 @@
 							Войти с помощью:
 						</div>
 						<div class="col">
-							<a :href="googleAuth">
+							<a :href="googleAuth" class="mx-1">
 								<img src="/images/google.svg" width="32" height="32" alt="">
+							</a>
+							<a :href="facebookAuth" class="mx-1">
+								<img src="/images/facebook.svg" width="32" height="32" alt="">
 							</a>
 						</div>
 					</div>
@@ -43,6 +46,7 @@ export default {
 	name: 'LoginModal',
 	props: {
 		googleAuth: String,
+		facebookAuth: String,
 	}
 }
 </script>
