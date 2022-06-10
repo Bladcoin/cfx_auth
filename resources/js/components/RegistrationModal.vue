@@ -22,75 +22,87 @@
 					</div>
 					<hr>
 					<form @submit.prevent="onSubmit">
-						<div class="mb-3">
-							<input
-								v-model.trim="form.name"
-								type="text"
-								class="form-control"
-								:class="{'is-invalid': v$.form.name.$error && submitted}"
-								placeholder="Имя"
+						<fieldset :disabled="success">
+							<div class="mb-3">
+								<input
+									v-model.trim="form.name"
+									type="text"
+									name="name"
+									class="form-control"
+									:class="{'is-invalid': v$.form.name.$error && submitted}"
+									placeholder="Имя"
+								>
+								<div v-if="v$.form.name.required.$invalid && submitted" class="invalid-feedback">
+									Введите имя
+								</div>
+							</div>
+							<div class="mb-3">
+								<input
+									v-model.trim="form.email"
+									type="email"
+									name="email"
+									class="form-control"
+									:class="{'is-invalid': v$.form.email.$error && submitted}"
+									placeholder="Email"
+								>
+								<div v-if="v$.form.email.required.$invalid && submitted" class="invalid-feedback">
+									Введите адрес электронной почты
+								</div>
+								<div v-else-if="v$.form.email.email.$invalid && submitted" class="invalid-feedback">
+									Не верный формат электронной почты
+								</div>
+							</div>
+							<div class="mb-3">
+								<input
+									v-model.trim="form.password"
+									type="password"
+									class="form-control"
+									:class="{'is-invalid': v$.form.password.$error && submitted}"
+									placeholder="Пароль (не менее 6 символов)"
+								>
+								<div v-if="v$.form.password.required.$invalid && submitted" class="invalid-feedback">
+									Введите пароль
+								</div>
+								<div v-else-if="v$.form.password.minLength.$invalid && submitted" class="invalid-feedback">
+									Длина не менее {{ v$.form.password.minLength.$params.min }} символов
+								</div>
+							</div>
+							<div class="mb-3">
+								<input
+									v-model.trim="form.repeatPassword"
+									type="password"
+									class="form-control"
+									:class="{'is-invalid': v$.form.repeatPassword.$error && submitted}"
+									placeholder="Повторите пароль"
+								>
+								<div v-if="v$.form.repeatPassword.required.$invalid && submitted" class="invalid-feedback">
+									Введите пароль еще раз
+								</div>
+								<div v-else-if="v$.form.repeatPassword.minLength.$invalid && submitted" class="invalid-feedback">
+									Длина не менее {{ v$.form.repeatPassword.minLength.$params.min }} символов
+								</div>
+								<div v-else-if="v$.form.repeatPassword.sameAsPassword.$invalid && submitted" class="invalid-feedback">
+									Пароли не совпадают
+								</div>
+							</div>
+							<button
+								class="position-relative btn btn-primary"
+								:disabled="isLoading"
 							>
-							<div v-if="v$.form.name.required.$invalid && submitted" class="invalid-feedback">
-								Введите имя
+								<span :class="{invisible: isLoading}">
+									Зарегистрироваться
+								</span>
+								<span class="spinner spinner-border spinner-border-sm" v-if="isLoading"></span>
+							</button>
+						</fieldset>
+						<div class="alert alert-success mt-3" v-if="success">
+							<div class="d-flex">
+								<i class="bi-check-circle-fill text-success fs-2"></i>
+								<div class="ps-3">
+									На указанный электронный адрес отправлена инструкция для завершения регистрации
+								</div>
 							</div>
 						</div>
-						<div class="mb-3">
-							<input
-								v-model.trim="form.email"
-								type="email"
-								class="form-control"
-								:class="{'is-invalid': v$.form.email.$error && submitted}"
-								placeholder="Email"
-							>
-							<div v-if="v$.form.email.required.$invalid && submitted" class="invalid-feedback">
-								Введите адрес электронной почты
-							</div>
-							<div v-else-if="v$.form.email.email.$invalid && submitted" class="invalid-feedback">
-								Не верный формат электронной почты
-							</div>
-						</div>
-						<div class="mb-3">
-							<input
-								v-model.trim="form.password"
-								type="password"
-								class="form-control"
-								:class="{'is-invalid': v$.form.password.$error && submitted}"
-								placeholder="Пароль (не менее 6 символов)"
-							>
-							<div v-if="v$.form.password.required.$invalid && submitted" class="invalid-feedback">
-								Введите пароль
-							</div>
-							<div v-else-if="v$.form.password.minLength.$invalid && submitted" class="invalid-feedback">
-								Длина не менее {{ v$.form.password.minLength.$params.min }} символов
-							</div>
-						</div>
-						<div class="mb-3">
-							<input
-								v-model.trim="form.repeatPassword"
-								type="password"
-								class="form-control"
-								:class="{'is-invalid': v$.form.repeatPassword.$error && submitted}"
-								placeholder="Повторите пароль"
-							>
-							<div v-if="v$.form.repeatPassword.required.$invalid && submitted" class="invalid-feedback">
-								Введите пароль еще раз
-							</div>
-							<div v-else-if="v$.form.repeatPassword.minLength.$invalid && submitted" class="invalid-feedback">
-								Длина не менее {{ v$.form.repeatPassword.minLength.$params.min }} символов
-							</div>
-							<div v-else-if="v$.form.repeatPassword.sameAsPassword.$invalid && submitted" class="invalid-feedback">
-								Пароли не совпадают
-							</div>
-						</div>
-						<button
-							class="position-relative btn btn-primary"
-							:disabled="isLoading"
-						>
-							<span :class="{invisible: isLoading}">
-								Зарегистрироваться
-							</span>
-							<span class="spinner spinner-border spinner-border-sm" v-if="isLoading"></span>
-						</button>
 					</form>
 				</div>
 			</div>
@@ -100,7 +112,7 @@
 
 <script>
 import useVuelidate from '@vuelidate/core'
-import { minLength, required, sameAs, email } from '@vuelidate/validators'
+import { minLength, required, email } from '@vuelidate/validators'
 
 export default {
 	name: 'RegistrationModal',
@@ -117,6 +129,8 @@ export default {
 		return {
 			isLoading: false,
 			submitted: false,
+			success: false,
+			errorMessages: null,
 			form: {
 				name: '',
 				email: '',
@@ -125,7 +139,7 @@ export default {
 			}
 		}
 	},
-	validations () {
+	validations() {
 		return {
 			form: {
 				name: {
@@ -148,7 +162,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.$refs.modal.addEventListener('hidden.bs.modal', event => {
+		this.$refs.modal.addEventListener('hidden.bs.modal', () => {
 			this.reset()
 		})
 	},
@@ -164,20 +178,25 @@ export default {
 		async register() {
 			try {
 				this.isLoading = true
-				const response = await this.$api.post('/new-user', {
+				await this.$api.post('/new-user', {
 					name: this.form.name,
 					email: this.form.email,
 					password: this.form.password,
 				})
 				this.isLoading = false
-				console.log(response)
+				this.success = true
 			} catch (e) {
 				this.isLoading = false
+				if (e.response?.status === 400) {
+					console.log('error 400')
+				}
 				console.log(e)
 			}
 		},
 		reset() {
 			this.submitted = false
+			this.success = false
+			this.errorMessages = null
 			this.form.name = ''
 			this.form.email = ''
 			this.form.password = ''

@@ -1,5 +1,5 @@
 <template>
-	<div class="modal fade" id="loginModal" tabindex="-1">
+	<div class="modal fade" id="loginModal" ref="modal" tabindex="-1">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header" style="border-bottom: none">
@@ -21,20 +21,53 @@
 						</div>
 					</div>
 					<hr>
-					<div class="mb-3">
-						<input type="email" class="form-control" placeholder="Email">
-					</div>
-					<div class="mb-3">
-						<input type="password" class="form-control" placeholder="Пароль">
-					</div>
-					<div class="row align-items-center">
-						<div class="col-auto">
-							<button class="btn btn-primary">Войти</button>
+					<form @submit.prevent="onSubmit">
+						<div class="mb-3">
+							<input
+								v-model="form.email"
+								type="email"
+								class="form-control"
+								:class="{'is-invalid': v$.form.email.$error && submitted}"
+								placeholder="Email"
+							>
+							<div v-if="v$.form.email.required.$invalid && submitted" class="invalid-feedback">
+								Введите адрес электронной почты
+							</div>
+							<div v-else-if="v$.form.email.email.$invalid && submitted" class="invalid-feedback">
+								Не верный формат электронной почты
+							</div>
 						</div>
-						<div class="col-auto">
-							<button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Забыли пароль?</button>
+						<div class="mb-3">
+							<input
+								v-model="form.password"
+								type="password"
+								class="form-control"
+								placeholder="Пароль"
+							>
+							<div v-if="v$.form.password.required.$invalid && submitted" class="invalid-feedback">
+								Введите пароль
+							</div>
+							<div v-else-if="v$.form.password.minLength.$invalid && submitted" class="invalid-feedback">
+								Длина не менее {{ v$.form.password.minLength.$params.min }} символов
+							</div>
 						</div>
-					</div>
+						<div class="row align-items-center">
+							<div class="col-auto">
+								<button
+									class="position-relative btn btn-primary"
+									:disabled="isLoading"
+								>
+									<span :class="{invisible: isLoading}">
+										Войти
+									</span>
+									<span class="spinner spinner-border spinner-border-sm" v-if="isLoading"></span>
+								</button>
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Забыли пароль?</button>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -42,11 +75,77 @@
 </template>
 
 <script>
+import useVuelidate from '@vuelidate/core'
+import { minLength, required, email } from '@vuelidate/validators'
+
 export default {
 	name: 'LoginModal',
 	props: {
 		googleAuth: String,
 		facebookAuth: String,
+	},
+	setup() {
+		return {
+			v$: useVuelidate(),
+		}
+	},
+	data() {
+		return {
+			submitted: false,
+			isLoading: false,
+			form: {
+				email: '',
+				password: '',
+			}
+		}
+	},
+	validations() {
+		return {
+			form: {
+				email: {
+					required,
+					email,
+				},
+				password: {
+					required,
+					minLength: minLength(6),
+				},
+			}
+		}
+	},
+	mounted() {
+		this.$refs.modal.addEventListener('hidden.bs.modal', () => {
+			this.reset()
+		})
+	},
+	methods: {
+		async onSubmit() {
+			this.submitted = true
+			this.v$.form.$touch()
+
+			if (!this.v$.form.$invalid) {
+				await this.login()
+			}
+		},
+		async login() {
+			try {
+				this.isLoading = true
+				await this.$api.post('/app/login', {
+					email: this.form.email,
+					password: this.form.password,
+				})
+				this.isLoading = false
+				window.location.href = '/'
+			} catch (e) {
+				this.isLoading = false
+				console.log(e)
+			}
+		},
+		reset() {
+			this.submitted = false
+			this.form.email = ''
+			this.form.password = ''
+		},
 	}
 }
 </script>
