@@ -35,6 +35,11 @@ return [
         'client_id' => "175318121490-ctknqt1r69t65fik0jcar8kptbma9mu2.apps.googleusercontent.com",
         'client_secret' => "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",
         'redirect' => 'http://127.0.0.1:8000/google/auth/callback',
-    ]
+    ],
 
+    "facebook" => [
+        'client_id' => "5892985670718043",
+        'client_secret' => "725b6f115f29655219b6dd758a825f07",
+        'redirect' => 'http://127.0.0.1:8000/facebook/auth/callback',
+    ]
 ];

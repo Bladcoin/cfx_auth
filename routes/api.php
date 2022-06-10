@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NewWalletController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::put("/new_wallet", [NewWalletController::class, "addNewWalletToUser"]);
+Route::delete("/delete_wallet/{id}", [NewWalletController::class, "deleteWalletToUser"]);
