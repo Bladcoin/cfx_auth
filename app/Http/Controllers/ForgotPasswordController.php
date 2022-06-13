@@ -19,15 +19,15 @@ class ForgotPasswordController extends Controller
     {
 
 
-            $request->validate(['email' => 'required|email']);
+        $request->validate(['email' => 'required|email']);
         try {
             $status = Password::sendResetLink(
                 $request->only('email')
             );
 
-            if( $status === Password::RESET_LINK_SENT ) {
+            if ($status === Password::RESET_LINK_SENT) {
                 $status = 200;
-            }else {
+            } else {
                 throw new \Throwable();
             }
             return response()->json([
@@ -57,34 +57,30 @@ class ForgotPasswordController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
 
-    try {
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->setRememberToken(Str::random(60));
+        try {
+            $status = Password::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($user, $password) {
+                    $user->forceFill([
+                        'password' => Hash::make($password)
+                    ])->setRememberToken(Str::random(60));
 
-                $user->save();
+                    $user->save();
 
-                event(new PasswordReset($user));
-            }
-        );
-         if( $status === Password::PASSWORD_RESET ) {
-                        $status = 200;
-                    }else {
-                        throw new \Throwable();
-                    }
-                    return response()->json([
-                        "status" => $status,
-                        "message" => "OK"
-                    ]);
-    }catch( \Throwable $error ) {
+                    event(new PasswordReset($user));
+                }
+            );
 
-        return response()->json([
-         "status" => 400,
-         "message"=> $error
-         ], 400);
-    }
+            return response()->json([
+                "status" => $status,
+                "message" => "OK"
+            ]);
+        } catch (\Throwable $error) {
+
+            return response()->json([
+                "status" => 400,
+                "message" => $error
+            ], 400);
+        }
     }
 }

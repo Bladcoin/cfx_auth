@@ -20,10 +20,10 @@ class FacebookController extends Controller
     {
         $user = Socialite::driver('facebook')->user();
         $user = User::updateOrCreate([
-            'facebook' => $user->id,
+            'email' => $user->email,
         ], [
             'name' => $user->name,
-            'email' => $user->email,
+            'facebook_id' => $user->id,
             "password" => Hash::make($user->email . "@" . $user->id)
         ]);
 

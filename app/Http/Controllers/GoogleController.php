@@ -20,10 +20,10 @@ class GoogleController extends Controller
     {
         $user = Socialite::driver('google')->user();
         $user = User::updateOrCreate([
-            'google_id' => $user->id,
+            'email' => $user->email,
         ], [
             'name' => $user->name,
-            'email' => $user->email,
+            'google_id' => $user->id,
             "password" => Hash::make($user->email . "@" . $user->id)
         ]);
 
