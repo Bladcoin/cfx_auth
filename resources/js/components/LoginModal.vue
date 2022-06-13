@@ -65,7 +65,7 @@
 								</button>
 							</div>
 							<div class="col-auto">
-								<button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Забыли пароль?</button>
+								<button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Забыли пароль?</button>
 							</div>
 						</div>
 						<div class="alert alert-danger mt-3" v-if="errorMessage">

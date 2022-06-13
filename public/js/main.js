@@ -26386,6 +26386,7 @@ var _hoisted_25 = {
 var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "col-auto"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  type: "button",
   "class": "btn btn-link p-0",
   "data-bs-toggle": "modal",
   "data-bs-target": "#forgotPasswordModal"
