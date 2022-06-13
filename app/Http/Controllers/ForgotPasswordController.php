@@ -17,10 +17,10 @@ class ForgotPasswordController extends Controller
 
     public function updatePassword(Request $request)
     {
-        try {
+
 
             $request->validate(['email' => 'required|email']);
-
+        try {
             $status = Password::sendResetLink(
                 $request->only('email')
             );
@@ -48,12 +48,16 @@ class ForgotPasswordController extends Controller
 
     public function resetPassword(Request $request)
     {
+
+
+
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:6|confirmed',
         ]);
 
+    try {
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
@@ -66,9 +70,21 @@ class ForgotPasswordController extends Controller
                 event(new PasswordReset($user));
             }
         );
+         if( $status === Password::PASSWORD_RESET ) {
+                        $status = 200;
+                    }else {
+                        throw new \Throwable();
+                    }
+                    return response()->json([
+                        "status" => $status,
+                        "message" => "OK"
+                    ]);
+    }catch( \Throwable $error ) {
 
-        return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('status', __($status))
-            : back()->withErrors(['email' => [__($status)]]);
+        return response()->json([
+         "status" => 400,
+         "message"=> $error
+         ], 400);
+    }
     }
 }

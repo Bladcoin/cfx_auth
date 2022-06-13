@@ -7,6 +7,6 @@
     <title>Verify Email</title>
 </head>
 <body>
-    <h1>asdasdasdsa</h1>
+
 </body>
 </html>

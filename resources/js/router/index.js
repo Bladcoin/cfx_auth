@@ -12,8 +12,18 @@ const router = createRouter({
 				{
 					path: 'login',
 					redirect: '/'
-					// name: 'login',
-					// component: () => import('~/views/Home'),
+				},
+				{
+					path: 'reset-password/:token',
+					redirect: to => {
+						return {
+							path: '/',
+							query: {
+								token: to.params.token,
+								email: to.query.email
+							},
+						}
+					},
 				},
 			]
         },

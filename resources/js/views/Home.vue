@@ -267,18 +267,6 @@
 			</div>
 		</div>
 	</div>
-
-	<LoginModal
-		:googleAuth="googleAuth"
-		:facebookAuth="facebookAuth"
-		v-if="!user"
-	/>
-	<RegistrationModal
-		:googleAuth="googleAuth"
-		:facebookAuth="facebookAuth"
-		v-if="!user"
-	/>
-	<ForgotPasswordModal v-if="!user" />
 </template>
 
 <script>
@@ -286,9 +274,6 @@ import { toRaw } from 'vue'
 import moment from 'moment/min/moment-with-locales'
 import Stats from '../components/Stats.vue'
 import Form from '../components/Form.vue'
-import LoginModal from '../components/LoginModal.vue'
-import RegistrationModal from '../components/RegistrationModal.vue'
-import ForgotPasswordModal from '../components/ForgotPasswordModal.vue'
 import { conflux, confluxSpace, getPosPoolContract, getSpaceContract, posPoolManagerContract, Drip, address, getPosAccountByPowAddress, spaceProvider } from '../utils/cfx'
 import { BigNumber, utils, ethers } from 'ethers'
 import { StatusPosNode } from '../constants'
@@ -306,15 +291,11 @@ export default {
 	components: {
 		Stats,
 		Form,
-		LoginModal,
-		RegistrationModal,
-		ForgotPasswordModal,
 	},
 	props: {
 		user: Object,
 		googleAuth: String,
 		facebookAuth: String,
-		referrer: String,
 	},
 	data() {
 		return {
