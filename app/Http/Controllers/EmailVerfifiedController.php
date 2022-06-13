@@ -18,4 +18,10 @@ class EmailVerfifiedController extends Controller
         $request->fulfill();
         return redirect('/');
     }
+
+    public function verificationNotification(Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+    
+        return back()->with('message', 'Verification link sent!');
+    }
 }

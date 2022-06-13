@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\EmailVerfifiedController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\LoginController;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
+use PhpParser\Node\Stmt\For_;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +25,14 @@ Route::get('/', function () {
 });
 
 
-Route::prefix("google")->group(function() {
+Route::prefix("google")->group(function () {
     Route::get("/auth/redirect", [GoogleController::class, "authRedirect"])->name("google.auth");
     Route::get("/auth/callback", [GoogleController::class, "authCallback"]);
 });
 
 
 
-Route::prefix("facebook")->group(function() {
+Route::prefix("facebook")->group(function () {
     Route::get("/auth/redirect", [GoogleController::class, "authRedirect"])->name("facebook.auth");
     Route::get("/auth/callback", [GoogleController::class, "authCallback"]);
 });
@@ -45,13 +47,16 @@ Route::get("login", [LoginController::class, "index"])->name("login");
 
 Route::post("/app/login", [LoginController::class, "login"]);
 
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-
-    return back()->with('message', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+Route::post('/email/verification-notification', [EmailVerfifiedController::class, "verificationNotification"])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::post('/logout', [LoginController::class, "logout"])->middleware(['auth'])->name('logout');
 
 
+Route::get('/forgot-password', [ForgotPasswordController::class, "forgotPassword"])->middleware('guest')->name('password.request');
 
+Route::post('/forgot-password', [ForgotPasswordController::class, "updatePassword"])->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, "resetPasswordView"])->middleware('guest')->name('password.reset');
+
+
+Route::post('/reset-password', [ForgotPasswordController::class, "resetPassword"])->middleware('guest')->name('password.update');
