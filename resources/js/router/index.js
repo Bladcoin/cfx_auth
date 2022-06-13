@@ -7,13 +7,14 @@ const router = createRouter({
             path: '/',
 			name: 'root',
             component: () => import('../views/Home.vue'),
-			alias: ['/login'],
+			//alias: ['/login'],
 			children: [
-				//{
-					//path: 'login',
-					//name: 'login',
-					//component: () => import('~/views/Home'),
-				//},
+				{
+					path: 'login',
+					redirect: '/'
+					// name: 'login',
+					// component: () => import('~/views/Home'),
+				},
 			]
         },
 	]

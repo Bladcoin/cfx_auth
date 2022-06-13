@@ -278,7 +278,7 @@
 		:facebookAuth="facebookAuth"
 		v-if="!user"
 	/>
-	<ForgotEmailModal v-if="!user" />
+	<ForgotPasswordModal v-if="!user" />
 </template>
 
 <script>
@@ -288,7 +288,7 @@ import Stats from '../components/Stats.vue'
 import Form from '../components/Form.vue'
 import LoginModal from '../components/LoginModal.vue'
 import RegistrationModal from '../components/RegistrationModal.vue'
-import ForgotEmailModal from '../components/ForgotEmailModal.vue'
+import ForgotPasswordModal from '../components/ForgotPasswordModal.vue'
 import { conflux, confluxSpace, getPosPoolContract, getSpaceContract, posPoolManagerContract, Drip, address, getPosAccountByPowAddress, spaceProvider } from '../utils/cfx'
 import { BigNumber, utils, ethers } from 'ethers'
 import { StatusPosNode } from '../constants'
@@ -308,12 +308,13 @@ export default {
 		Form,
 		LoginModal,
 		RegistrationModal,
-		ForgotEmailModal,
+		ForgotPasswordModal,
 	},
 	props: {
 		user: Object,
 		googleAuth: String,
 		facebookAuth: String,
+		referrer: String,
 	},
 	data() {
 		return {
@@ -384,9 +385,7 @@ export default {
 		}
 	},
 	async mounted() {
-		if (this.$route.path === '/login' && !this.user) {
-			new bootstrap.Modal('#loginModal').show()
-		}
+		this.$emit('mounted')
 
 		if (window.conflux) {
 			window.conflux.on('accountsChanged', accounts => {

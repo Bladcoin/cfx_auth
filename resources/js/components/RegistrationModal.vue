@@ -21,7 +21,7 @@
 						</div>
 					</div>
 					<hr>
-					<form @submit.prevent="onSubmit">
+					<form @submit.prevent="onSubmit" novalidate>
 						<fieldset :disabled="success">
 							<div class="mb-3">
 								<input

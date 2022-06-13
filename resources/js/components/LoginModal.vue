@@ -21,10 +21,10 @@
 						</div>
 					</div>
 					<hr>
-					<form @submit.prevent="onSubmit">
+					<form @submit.prevent="onSubmit" novalidate>
 						<div class="mb-3">
 							<input
-								v-model="form.email"
+								v-model.trim="form.email"
 								type="email"
 								class="form-control"
 								:class="{'is-invalid': v$.form.email.$error && submitted}"
@@ -39,9 +39,10 @@
 						</div>
 						<div class="mb-3">
 							<input
-								v-model="form.password"
+								v-model.trim="form.password"
 								type="password"
 								class="form-control"
+								:class="{'is-invalid': v$.form.password.$error && submitted}"
 								placeholder="Пароль"
 							>
 							<div v-if="v$.form.password.required.$invalid && submitted" class="invalid-feedback">
@@ -112,7 +113,7 @@ export default {
 				},
 				password: {
 					required,
-					minLength: minLength(1),
+					minLength: minLength(6),
 				},
 			}
 		}

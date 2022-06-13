@@ -11,7 +11,12 @@
     </head>
     <body>
         <div id="app">
-            <root :user='@json(Auth::user())' :google-auth='`{{ route("google.auth") }}`' :facebook-auth='`{{ route("facebook.auth") }}`'></root>
+            <root
+            	:user='@json(Auth::user())'
+            	:google-auth='`{{ route("google.auth") }}`'
+            	:facebook-auth='`{{ route("facebook.auth") }}`'
+            	:referrer='`{{ URL::previous() }}`'
+            />
         </div>
     </body>
     <script src="{{ asset('/js/main.js') }}">
