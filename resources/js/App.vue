@@ -1,22 +1,21 @@
 <template>
 	<router-view
 		:user=user
-		:google-auth=googleAuth
-		:facebook-auth=facebookAuth
-		@mounted="onMount"
 	/>
-	<LoginModal
-		:googleAuth="googleAuth"
-		:facebookAuth="facebookAuth"
-		v-if="!user"
-	/>
-	<RegistrationModal
-		:googleAuth="googleAuth"
-		:facebookAuth="facebookAuth"
-		v-if="!user"
-	/>
-	<ForgotPasswordModal v-if="!user" />
-	<ResetPasswordModal v-if="!user" />
+	<template v-if="!user">
+		<LoginModal
+			:google-auth="googleAuth"
+			:facebook-auth="facebookAuth"
+		/>
+		<RegistrationModal
+			:google-auth="googleAuth"
+			:facebook-auth="facebookAuth"
+		/>
+		<ForgotPasswordModal />
+		<ResetPasswordModal
+			:reset-token="resetToken"
+		/>
+	</template>
 </template>
 
 <script>
@@ -34,6 +33,7 @@ export default {
 		ResetPasswordModal,
 	},
 	props: {
+		resetToken: String,
 		user: Object,
 		googleAuth: String,
 		facebookAuth: String,
@@ -44,13 +44,16 @@ export default {
 			toast: useToast(),
 		}
 	},
+	mounted() {
+		this.onMount()
+	},
 	methods: {
 		onMount() {
 			if (this.referrer.indexOf(`${window.location.origin}/email/verify/`) === 0 && !this.user) {
 				this.toast.success('Вы успешно зарегистрировались!')
-				new bootstrap.Modal('#loginModal').show()
-			} else if (this.referrer.indexOf(`${window.location.origin}/reset-password/`) === 0 && !this.user) {
-				new bootstrap.Modal('#resetPasswordModal').show()
+				bootstrap.Modal.getOrCreateInstance('#loginModal').show()
+			} else if (this.resetToken && !this.user) {
+				bootstrap.Modal.getOrCreateInstance('#resetPasswordModal').show()
 			}
 		}
 	}

@@ -61,13 +61,18 @@
 </template>
 
 <script>
+import { useToast } from 'vue-toastification'
 import useVuelidate from '@vuelidate/core'
 import {required, minLength} from '@vuelidate/validators'
 
 export default {
 	name: 'ResetPasswordModal',
+	props: {
+		resetToken: String,
+	},
 	setup() {
 		return {
+			toast: useToast(),
 			v$: useVuelidate(),
 		}
 	},
@@ -119,11 +124,11 @@ export default {
 					email: this.$route.query.email,
 					password: this.form.password,
 					password_confirmation: this.form.passwordConfirmation,
-					token: this.$route.query.token,
+					token: this.resetToken,
 				})
 				this.isLoading = false
 				this.toast.success('Вы успешно изменили пароль!')
-				new bootstrap.Modal('#resetPasswordModal').hide()
+				bootstrap.Modal.getOrCreateInstance('#resetPasswordModal').hide()
 			} catch (e) {
 				this.isLoading = false
 				if (e.response.status === 400) {

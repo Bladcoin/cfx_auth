@@ -17,9 +17,9 @@ const router = createRouter({
 					path: 'reset-password/:token',
 					redirect: to => {
 						return {
-							path: '/',
+							name: 'root',
 							query: {
-								token: to.params.token,
+								//token: to.params.token,
 								email: to.query.email
 							},
 						}

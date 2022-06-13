@@ -14868,9 +14868,7 @@ function paddingZero(value) {
     Form: _components_Form_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: {
-    user: Object,
-    googleAuth: String,
-    facebookAuth: String
+    user: Object
   },
   data: function data() {
     return {
@@ -14963,8 +14961,6 @@ function paddingZero(value) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _this2.$emit('mounted');
-
               if (window.conflux) {
                 window.conflux.on('accountsChanged', function (accounts) {
                   if (accounts.length === 0) {
@@ -15017,14 +15013,14 @@ function paddingZero(value) {
               }
 
               if (!(_this2.user && window.conflux && localStorage.getItem('userConnected'))) {
-                _context3.next = 6;
+                _context3.next = 5;
                 break;
               }
 
-              _context3.next = 6;
+              _context3.next = 5;
               return _this2.requestAccount(true);
 
-            case 6:
+            case 5:
             case "end":
               return _context3.stop();
           }

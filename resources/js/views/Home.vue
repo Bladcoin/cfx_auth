@@ -294,8 +294,6 @@ export default {
 	},
 	props: {
 		user: Object,
-		googleAuth: String,
-		facebookAuth: String,
 	},
 	data() {
 		return {
@@ -366,8 +364,6 @@ export default {
 		}
 	},
 	async mounted() {
-		this.$emit('mounted')
-
 		if (window.conflux) {
 			window.conflux.on('accountsChanged', accounts => {
 				if (accounts.length === 0) {
