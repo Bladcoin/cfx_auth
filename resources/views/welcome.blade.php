@@ -12,6 +12,7 @@
     <body>
         <div id="app">
             <root
+                :token='{{ $token }}'
             	:user='@json(Auth::user())'
             	:google-auth='`{{ route("google.auth") }}`'
             	:facebook-auth='`{{ route("facebook.auth") }}`'

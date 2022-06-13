@@ -17,15 +17,28 @@ class ForgotPasswordController extends Controller
 
     public function updatePassword(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        try {
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+            $request->validate(['email' => 'required|email']);
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+            $status = Password::sendResetLink(
+                $request->only('email')
+            );
+
+            if( $status === Password::RESET_LINK_SENT ) {
+                $status = 200;
+            }else {
+                throw new \Throwable();
+            }
+            return response()->json([
+                "status" => $status,
+                "message" => "OK"
+            ]);
+        } catch (\Throwable $error) {
+            return response()->json([
+                "status" => 400
+            ], 400);
+        }
     }
 
     public function resetPasswordView($token)
