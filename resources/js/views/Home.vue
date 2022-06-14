@@ -53,25 +53,49 @@
 								<i class="bi bi-person-circle"></i>
 								{{ user.name }}
 							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-								<li><button class="dropdown-item" type="button">Action</button></li>
-								<li><button class="dropdown-item" type="button">Another action</button></li>
-								<li><button class="dropdown-item" type="button">Something else here</button></li>
-								<li><hr class="dropdown-divider"></li>
-								<li>
-									<button
-										class="position-relative dropdown-item"
-										type="button"
-										@click="logout"
-										:disabled="isLoggingOut"
-									>
-										<span :class="{invisible: isLoggingOut}">
-											Выйти
-										</span>
-										<span class="spinner spinner-border spinner-border-sm" v-if="isLoggingOut"></span>
-									</button>
-								</li>
-							</ul>
+							<div class="dropdown-menu">
+								<template v-if="coreWallets.length">
+									<div class="mb-1 px-3 fw-bold">
+										Core wallets
+									</div>
+									<ul class="list-unstyled m-0">
+										<li v-for="wallet in coreWallets" :key="wallet.id">
+											<button class="dropdown-item" type="button">
+												{{ wallet.public_key }}
+											</button>
+										</li>
+										<li><hr class="dropdown-divider"></li>
+									</ul>
+								</template>
+								<template v-if="eSpaceWallets.length">
+									<div class="mb-1 px-3 fw-bold">
+										eSpace wallets
+									</div>
+									<ul class="list-unstyled m-0">
+										<li v-for="wallet in eSpaceWallets" :key="wallet.id">
+											<button class="dropdown-item" type="button">
+												{{ wallet.public_key }}
+											</button>
+										</li>
+										<li><hr class="dropdown-divider"></li>
+									</ul>
+								</template>
+								<ul class="list-unstyled m-0">
+									<li>
+										<button
+											class="position-relative dropdown-item"
+											type="button"
+											@click="logout"
+											:disabled="isLoggingOut"
+										>
+											<span :class="{invisible: isLoggingOut}">
+												Выйти
+											</span>
+											<span class="spinner spinner-border spinner-border-sm" v-if="isLoggingOut"></span>
+										</button>
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 					<div class="col-auto">
@@ -302,7 +326,7 @@ export default {
 			isLoading: false,
 			chainStatus: {},
 			poolContract: null,
-
+			wallets: [],
 			showChart: false,
 			poolInfo: {
 				fee: 0,
@@ -337,8 +361,6 @@ export default {
 			incomingHistoryLoading: false,
 			chart: null,
 			eSpaceBlockNumber: 0,
-			eSpaceAccount: '',
-			coreAccount: '',
 			isLoggingOut: false,
 		}
 	},
@@ -364,6 +386,10 @@ export default {
 		}
 	},
 	async mounted() {
+		if (this.user) {
+			await this.fetchWallets()
+		}
+
 		if (window.conflux) {
 			window.conflux.on('accountsChanged', accounts => {
 				if (accounts.length === 0) {
@@ -380,7 +406,6 @@ export default {
 			})
 
 			window.ethereum.on('accountsChanged', async ([newAddress]) => {
-				console.log('account change')
 				if (newAddress === undefined) {
 					return this.resetUserInfo()
 				}
@@ -403,6 +428,12 @@ export default {
 				return `${account.slice(0, 4)}...${account.slice(-4)}`;
 			}
 		},
+		coreWallets() {
+			return this.wallets.filter(wallet => wallet.wallet_type === 'CORE')
+		},
+		eSpaceWallets() {
+			return this.wallets.filter(wallet => wallet.wallet_type === 'ESPACE')
+		},
 	},
 	watch: {
 		async activeTabIndex(index) {
@@ -413,21 +444,15 @@ export default {
 	},
 	methods: {
 		async loadServerStatus() {
-			console.log('loadServerStatus')
 			try {
 				const fetchResult = await fetch('http://217.30.173.35');
-				console.log(fetchResult)
 				const result = await fetchResult.json();
-				console.log(result)
 				if (fetchResult.ok) {
 					return result;
 				}
 			} catch (e) {
 				console.log(e)
 			}
-
-
-
 		},
 		async loadChainInfo() {
 			const status = await conflux.cfx.getStatus();
@@ -622,12 +647,10 @@ export default {
 						return;
 					}
 
-					account = accounts[0];
-
+					account = utils.getAddress(accounts[0])
 					this.eSpaceBlockNumber = await provider.getBlockNumber()
 				}
 
-				console.log(account)
 				this.userInfo.account = account
 				this.userInfo.connected = true
 
@@ -640,7 +663,6 @@ export default {
 
 				return account;
 			} catch (e) {
-				console.log(e)
 				if (isLocalStorage) {
 					localStorage.removeItem('userConnected')
 				}
@@ -676,16 +698,25 @@ export default {
 		},
 
 		async saveWallet() {
-			console.log('save wallet')
 			try {
+				if (this.wallets.find(wallet => wallet.public_key === this.userInfo.account)) {
+					return
+				}
+
 				await this.$api.post('/api/new_wallet', {
 					user_id: this.user.id,
 					public_key: this.userInfo.account,
 					wallet_type: this.currentSpace.toUpperCase()
 				})
-			} catch (e) {
-				console.log(e)
-			}
+				await this.fetchWallets()
+			} catch (e) {}
+		},
+
+		async fetchWallets() {
+			try {
+				const response = await this.$api.get(`/api/get-wallets/${this.user.id}`)
+				this.wallets = response.data
+			} catch (e) {}
 		},
 
 		async loadLockingList() {
@@ -750,7 +781,6 @@ export default {
 				window.location.href = '/'
 			} catch (e) {
 				this.isLoggingOut = false
-				console.log(e)
 			}
 		}
 	}
