@@ -46,4 +46,9 @@ class NewWalletController extends Controller
             ], 400);
         }
     }
+
+
+    public function getWalletsByUserId( $id) {
+        return Wallet::where("user_id", $id)->get();
+    }
 }
