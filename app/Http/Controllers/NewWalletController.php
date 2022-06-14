@@ -12,7 +12,7 @@ class NewWalletController extends Controller
         try {
             Wallet::create(
                 [
-                    "user_id" => $request->user()->id,
+                    "user_id" => $request->user_id,
                     "public_key" => $request->public_key,
                     "wallet_type" => $request->wallet_type
                 ]

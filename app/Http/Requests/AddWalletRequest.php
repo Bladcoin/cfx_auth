@@ -24,7 +24,9 @@ class AddWalletRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "user_id" => "required|integer",
+            "public_key" => "required",
+            "wallet_type" => "required"
         ];
     }
 }
