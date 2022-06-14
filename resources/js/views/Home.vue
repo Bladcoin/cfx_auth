@@ -624,10 +624,10 @@ export default {
 
 					account = accounts[0];
 
-					//this.poolContract.setESpaceProvider(provider)
 					this.eSpaceBlockNumber = await provider.getBlockNumber()
 				}
 
+				console.log(account)
 				this.userInfo.account = account
 				this.userInfo.connected = true
 
@@ -635,6 +635,7 @@ export default {
 					this.loadUserInfo(),
 					this.loadLockingList(),
 					this.loadUnlockingList(),
+					this.saveWallet(),
 				])
 
 				return account;
@@ -672,6 +673,19 @@ export default {
 			this.userInfo.userInQueue = []
 			this.userInfo.userOutOueue = []
 			localStorage.removeItem('userConnected')
+		},
+
+		async saveWallet() {
+			console.log('save wallet')
+			try {
+				await this.$api.post('/api/new_wallet', {
+					user_id: this.user.id,
+					public_key: this.userInfo.account,
+					wallet_type: this.currentSpace.toUpperCase()
+				})
+			} catch (e) {
+				console.log(e)
+			}
 		},
 
 		async loadLockingList() {

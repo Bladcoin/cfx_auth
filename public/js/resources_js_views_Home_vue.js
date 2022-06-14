@@ -15502,8 +15502,7 @@ function paddingZero(value) {
                 return _context12.abrupt("return");
 
               case 19:
-                account = _accounts[0]; //this.poolContract.setESpaceProvider(provider)
-
+                account = _accounts[0];
                 _context12.next = 22;
                 return provider.getBlockNumber();
 
@@ -15511,16 +15510,17 @@ function paddingZero(value) {
                 _this10.eSpaceBlockNumber = _context12.sent;
 
               case 23:
+                console.log(account);
                 _this10.userInfo.account = account;
                 _this10.userInfo.connected = true;
-                _context12.next = 27;
-                return Promise.all([_this10.loadUserInfo(), _this10.loadLockingList(), _this10.loadUnlockingList()]);
+                _context12.next = 28;
+                return Promise.all([_this10.loadUserInfo(), _this10.loadLockingList(), _this10.loadUnlockingList(), _this10.saveWallet()]);
 
-              case 27:
+              case 28:
                 return _context12.abrupt("return", account);
 
-              case 30:
-                _context12.prev = 30;
+              case 31:
+                _context12.prev = 31;
                 _context12.t0 = _context12["catch"](0);
                 console.log(_context12.t0);
 
@@ -15528,12 +15528,12 @@ function paddingZero(value) {
                   localStorage.removeItem('userConnected');
                 }
 
-              case 34:
+              case 35:
               case "end":
                 return _context12.stop();
             }
           }
-        }, _callee12, null, [[0, 30]]);
+        }, _callee12, null, [[0, 31]]);
       }))();
     },
     loadUserInfo: function loadUserInfo() {
@@ -15608,31 +15608,41 @@ function paddingZero(value) {
       this.userInfo.userOutOueue = [];
       localStorage.removeItem('userConnected');
     },
-    loadLockingList: function loadLockingList() {
+    saveWallet: function saveWallet() {
       var _this12 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
-        var list;
         return _regeneratorRuntime().wrap(function _callee14$(_context14) {
           while (1) {
             switch (_context14.prev = _context14.next) {
               case 0:
-                _context14.next = 2;
-                return _this12.poolContract['userInQueue(address)'](_this12.userInfo.account);
-
-              case 2:
-                list = _context14.sent;
-                _this12.userInfo.userInQueue = list.map(_this12.mapQueueItem);
+                console.log('save wallet');
+                _context14.prev = 1;
+                _context14.next = 4;
+                return _this12.$api.post('/api/new_wallet', {
+                  user_id: _this12.user.id,
+                  public_key: _this12.userInfo.account,
+                  wallet_type: _this12.currentSpace.toUpperCase()
+                });
 
               case 4:
+                _context14.next = 9;
+                break;
+
+              case 6:
+                _context14.prev = 6;
+                _context14.t0 = _context14["catch"](1);
+                console.log(_context14.t0);
+
+              case 9:
               case "end":
                 return _context14.stop();
             }
           }
-        }, _callee14);
+        }, _callee14, null, [[1, 6]]);
       }))();
     },
-    loadUnlockingList: function loadUnlockingList() {
+    loadLockingList: function loadLockingList() {
       var _this13 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
@@ -15642,11 +15652,11 @@ function paddingZero(value) {
             switch (_context15.prev = _context15.next) {
               case 0:
                 _context15.next = 2;
-                return _this13.poolContract['userOutQueue(address)'](_this13.userInfo.account);
+                return _this13.poolContract['userInQueue(address)'](_this13.userInfo.account);
 
               case 2:
                 list = _context15.sent;
-                _this13.userInfo.userOutOueue = list.map(_this13.mapQueueItem);
+                _this13.userInfo.userInQueue = list.map(_this13.mapQueueItem);
 
               case 4:
               case "end":
@@ -15654,6 +15664,30 @@ function paddingZero(value) {
             }
           }
         }, _callee15);
+      }))();
+    },
+    loadUnlockingList: function loadUnlockingList() {
+      var _this14 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
+        var list;
+        return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+          while (1) {
+            switch (_context16.prev = _context16.next) {
+              case 0:
+                _context16.next = 2;
+                return _this14.poolContract['userOutQueue(address)'](_this14.userInfo.account);
+
+              case 2:
+                list = _context16.sent;
+                _this14.userInfo.userOutOueue = list.map(_this14.mapQueueItem);
+
+              case 4:
+              case "end":
+                return _context16.stop();
+            }
+          }
+        }, _callee16);
       }))();
     },
     mapQueueItem: function mapQueueItem(item) {
@@ -15699,36 +15733,36 @@ function paddingZero(value) {
       window.location.reload();
     },
     logout: function logout() {
-      var _this14 = this;
+      var _this15 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
-        return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
+        return _regeneratorRuntime().wrap(function _callee17$(_context17) {
           while (1) {
-            switch (_context16.prev = _context16.next) {
+            switch (_context17.prev = _context17.next) {
               case 0:
-                _context16.prev = 0;
-                _this14.isLoggingOut = true;
-                _context16.next = 4;
-                return _this14.$api.post('/logout');
+                _context17.prev = 0;
+                _this15.isLoggingOut = true;
+                _context17.next = 4;
+                return _this15.$api.post('/logout');
 
               case 4:
-                _this14.isLoggingOut = false;
+                _this15.isLoggingOut = false;
                 window.location.href = '/';
-                _context16.next = 12;
+                _context17.next = 12;
                 break;
 
               case 8:
-                _context16.prev = 8;
-                _context16.t0 = _context16["catch"](0);
-                _this14.isLoggingOut = false;
-                console.log(_context16.t0);
+                _context17.prev = 8;
+                _context17.t0 = _context17["catch"](0);
+                _this15.isLoggingOut = false;
+                console.log(_context17.t0);
 
               case 12:
               case "end":
-                return _context16.stop();
+                return _context17.stop();
             }
           }
-        }, _callee16, null, [[0, 8]]);
+        }, _callee17, null, [[0, 8]]);
       }))();
     }
   }

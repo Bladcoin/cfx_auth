@@ -25878,8 +25878,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var _e$response;
-
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -25896,21 +25894,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 4:
                 _this4.isLoading = false;
                 _this4.success = true;
-                _context2.next = 13;
+                _context2.next = 11;
                 break;
 
               case 8:
                 _context2.prev = 8;
                 _context2.t0 = _context2["catch"](0);
-                _this4.isLoading = false;
+                _this4.isLoading = false; // if (e.response?.status === 400) {
+                // 	console.log('error 400')
+                // }
+                // console.log(e)
 
-                if (((_e$response = _context2.t0.response) === null || _e$response === void 0 ? void 0 : _e$response.status) === 400) {
-                  console.log('error 400');
-                }
-
-                console.log(_context2.t0);
-
-              case 13:
+              case 11:
               case "end":
                 return _context2.stop();
             }
@@ -26059,11 +26054,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this4.toast.success('Вы успешно изменили пароль!');
 
                 bootstrap.Modal.getOrCreateInstance('#resetPasswordModal').hide();
-                _context2.next = 13;
+                bootstrap.Modal.getOrCreateInstance('#loginModal').show();
+                _context2.next = 14;
                 break;
 
-              case 9:
-                _context2.prev = 9;
+              case 10:
+                _context2.prev = 10;
                 _context2.t0 = _context2["catch"](0);
                 _this4.isLoading = false;
 
@@ -26073,12 +26069,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   _this4.errorMessage = _context2.t0.response.data.message;
                 }
 
-              case 13:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 9]]);
+        }, _callee2, null, [[0, 10]]);
       }))();
     },
     reset: function reset() {
@@ -26240,6 +26236,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.form.email = $event;
     }),
     type: "email",
+    name: "email",
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["form-control", {
       'is-invalid': $setup.v$.form.email.$error && $data.submitted
     }]),
@@ -26741,6 +26738,8 @@ var _hoisted_1 = {
   "class": "modal fade",
   id: "resetPasswordModal",
   ref: "modal",
+  "data-bs-backdrop": "static",
+  "data-bs-keyboard": "false",
   tabindex: "-1"
 };
 var _hoisted_2 = {

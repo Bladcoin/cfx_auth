@@ -19,5 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::put("/new_wallet", [NewWalletController::class, "addNewWalletToUser"]);
+Route::post("/new_wallet", [NewWalletController::class, "addNewWalletToUser"]);
 Route::delete("/delete_wallet/{id}", [NewWalletController::class, "deleteWalletToUser"]);

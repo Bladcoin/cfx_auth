@@ -1,5 +1,5 @@
 <template>
-	<div class="modal fade" id="resetPasswordModal" ref="modal" tabindex="-1">
+	<div class="modal fade" id="resetPasswordModal" ref="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header" style="border-bottom: none">
@@ -129,6 +129,7 @@ export default {
 				this.isLoading = false
 				this.toast.success('Вы успешно изменили пароль!')
 				bootstrap.Modal.getOrCreateInstance('#resetPasswordModal').hide()
+				bootstrap.Modal.getOrCreateInstance('#loginModal').show()
 			} catch (e) {
 				this.isLoading = false
 				if (e.response.status === 400) {

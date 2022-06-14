@@ -14,6 +14,7 @@
 								<input
 									v-model.trim="form.email"
 									type="email"
+									name="email"
 									class="form-control"
 									:class="{'is-invalid': v$.form.email.$error && submitted}"
 									placeholder="Email"

@@ -187,10 +187,10 @@ export default {
 				this.success = true
 			} catch (e) {
 				this.isLoading = false
-				if (e.response?.status === 400) {
-					console.log('error 400')
-				}
-				console.log(e)
+				// if (e.response?.status === 400) {
+				// 	console.log('error 400')
+				// }
+				// console.log(e)
 			}
 		},
 		reset() {
