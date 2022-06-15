@@ -27061,37 +27061,68 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   "createRouter": () => (/* binding */ createRouter)
 /* harmony export */ });
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm-bundler.js");
 
-var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_0__.createRouter)({
-  history: (0,vue_router__WEBPACK_IMPORTED_MODULE_0__.createWebHistory)(),
-  routes: [{
-    path: '/',
-    name: 'root',
+var routes = [{
+  path: '/',
+  name: 'home',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ "resources_js_views_Home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/Home.vue */ "./resources/js/views/Home.vue"));
+  },
+  //alias: ['/login'],
+  children: [{
+    path: 'login',
+    redirect: '/'
+  }, {
+    path: 'reset-password/:token',
+    redirect: function redirect(to) {
+      return {
+        name: 'home',
+        query: {
+          //token: to.params.token,
+          email: to.query.email
+        }
+      };
+    }
+  }, {
+    path: 'address/:wallet',
+    name: 'wallet',
     component: function component() {
-      return __webpack_require__.e(/*! import() */ "resources_js_views_Home_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/Home.vue */ "./resources/js/views/Home.vue"));
-    },
-    //alias: ['/login'],
-    children: [{
-      path: 'login',
-      redirect: '/'
-    }, {
-      path: 'reset-password/:token',
-      redirect: function redirect(to) {
-        return {
-          name: 'root',
-          query: {
-            //token: to.params.token,
-            email: to.query.email
-          }
-        };
-      }
-    }]
+      return __webpack_require__.e(/*! import() */ "resources_js_views_Wallet_vue").then(__webpack_require__.bind(__webpack_require__, /*! ../views/Wallet.vue */ "./resources/js/views/Wallet.vue"));
+    }
   }]
-});
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (router);
+}];
+var createRouter = function createRouter(app) {
+  var router = (0,vue_router__WEBPACK_IMPORTED_MODULE_0__.createRouter)({
+    history: (0,vue_router__WEBPACK_IMPORTED_MODULE_0__.createWebHistory)(),
+    routes: routes
+  });
+  router.beforeEach(function (to, from, next) {
+    console.log(to.name); //console.log(app)
+    //console.log('beforeEach')
+    //console.log(app._component.template)
+
+    var doc = new DOMParser().parseFromString(app._component.template, 'text/html');
+    var user = JSON.parse(doc.querySelector('root').getAttribute(':user'));
+
+    if (user) {} //console.log(user)
+    // const token = localStorage.getItem('token')
+    //
+    // if (!token && to.name !== 'Auth') {
+    // 	next('/auth')
+    // } else if (token && to.name === 'Auth') {
+    // 	next('/')
+    // } else {
+    // 	next()
+    // }
+
+
+    next();
+  });
+  return router;
+};
 
 /***/ }),
 
@@ -29157,7 +29188,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "body {\n\toverflow-y: scroll;\n}\ncaption {\n\tcolor: #000;\n}\na, a:hover{\n\tcolor: #F53838;\n}\n.bg-light {\n\tbackground-color: #fbfbfb !important;\n}\n.text-primary {\n\tcolor: #F53838 !important;\n}\n.alert-primary {\n\tbackground: #FFECEC;\n\tcolor: inherit;\n\tborder-color: #F53838;\n}\n.btn-primary {\n\tbackground-color: #F53838;\n\tborder-color: #F53838;\n}\n.btn-primary:hover,\n.btn-primary:focus,\n.btn-primary:active,\n.btn-primary:disabled {\n\tbackground: #ffab4a;\n\tborder-color: #F53838;\n}\n.btn-primary:active,\n.btn-primary:focus,\n.btn-primary:active:focus {\n\tbox-shadow: 0 0 0 0.25rem #FFECEC;\n}\n.btn-link,\n.btn-link:hover,\n.btn-link:focus,\n.btn-link:active,\n.btn-link:disabled {\n\tcolor: #F53838;\n}\n#app {\n\tposition: relative;\n}\n.logo {\n\twidth: 250px;\n}\n.h-num {\n\tmargin-top: 0.25rem;\n\tfont-size: 18px;\n\tfont-weight: 700;\n}\n\n.intro-title {\n\tcolor: #565a69;\n}\n\n.b-shadow {\n\tbox-shadow: rgb(0 0 0/5%) 0 6px 10px;\n}\n\n.table>:not(:first-child) {\n\tborder-top: 2px solid #dee2e6;\n}\n.table-striped>tbody>tr:nth-of-type(odd)>*{\n\t--bs-table-accent-bg: #FFECEC;\n}\n.footer-item {\n\tdisplay: inline-block;\n\twidth: 180px;\n\tcolor: inherit;\n}\n.preloader {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: rgba(255,255,255,0.5);\n}\n\n.spinner {\n\tposition: absolute;\n\tleft: 50%;\n\ttop: 50%;\n\tmargin: -0.5rem 0 0 -0.5rem;\n}\n\n.nav-link {\n\tcolor: #F53838;\n}\n\n.nav.nav-tabs {\n\tflex-wrap: nowrap;\n\toverflow-y: hidden;\n\tmargin-bottom: -1px;\n\twidth: 100%;\n}\n\n.nav.nav-tabs .nav-link {\n\ttransition: none;\n}\n\n.nav.nav-tabs .nav-link:not(.active) {\n\tcolor: #ffab4a;\n}\n\n.nav.nav-tabs .nav-link.active {\n\tbackground: rgba(250,250,250,0.8);\n\tborder-bottom: 0;\n\tborder-bottom: 2px solid #fbfbfb;\n\tcolor: #F53838;\n}\n\n.pre-line {\n\twhite-space: pre-line;\n}\n\n.lang {\n\tdisplay: inline-block;\n\tvertical-align: top;\n\tmargin-left: 0.5rem;\n\twidth: auto;\n\theight: 1.5rem;\n\tcursor: pointer;\n}\n.lang.active {\n\topacity: 0.5;\n\tcursor: default;\n}\n\n.chart {\n\twidth: 100% !important;\n\theight: 170px !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "body {\n\toverflow-y: scroll;\n}\ncaption {\n\tcolor: #000;\n}\na, a:hover{\n\tcolor: #F53838;\n}\n.bg-light {\n\tbackground-color: #fbfbfb !important;\n}\n.text-primary {\n\tcolor: #F53838 !important;\n}\n.alert-primary {\n\tbackground: #FFECEC;\n\tcolor: inherit;\n\tborder-color: #F53838;\n}\n.btn-primary {\n\tbackground-color: #F53838;\n\tborder-color: #F53838;\n}\n.btn-primary:hover,\n.btn-primary:focus,\n.btn-primary:active,\n.btn-primary:disabled {\n\tbackground: #ffab4a;\n\tborder-color: #F53838;\n}\n.btn-primary:active,\n.btn-primary:focus,\n.btn-primary:active:focus {\n\tbox-shadow: 0 0 0 0.25rem #FFECEC;\n}\n.btn-link,\n.btn-link:hover,\n.btn-link:focus,\n.btn-link:active,\n.btn-link:disabled {\n\tcolor: #F53838;\n}\n#app {\n\tposition: relative;\n}\n.logo {\n\twidth: 250px;\n}\n.h-num {\n\tmargin-top: 0.25rem;\n\tfont-size: 18px;\n\tfont-weight: 700;\n}\n\n.intro-title {\n\tcolor: #565a69;\n}\n\n.b-shadow {\n\tbox-shadow: rgb(0 0 0/5%) 0 6px 10px;\n}\n\n.table>:not(:first-child) {\n\tborder-top: 2px solid #dee2e6;\n}\n.table-striped>tbody>tr:nth-of-type(odd)>*{\n\t--bs-table-accent-bg: #FFECEC;\n}\n.footer-item {\n\tdisplay: inline-block;\n\twidth: 180px;\n\tcolor: inherit;\n}\n.preloader {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 100%;\n\theight: 100%;\n\tbackground: rgba(255,255,255,0.5);\n}\n\n.spinner {\n\tposition: absolute;\n\tleft: 50%;\n\ttop: 50%;\n\tmargin: -0.5rem 0 0 -0.5rem;\n}\n\n.nav-link {\n\tcolor: #F53838;\n}\n\n.nav.nav-tabs {\n\tflex-wrap: nowrap;\n\toverflow-y: hidden;\n\tmargin-bottom: -1px;\n\twidth: 100%;\n}\n\n.nav.nav-tabs .nav-link {\n\ttransition: none;\n}\n\n.nav.nav-tabs .nav-link:not(.active) {\n\tcolor: #ffab4a;\n}\n\n.nav.nav-tabs .nav-link.active {\n\tbackground: rgba(250,250,250,0.8);\n\tborder-bottom: 0;\n\tborder-bottom: 2px solid #fbfbfb;\n\tcolor: #F53838;\n}\n\n.pre-line {\n\twhite-space: pre-line;\n}\n\n.lang {\n\tdisplay: inline-block;\n\tvertical-align: top;\n\tmargin-left: 0.5rem;\n\twidth: auto;\n\theight: 1.5rem;\n\tcursor: pointer;\n}\n.lang.active {\n\topacity: 0.5;\n\tcursor: default;\n}\n\n.chart {\n\twidth: 100% !important;\n\theight: 170px !important;\n}\n\n.dropdown-menu {\n\tmax-width: calc(100vw - 1rem);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -37923,7 +37954,7 @@ var src_default = VueToastificationPlugin;
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if (chunkId === "resources_js_views_Home_vue") return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_views_Home_vue":1,"resources_js_views_Wallet_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
@@ -38160,6 +38191,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+ //import router from './router'
 
 
 
@@ -38169,12 +38201,13 @@ __webpack_require__.r(__webpack_exports__);
  //const app = createApp()
 //const app = createApp(App)
 
-var app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({});
+var app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)(null);
+var router = (0,_router__WEBPACK_IMPORTED_MODULE_4__.createRouter)(app);
 var api = axios__WEBPACK_IMPORTED_MODULE_2___default().create({
   baseURL: '/'
 });
 app.config.globalProperties.$api = api;
-app.use(_router__WEBPACK_IMPORTED_MODULE_4__["default"]);
+app.use(router);
 app.use(_i18n__WEBPACK_IMPORTED_MODULE_5__["default"]);
 app.use(vue_axios__WEBPACK_IMPORTED_MODULE_3__["default"], (axios__WEBPACK_IMPORTED_MODULE_2___default()));
 app.use(vue_toastification__WEBPACK_IMPORTED_MODULE_8__["default"], {
