@@ -4,32 +4,34 @@ const routes = [
 	{
 		path: '/',
 		name: 'home',
-		component: () => import('../views/Home.vue'),
-		//alias: ['/login'],
-		children: [
-			{
-				path: 'login',
-				redirect: '/'
-			},
-			{
-				path: 'reset-password/:token',
-				redirect: to => {
-					return {
-						name: 'home',
-						query: {
-							//token: to.params.token,
-							email: to.query.email
-						},
-					}
-				},
-			},
-			{
-				path: 'address/:wallet',
-				name: 'wallet',
-				component: () => import('../views/Wallet.vue'),
-			}
-		]
+		component: () => import('../views/Home.vue')
 	},
+	{
+		path: '/login',
+		redirect: '/',
+	},
+	{
+		path: '/reset-password/:token',
+		redirect: to => {
+			return {
+				name: 'home',
+				query: {
+					//token: to.params.token,
+					email: to.query.email
+				},
+			}
+		},
+	},
+	{
+		path: '/address/:wallet',
+		name: 'address',
+		meta: { auth: true },
+		component: () => import('../views/Address.vue'),
+	},
+	{
+		path: '/:pathMatch(.*)*',
+		redirect: '/',
+	}
 ]
 
 export const createRouter = (app) => {
@@ -39,26 +41,16 @@ export const createRouter = (app) => {
 	})
 
 	router.beforeEach((to, from, next) => {
-		console.log(to.name)
-		//console.log(app)
-		//console.log('beforeEach')
-		//console.log(app._component.template)
+		//console.log(to)
 		const doc = new DOMParser().parseFromString(app._component.template, 'text/html')
 		const user = JSON.parse(doc.querySelector('root').getAttribute(':user'))
-		if (user) {
 
+		//next()
+		if (to.meta.auth && !user) {
+			next('/')
+		} else {
+			next()
 		}
-		//console.log(user)
-		// const token = localStorage.getItem('token')
-		//
-		// if (!token && to.name !== 'Auth') {
-		// 	next('/auth')
-		// } else if (token && to.name === 'Auth') {
-		// 	next('/')
-		// } else {
-		// 	next()
-		// }
-		next()
 	})
 
 	return router

@@ -1,307 +1,160 @@
 <template>
-	<div class="container position-relative pt-3">
-		<div class="row align-items-center justify-content-between mb-3">
-			<div class="col-auto">
-				<div class="row align-items-center">
-					<div class="col-auto">
-						<router-link :to="{name: 'home'}">
-							<img src="../assets/img/logo.svg" class="img-fluid" width="100" alt="">
-						</router-link>
-					</div>
-					<div class="col-auto">
-						<ul class="nav">
-							<li class="nav-item">
-								<button
-									class="btn nav-link"
-									:class="{'disabled': currentSpace === 'core'}"
-									@click="changeSpace('core')"
-								>
-									Core
-								</button>
-							</li>
-							<li class="nav-item">
-								<button
-									class="btn nav-link"
-									:class="{'disabled': currentSpace === 'eSpace'}"
-									@click="changeSpace('eSpace')"
-								>
-									eSpace
-								</button>
-							</li>
-						</ul>
-					</div>
-				</div>
+	<div class="mb-4">
+		<div class="text-center">
+			<div class="mb-2">
+				<img src="../assets/img/logo.svg" class="logo img-fluid" width="377" height="203" alt="">
 			</div>
-			<div class="col-auto">
-				<div class="row align-items-center">
-					<div class="col-auto">
-						<img
-							src="../assets/img/en.svg"
-							class="lang"
-							:class="{active: $i18n.locale === 'en'}"
-							alt="EN"
-							@click="changeLanguage('en')"
-						>
-						<img
-							src="../assets/img/ru.svg"
-							class="lang"
-							:class="{active: $i18n.locale === 'ru'}"
-							alt="RU"
-							@click="changeLanguage('ru')"
-						>
-					</div>
-					<div class="col-auto">
-						<template v-if="user">
-							<button
-								v-if="!userInfo.connected"
-								class="btn btn-primary"
-								@click="connectWallet"
-							>
-								{{ currentSpace === 'core' ? $t('connect_fluent') : $t('connect_metamask') }}
-							</button>
-							<div class="btn text-primary" style="cursor:auto;user-select:auto;" v-else>
-								{{ shortenAccount }}
-							</div>
-						</template>
-						<template v-else>
-							<button class="btn btn-danger me-3" data-bs-toggle="modal" data-bs-target="#loginModal">
-								Войти
-							</button>
-							<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrationModal">
-								Регистрация
-							</button>
-						</template>
-					</div>
-					<div class="col-auto" v-if="user">
-						<div class="dropdown">
-							<button class="btn btn-outline-danger dropdown-toggle" type="button" data-bs-toggle="dropdown">
-								<i class="bi bi-person-circle"></i>
-								{{ user.name }}
-							</button>
-							<div class="dropdown-menu dropdown-menu-end">
-								<template v-if="coreWallets.length">
-									<div class="mb-1 px-3 fw-bold">
-										Core wallets
-									</div>
-									<ul class="list-unstyled m-0">
-										<li v-for="wallet in coreWallets" :key="wallet.id">
-											<button type="button" class="dropdown-item text-truncate">
-												{{ wallet.public_key }}
-											</button>
-										</li>
-										<li><hr class="dropdown-divider"></li>
-									</ul>
-								</template>
-								<template v-if="eSpaceWallets.length">
-									<div class="mb-1 px-3 fw-bold">
-										eSpace wallets
-									</div>
-									<ul class="list-unstyled m-0">
-										<li v-for="wallet in eSpaceWallets" :key="wallet.id">
-											<button type="button" class="dropdown-item text-truncate">
-												{{ wallet.public_key }}
-											</button>
-										</li>
-										<li><hr class="dropdown-divider"></li>
-									</ul>
-								</template>
-								<ul class="list-unstyled m-0">
-									<li>
-										<button
-											class="position-relative dropdown-item"
-											type="button"
-											@click="logout"
-											:disabled="isLoggingOut"
-										>
-											<span :class="{invisible: isLoggingOut}">
-												Выйти
-											</span>
-											<span class="spinner spinner-border spinner-border-sm" v-if="isLoggingOut"></span>
-										</button>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
+			{{ $t('tagline') }}
+		</div>
+	</div>
+
+	<div class="position-relative">
+		<Stats :poolInfo="poolInfo" />
+		<div class="preloader rounded-3" v-if="isLoading">
+			<div class="spinner-border text-primary"></div>
+		</div>
+	</div>
+
+	<div class="mt-4 border rounded-3 p-2 bg-light" v-show="showChart">
+		<canvas ref="chart" class="chart"></canvas>
+	</div>
+
+	<Form
+		:poolContract="poolContract"
+		:poolInfo="poolInfo"
+		:userInfo="userInfo"
+		:currentSpace="currentSpace"
+		v-if="userInfo.connected"
+	/>
+
+	<div
+		class="mt-4 border rounded-3 p-4 bg-light"
+		v-if="userInfo.connected && (userInfo.userInQueue.length || userInfo.userOutOueue.length)"
+	>
+		<div class="row">
+			<div class="col-md-6 col-12">
+				<table class="table table-striped table-bordered caption-top">
+					<caption>{{ $t('locking_votes') }}</caption>
+					<thead>
+					<tr>
+						<th class="w-50">{{ $t('amount') }} (CFX)</th>
+						<th class="w-50">{{ $t('date') }}</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr v-for="item in userInfo.userInQueue">
+						<th>{{item.amount}}</th>
+						<td>{{item.endTime}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-6 col-12">
+				<table class="table table-striped table-bordered caption-top">
+					<caption>{{ $t('unlocking_votes') }}</caption>
+					<thead>
+					<tr>
+						<th class="w-50">{{ $t('amount') }} (CFX)</th>
+						<th class="w-50">{{ $t('date') }}</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr v-for="item in userInfo.userOutOueue">
+						<th>{{item.amount}}</th>
+						<td>{{item.endTime}}</td>
+					</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
+	</div>
 
-		<template v-if="$route.name === 'home'">
-			<div class="p-3 border rounded-3 bg-light">
-				<div class="text-center">
-					<div class="mb-2">
-						<img src="../assets/img/logo.svg" class="logo img-fluid" width="377" height="203" alt="">
-					</div>
-					{{ $t('tagline') }}
+	<div class="mt-4" v-if="!isLoading">
+		<ul class="nav nav-tabs border-bottom-0">
+			<li class="nav-item">
+				<a
+					class="nav-link"
+					:class="{active: activeTabIndex === 0}"
+					href="#"
+					@click.prevent="activeTabIndex = 0"
+				>
+					{{ $t('incoming_history') }}
+				</a>
+			</li>
+			<li class="nav-item">
+				<a
+					class="nav-link"
+					:class="{active: activeTabIndex === 1}"
+					href="#"
+					@click.prevent="activeTabIndex = 1"
+				>
+					{{ $t('voting_history') }}
+				</a>
+			</li>
+			<li class="nav-item">
+				<a
+					class="nav-link"
+					:class="{active: activeTabIndex === 2}"
+					href="#"
+					@click.prevent="activeTabIndex = 2"
+				>
+					{{ $t('pending_rights_status') }}
+				</a>
+			</li>
+		</ul>
+
+		<div class="border rounded-bottom p-4 bg-light">
+			<template v-if="activeTabIndex === 0">
+				<div class="text-center" v-if="incomingHistoryLoading">
+					<div class="mx-auto spinner-border text-primary"></div>
 				</div>
-			</div>
+				<table class="table table-striped table-bordered caption-top" v-else-if="incomingHistory && incomingHistory.length !== 0">
+					<thead>
+					<tr>
+						<th>{{ $t('pow_block_hash') }}</th>
+						<th>{{ $t('incoming') }}</th>
+						<th>{{ $t('date') }}</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr v-for="item in incomingHistory">
+						<td>
+							<a class="text-decoration-none" :href="`https://confluxscan.io/block/${item.powBlockHash}`" target="_blank">
+								{{item.powBlockHash.slice(0, 11)}}...
+							</a>
+						</td>
+						<td>{{ item.reward }} CFX</td>
+						<td>{{ item.age }}</td>
+					</tr>
+					</tbody>
+				</table>
+				<h5 v-else>
+					{{ $t('no_matching_entries') }}
+				</h5>
+			</template>
 
-			<div class="position-relative">
-				<Stats :poolInfo="poolInfo" />
-				<div class="preloader rounded-3" v-if="isLoading">
-					<div class="spinner-border text-primary"></div>
-				</div>
-			</div>
+			<template v-if="activeTabIndex === 1">
+				<h5>{{ $t('no_matching_entries') }}</h5>
+			</template>
 
-			<div class="mt-4 border rounded-3 p-2 bg-light" v-show="showChart">
-				<canvas ref="chart" class="chart"></canvas>
-			</div>
+			<template v-if="activeTabIndex === 2">
+				<h5>{{ $t('no_matching_entries') }}</h5>
+			</template>
+		</div>
+	</div>
 
-			<Form
-				:poolContract="poolContract"
-				:poolInfo="poolInfo"
-				:userInfo="userInfo"
-				:currentSpace="currentSpace"
-				v-if="userInfo.connected"
-			/>
-
-			<div
-				class="mt-4 border rounded-3 p-4 bg-light"
-				v-if="userInfo.connected && (userInfo.userInQueue.length || userInfo.userOutOueue.length)"
-			>
-				<div class="row">
-					<div class="col-md-6 col-12">
-						<table class="table table-striped table-bordered caption-top">
-							<caption>{{ $t('locking_votes') }}</caption>
-							<thead>
-							<tr>
-								<th class="w-50">{{ $t('amount') }} (CFX)</th>
-								<th class="w-50">{{ $t('date') }}</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr v-for="item in userInfo.userInQueue">
-								<th>{{item.amount}}</th>
-								<td>{{item.endTime}}</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="col-md-6 col-12">
-						<table class="table table-striped table-bordered caption-top">
-							<caption>{{ $t('unlocking_votes') }}</caption>
-							<thead>
-							<tr>
-								<th class="w-50">{{ $t('amount') }} (CFX)</th>
-								<th class="w-50">{{ $t('date') }}</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr v-for="item in userInfo.userOutOueue">
-								<th>{{item.amount}}</th>
-								<td>{{item.endTime}}</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
+	<div class="mt-4">
+		<div class="alert alert-success">
+			<h5>{{ $t('features') }}</h5>
+			<div class="pre-line">
+				{{ $t('features_text') }}
 			</div>
-
-			<div class="mt-4" v-if="!isLoading">
-				<ul class="nav nav-tabs border-bottom-0">
-					<li class="nav-item">
-						<a
-							class="nav-link"
-							:class="{active: activeTabIndex === 0}"
-							href="#"
-							@click.prevent="activeTabIndex = 0"
-						>
-							{{ $t('incoming_history') }}
-						</a>
-					</li>
-					<li class="nav-item">
-						<a
-							class="nav-link"
-							:class="{active: activeTabIndex === 1}"
-							href="#"
-							@click.prevent="activeTabIndex = 1"
-						>
-							{{ $t('voting_history') }}
-						</a>
-					</li>
-					<li class="nav-item">
-						<a
-							class="nav-link"
-							:class="{active: activeTabIndex === 2}"
-							href="#"
-							@click.prevent="activeTabIndex = 2"
-						>
-							{{ $t('pending_rights_status') }}
-						</a>
-					</li>
-				</ul>
-
-				<div class="border rounded-bottom p-4 bg-light">
-					<template v-if="activeTabIndex === 0">
-						<div class="text-center" v-if="incomingHistoryLoading">
-							<div class="mx-auto spinner-border text-primary"></div>
-						</div>
-						<table class="table table-striped table-bordered caption-top" v-else-if="incomingHistory && incomingHistory.length !== 0">
-							<thead>
-							<tr>
-								<th>{{ $t('pow_block_hash') }}</th>
-								<th>{{ $t('incoming') }}</th>
-								<th>{{ $t('date') }}</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr v-for="item in incomingHistory">
-								<td>
-									<a class="text-decoration-none" :href="`https://confluxscan.io/block/${item.powBlockHash}`" target="_blank">
-										{{item.powBlockHash.slice(0, 11)}}...
-									</a>
-								</td>
-								<td>{{ item.reward }} CFX</td>
-								<td>{{ item.age }}</td>
-							</tr>
-							</tbody>
-						</table>
-						<h5 v-else>
-							{{ $t('no_matching_entries') }}
-						</h5>
-					</template>
-
-					<template v-if="activeTabIndex === 1">
-						<h5>{{ $t('no_matching_entries') }}</h5>
-					</template>
-
-					<template v-if="activeTabIndex === 2">
-						<h5>{{ $t('no_matching_entries') }}</h5>
-					</template>
-				</div>
-			</div>
-
-			<div class="mt-4">
-				<div class="alert alert-success">
-					<h5>{{ $t('features') }}</h5>
-					<div class="pre-line">
-						{{ $t('features_text') }}
-					</div>
-				</div>
-			</div>
-			<div class="mt-4 border rounded-3 p-3 bg-light">
-				<h5>{{ $t('staking_rules') }}</h5>
-				<div class="pre-line">
-					{{ $t('staking_rules_text') }}
-				</div>
-			</div>
-		</template>
-		<router-view v-else />
-
-		<div class="row justify-content-center mt-3 mb-4 footer">
-			<div class="col-auto footer-item text-center mb-3">
-				© {{ new Date().getFullYear() }} POS-CFX
-			</div>
-			<div class="col-auto footer-item text-center mb-3">
-				<a href="#" target="_blank">Twitter</a>
-			</div>
-			<div class="col-auto footer-item text-center mb-3">
-				<a href="#" target="_blank">Github</a>
-			</div>
-			<div class="col-auto footer-item text-center mb-3">
-				<a href="#">Email</a>
-			</div>
+		</div>
+	</div>
+	<div class="mt-4 border rounded-3 p-3 bg-light">
+		<h5>{{ $t('staking_rules') }}</h5>
+		<div class="pre-line">
+			{{ $t('staking_rules_text') }}
 		</div>
 	</div>
 </template>
@@ -331,6 +184,7 @@ export default {
 	},
 	props: {
 		user: Object,
+		//userInfo: Object,
 	},
 	data() {
 		return {
@@ -374,7 +228,6 @@ export default {
 			incomingHistoryLoading: false,
 			chart: null,
 			eSpaceBlockNumber: 0,
-			isLoggingOut: false,
 		}
 	},
 	async created() {
@@ -431,22 +284,6 @@ export default {
 		if (this.user && window.conflux && localStorage.getItem('userConnected')) {
 			await this.requestAccount(true)
 		}
-	},
-	computed: {
-		shortenAccount() {
-			const account = this.userInfo.account;
-			if (account.match(':')) {
-				return address.shortenCfxAddress(account);
-			} else {
-				return `${account.slice(0, 4)}...${account.slice(-4)}`;
-			}
-		},
-		coreWallets() {
-			return this.wallets.filter(wallet => wallet.wallet_type === 'CORE')
-		},
-		eSpaceWallets() {
-			return this.wallets.filter(wallet => wallet.wallet_type === 'ESPACE')
-		},
 	},
 	watch: {
 		async activeTabIndex(index) {
@@ -746,24 +583,6 @@ export default {
 			}
 			return `${parts[0]}.${parts[1].substr(0, 4)}`;
 		},
-		changeLanguage(locale) {
-			localStorage.setItem('locale', locale)
-			window.location.reload()
-		},
-		changeSpace(space) {
-			localStorage.setItem('space', space)
-			window.location.reload()
-		},
-		async logout() {
-			try {
-				this.isLoggingOut = true
-				await this.$api.post('/logout')
-				this.isLoggingOut = false
-				window.location.href = '/'
-			} catch (e) {
-				this.isLoggingOut = false
-			}
-		}
 	}
 }
 </script>

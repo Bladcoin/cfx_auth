@@ -1,5 +1,9 @@
+html {
+	height: 100%;
+}
 body {
 	overflow-y: scroll;
+	height: 100%;
 }
 caption {
 	color: #000;
@@ -42,7 +46,11 @@ a, a:hover{
 	color: #F53838;
 }
 #app {
-	position: relative;
+	overflow-x: hidden;
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	height: 100%;
 }
 .logo {
 	width: 250px;
