@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained("users")->onUpdate('cascade')
                 ->onDelete('cascade');;
-            $table->string("public_key");
+            $table->string("public_key")->unique();
             $table->string("wallet_type");
             $table->timestamps();
         });

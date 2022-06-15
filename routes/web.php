@@ -60,3 +60,7 @@ Route::get('/reset-password/{token}', [ForgotPasswordController::class, "resetPa
 
 
 Route::post('/reset-password', [ForgotPasswordController::class, "resetPassword"])->middleware('guest')->name('password.update');
+
+Route::fallback(function() {
+    return view("welcome");
+});
