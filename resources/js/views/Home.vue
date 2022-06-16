@@ -20,11 +20,14 @@
 	</div>
 
 	<Form
+		v-if="userInfo.connected"
+		:extensionPriority="extensionPriority"
 		:poolContract="poolContract"
+		:poolAddress="poolAddress"
 		:poolInfo="poolInfo"
 		:userInfo="userInfo"
 		:currentSpace="currentSpace"
-		v-if="userInfo.connected"
+		@loadUserInfo="$emit('loadUserInfo')"
 	/>
 
 	<div
@@ -36,16 +39,16 @@
 				<table class="table table-striped table-bordered caption-top">
 					<caption>{{ $t('locking_votes') }}</caption>
 					<thead>
-					<tr>
-						<th class="w-50">{{ $t('amount') }} (CFX)</th>
-						<th class="w-50">{{ $t('date') }}</th>
-					</tr>
+						<tr>
+							<th class="w-50">{{ $t('amount') }} (CFX)</th>
+							<th class="w-50">{{ $t('date') }}</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr v-for="item in userInfo.userInQueue">
-						<th>{{item.amount}}</th>
-						<td>{{item.endTime}}</td>
-					</tr>
+						<tr v-for="item in userInfo.userInQueue">
+							<th>{{item.amount}}</th>
+							<td>{{item.endTime}}</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -53,16 +56,16 @@
 				<table class="table table-striped table-bordered caption-top">
 					<caption>{{ $t('unlocking_votes') }}</caption>
 					<thead>
-					<tr>
-						<th class="w-50">{{ $t('amount') }} (CFX)</th>
-						<th class="w-50">{{ $t('date') }}</th>
-					</tr>
+						<tr>
+							<th class="w-50">{{ $t('amount') }} (CFX)</th>
+							<th class="w-50">{{ $t('date') }}</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr v-for="item in userInfo.userOutOueue">
-						<th>{{item.amount}}</th>
-						<td>{{item.endTime}}</td>
-					</tr>
+						<tr v-for="item in userInfo.userOutOueue">
+							<th>{{item.amount}}</th>
+							<td>{{item.endTime}}</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -164,17 +167,12 @@ import { toRaw } from 'vue'
 import moment from 'moment/min/moment-with-locales'
 import Stats from '../components/Stats.vue'
 import Form from '../components/Form.vue'
-import { conflux, confluxSpace, getPosPoolContract, getSpaceContract, posPoolManagerContract, Drip, address, getPosAccountByPowAddress, spaceProvider } from '../utils/cfx'
-import { BigNumber, utils, ethers } from 'ethers'
+import { conflux, Drip, getPosAccountByPowAddress } from '../utils/cfx'
 import { StatusPosNode } from '../constants'
 import {formatUnit, formatTime} from '../utils/index.js'
 import config from '../pool.config.js'
 
 const ONE_VOTE_CFX = 1000
-
-function paddingZero(value) {
-	return value < 10 ? `0${value}` : value;
-}
 
 export default {
 	name: 'Home',
@@ -183,17 +181,18 @@ export default {
 		Form,
 	},
 	props: {
+		extensionPriority: Boolean,
 		user: Object,
-		//userInfo: Object,
+		userInfo: Object,
+		poolAddress: String,
+		poolContract: Object,
 	},
+	emits: ['loadUserInfo'],
 	data() {
 		return {
 			currentSpace: localStorage.getItem('space') || 'core',
 			moment: moment,
 			isLoading: false,
-			chainStatus: {},
-			poolContract: null,
-			wallets: [],
 			showChart: false,
 			poolInfo: {
 				fee: 0,
@@ -205,23 +204,9 @@ export default {
 				apy: 0,
 				lastRewardTime: 0,
 				stakerNumber: '0',
-				poolAddress: null,
 				posAddress: config.mainnet.posAddress,
 				inCommittee: false,
 				totalAvailable: 0,
-			},
-			userInfo: {
-				balance: 0,
-				connected: false,
-				userStaked: BigInt(0),
-				available: BigInt(0),
-				userInterest: 0,
-				account: '',
-				locked: BigInt(0),
-				unlocked: BigInt(0),
-				unlockedRaw: 0,
-				userInQueue: [],
-				userOutOueue: [],
 			},
 			activeTabIndex: 0,
 			incomingHistory: null,
@@ -232,58 +217,22 @@ export default {
 	},
 	async created() {
 		try {
-			//this.isLoading = true
-			this.poolContract = this.currentSpace === 'core' ? getPosPoolContract(config.mainnet.poolAddress) : getSpaceContract(config.mainnet.spaceAddress)
-			this.poolInfo.poolAddress = this.currentSpace === 'core' ? config.mainnet.poolAddress : config.mainnet.spaceAddress
 			this.moment.locale(this.$i18n.locale)
 
-			//await this.loadServerStatus()
 			await Promise.all([
 				this.loadPoolInfo(),
-				this.loadChainInfo(),
 				this.loadLastRewardInfo(),
 				this.loadRewardData(),
 				this.loadIncomingHistory(),
 			])
 
-			this.isLoading = false
+			//this.isLoading = false
 		} catch (e) {
-			this.isLoading = false
+			//this.isLoading = false
 		}
 	},
 	async mounted() {
-		if (this.user) {
-			await this.fetchWallets()
-		}
 
-		if (window.conflux) {
-			window.conflux.on('accountsChanged', accounts => {
-				if (accounts.length === 0) {
-					this.userInfo.account = ''
-					this.userInfo.connected = false
-					localStorage.removeItem('userConnected')
-				}
-			})
-		}
-
-		if (window.ethereum) {
-			window.ethereum.on('chainChanged', () => {
-				this.resetUserInfo()
-			})
-
-			window.ethereum.on('accountsChanged', async ([newAddress]) => {
-				if (newAddress === undefined) {
-					return this.resetUserInfo()
-				}
-
-				localStorage.setItem('userConnected', 'true')
-				await this.requestAccount(true, utils.getAddress(newAddress))
-			})
-		}
-
-		if (this.user && window.conflux && localStorage.getItem('userConnected')) {
-			await this.requestAccount(true)
-		}
 	},
 	watch: {
 		async activeTabIndex(index) {
@@ -304,25 +253,8 @@ export default {
 				console.log(e)
 			}
 		},
-		async loadChainInfo() {
-			const status = await conflux.cfx.getStatus();
-			this.chainStatus = status;
-			return status;
-		},
 		async loadPoolInfo() {
-			// try {
-			// 	console.log(posPoolManagerContract)
-			// 	const pools = await posPoolManagerContract.getPools()
-			// 	console.log('loadPoolInfo done')
-			// 	console.log(pools[0][3])
-			// 	// const poolAddress = pools[0][3]
-			// } catch (e) {
-			// 	console.log(e)
-			// }
-
-			const poolAddress = this.poolInfo.poolAddress
 			const poolContract = toRaw(this.poolContract)
-
 			let poolSummary
 			let stakerNumber
 			let apy
@@ -333,7 +265,7 @@ export default {
 				poolContract.poolSummary().then(response => { poolSummary = response }).catch(e => {console.log(e)}),
 				poolContract.stakerNumber().then(response => { stakerNumber = response }).catch(e => {console.log(e)}),
 				poolContract.poolAPY().then(response => { apy = response }).catch(e => {console.log(e)}),
-				getPosAccountByPowAddress(poolAddress).then(response => { account = response }).catch(e => {console.log(e)}),
+				getPosAccountByPowAddress(this.poolAddress).then(response => { account = response }).catch(e => {console.log(e)}),
 				poolContract.poolUserShareRatio().then(response => { userShareRatio = response }).catch(e => {console.log(e)}),
 			])
 
@@ -342,10 +274,7 @@ export default {
 			this.poolInfo.apy = Number(apy) / 100
 			this.poolInfo.fee = Number((BigInt(10000) - BigInt(Array.isArray(userShareRatio) ? userShareRatio[0] : userShareRatio)) / BigInt(100))
 			this.poolInfo.stakerNumber = stakerNumber.toString()
-
 			this.poolInfo.status = account.status?.forceRetired === null ? StatusPosNode.success : StatusPosNode.error
-			//this.poolInfo.poolAddress = poolAddress
-			//this.poolInfo.posAddress = account.address
 		},
 
 		async loadIncomingHistory() {
@@ -426,162 +355,6 @@ export default {
 			}
 			const block = await conflux.cfx.getBlockByHash(lastReward.powEpochHash, false);
 			this.poolInfo.lastRewardTime = block.timestamp;
-		},
-
-		async connectWallet() {
-			if (this.currentSpace === 'core') {
-				if (!window.conflux) {
-					alert(this.$t('install_conflux_wallet'));
-					return;
-				}
-			} else {
-				if (!window.ethereum) {
-					alert('Please install Metamask');
-					return;
-				}
-
-				if (+window.ethereum.networkVersion !== config.mainnet.eSpace.networkId) {
-					alert('Please switch network to ' + config.mainnet.eSpace.networkId);
-					return;
-				}
-			}
-
-			const account = await this.requestAccount();
-
-			if (!account) {
-				alert(this.$t('request_account_failed'));
-			} else {
-				localStorage.setItem('userConnected', 'true')
-			}
-		},
-		async requestAccount(isLocalStorage, address) {
-			try {
-				let account = address
-
-				if (this.currentSpace === 'core') {
-					const accounts = await window.conflux.request({
-						method: 'cfx_requestAccounts'
-					});
-					account = accounts[0];
-
-					if (!account) {
-						return null
-					}
-				} else if (!account) {
-					const provider = new ethers.providers.Web3Provider(window.ethereum);
-					const accounts = await provider.send('eth_requestAccounts');
-
-					if (accounts.length === 0) {
-						alert('Request account failed');
-						return;
-					}
-
-					account = utils.getAddress(accounts[0])
-					this.eSpaceBlockNumber = await provider.getBlockNumber()
-				}
-
-				this.userInfo.account = account
-				this.userInfo.connected = true
-
-				await Promise.all([
-					this.loadUserInfo(),
-					this.loadLockingList(),
-					this.loadUnlockingList(),
-					this.saveWallet(),
-				])
-
-				return account;
-			} catch (e) {
-				if (isLocalStorage) {
-					localStorage.removeItem('userConnected')
-				}
-			}
-		},
-		async loadUserInfo() {
-			const userSummary = await this.poolContract.userSummary(this.userInfo.account);
-			const userInterest = await this.poolContract.userInterest(this.userInfo.account);
-			const balance = this.currentSpace === 'core' ? await conflux.cfx.getBalance(this.userInfo.account) : await spaceProvider.getBalance(this.userInfo.account);
-
-			this.userInfo.userStaked = BigInt(userSummary[0].toString());
-			this.userInfo.available = BigInt(userSummary[1].toString());
-			this.userInfo.locked = BigInt(userSummary[2].toString());
-			this.userInfo.unlocked = BigInt(userSummary[3].toString());
-			this.userInfo.unlockedRaw = userSummary[3];
-			this.userInfo.userInterest = this.trimPoints(Drip(userInterest.toString()).toCFX());
-			this.userInfo.balance = this.trimPoints(Drip(balance).toCFX());
-		},
-
-		resetUserInfo() {
-			this.userInfo.balance = 0
-			this.userInfo.connected = false
-			this.userInfo.userStaked = BigInt(0)
-			this.userInfo.available = BigInt(0)
-			this.userInfo.userInterest = 0
-			this.userInfo.account = ''
-			this.userInfo.locked = BigInt(0)
-			this.userInfo.unlocked = BigInt(0)
-			this.userInfo.unlockedRaw = 0
-			this.userInfo.userInQueue = []
-			this.userInfo.userOutOueue = []
-			localStorage.removeItem('userConnected')
-		},
-
-		async saveWallet() {
-			try {
-				if (this.wallets.find(wallet => wallet.public_key === this.userInfo.account)) {
-					return
-				}
-
-				await this.$api.post('/api/new_wallet', {
-					user_id: this.user.id,
-					public_key: this.userInfo.account,
-					wallet_type: this.currentSpace.toUpperCase()
-				})
-				await this.fetchWallets()
-			} catch (e) {}
-		},
-
-		async fetchWallets() {
-			try {
-				const response = await this.$api.get(`/api/get-wallets/${this.user.id}`)
-				this.wallets = response.data
-			} catch (e) {}
-		},
-
-		async loadLockingList() {
-			let list = await this.poolContract['userInQueue(address)'](this.userInfo.account);
-			this.userInfo.userInQueue = list.map(this.mapQueueItem);
-		},
-
-		async loadUnlockingList() {
-			let list = await this.poolContract['userOutQueue(address)'](this.userInfo.account);
-			this.userInfo.userOutOueue = list.map(this.mapQueueItem);
-		},
-
-		mapQueueItem(item) {
-			let now = new Date().getTime();
-			let unlockBlockNumber = Number(item[1].toString()) - this.chainStatus.blockNumber;
-			let unlockTime = new Date(now + unlockBlockNumber / 2 * 1000);
-			return {
-				amount: this.voteToCFX(item[0]),
-				endTime: this.formatDateTime(unlockTime),
-			}
-		},
-
-		voteToCFX(vote) {
-			return BigInt(vote.toString()) * BigInt(ONE_VOTE_CFX);
-		},
-
-		formatDateTime(date) {
-			return `${date.getFullYear()}-${paddingZero(date.getMonth() + 1)}-${paddingZero(date.getDate())} ${paddingZero(date.getHours())}:${paddingZero(date.getMinutes())}:${paddingZero(date.getSeconds())}`;
-		},
-
-		trimPoints(str) {
-			const parts = str.split('.');
-			if (parts.length !== 2) {
-				return str;
-			}
-			return `${parts[0]}.${parts[1].substr(0, 4)}`;
 		},
 	}
 }

@@ -33,7 +33,7 @@ class NewWalletController extends Controller
     public function deleteWalletToUser($id)
     {
         try {
-            Wallet::where($id)->delete();
+            Wallet::where("id", $id)->delete();
             return response()->json([
                 "status" => 200,
                 "message" => "OK"

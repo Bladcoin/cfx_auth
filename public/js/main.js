@@ -39717,6 +39717,7 @@ var paddingZero = function paddingZero(value) {
   },
   data: function data() {
     return {
+      extensionPriority: false,
       currentSpace: localStorage.getItem('space') || 'core',
       chainStatus: {},
       poolContract: null,
@@ -39728,6 +39729,7 @@ var paddingZero = function paddingZero(value) {
         available: BigInt(0),
         userInterest: 0,
         account: '',
+        wallet: localStorage.getItem('wallet'),
         locked: BigInt(0),
         unlocked: BigInt(0),
         unlockedRaw: 0,
@@ -39735,6 +39737,11 @@ var paddingZero = function paddingZero(value) {
         userOutOueue: []
       },
       wallets: [],
+      deletingWallet: {
+        id: null,
+        address: null,
+        loading: false
+      },
       eSpaceBlockNumber: 0
     };
   },
@@ -39748,8 +39755,9 @@ var paddingZero = function paddingZero(value) {
             case 0:
               _this.poolContract = _this.currentSpace === 'core' ? (0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.getPosPoolContract)(_pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.poolAddress) : (0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.getSpaceContract)(_pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.spaceAddress);
               _this.poolAddress = _this.currentSpace === 'core' ? _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.poolAddress : _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.spaceAddress;
+              _this.extensionPriority = !!(window.ethereum || window.conflux);
 
-            case 2:
+            case 3:
             case "end":
               return _context.stop();
           }
@@ -39776,19 +39784,32 @@ var paddingZero = function paddingZero(value) {
               }
 
               if (!_this2.user) {
-                _context3.next = 4;
+                _context3.next = 12;
                 break;
               }
 
-              _context3.next = 4;
+              _context3.t0 = Promise;
+              _context3.next = 5;
+              return _this2.loadChainInfo();
+
+            case 5:
+              _context3.t1 = _context3.sent;
+              _context3.next = 8;
               return _this2.fetchWallets();
 
-            case 4:
+            case 8:
+              _context3.t2 = _context3.sent;
+              _context3.t3 = [_context3.t1, _context3.t2];
+              _context3.next = 12;
+              return _context3.t0.all.call(_context3.t0, _context3.t3);
+
+            case 12:
               if (window.conflux) {
                 window.conflux.on('accountsChanged', function (accounts) {
                   if (accounts.length === 0) {
                     _this2.userInfo.account = '';
                     _this2.userInfo.connected = false;
+                    _this2.extensionPriority = true;
                     localStorage.removeItem('userConnected');
                   }
                 });
@@ -39797,6 +39818,8 @@ var paddingZero = function paddingZero(value) {
               if (window.ethereum) {
                 window.ethereum.on('chainChanged', function () {
                   _this2.resetUserInfo();
+
+                  _this2.extensionPriority = true;
                 });
                 window.ethereum.on('accountsChanged', /*#__PURE__*/function () {
                   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref) {
@@ -39817,10 +39840,11 @@ var paddingZero = function paddingZero(value) {
 
                           case 3:
                             localStorage.setItem('userConnected', 'true');
-                            _context2.next = 6;
+                            _this2.extensionPriority = true;
+                            _context2.next = 7;
                             return _this2.requestAccount(true, ethers__WEBPACK_IMPORTED_MODULE_9__.getAddress(newAddress));
 
-                          case 6:
+                          case 7:
                           case "end":
                             return _context2.stop();
                         }
@@ -39834,15 +39858,32 @@ var paddingZero = function paddingZero(value) {
                 }());
               }
 
-              if (!(_this2.user && window.conflux && localStorage.getItem('userConnected'))) {
-                _context3.next = 9;
+              if (!(_this2.user && (window.conflux || window.ethereum) && localStorage.getItem('userConnected'))) {
+                _context3.next = 19;
                 break;
               }
 
-              _context3.next = 9;
+              _context3.next = 17;
               return _this2.requestAccount(true);
 
-            case 9:
+            case 17:
+              _context3.next = 24;
+              break;
+
+            case 19:
+              if (!(_this2.user && !window.conflux && !window.ethereum && _this2.userInfo.wallet)) {
+                _context3.next = 24;
+                break;
+              }
+
+              _this2.extensionPriority = false;
+              _context3.next = 23;
+              return _this2.loadUserInfo();
+
+            case 23:
+              _this2.userInfo.connected = true;
+
+            case 24:
             case "end":
               return _context3.stop();
           }
@@ -39851,64 +39892,21 @@ var paddingZero = function paddingZero(value) {
     }))();
   },
   methods: {
-    connectWallet: function connectWallet() {
+    loadChainInfo: function loadChainInfo() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-        var account;
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                if (!(_this3.currentSpace === 'core')) {
-                  _context4.next = 6;
-                  break;
-                }
+                _context4.next = 2;
+                return _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.conflux.cfx.getStatus();
 
-                if (window.conflux) {
-                  _context4.next = 4;
-                  break;
-                }
+              case 2:
+                _this3.chainStatus = _context4.sent;
 
-                alert(_this3.$t('install_conflux_wallet'));
-                return _context4.abrupt("return");
-
-              case 4:
-                _context4.next = 12;
-                break;
-
-              case 6:
-                if (window.ethereum) {
-                  _context4.next = 9;
-                  break;
-                }
-
-                alert('Please install Metamask');
-                return _context4.abrupt("return");
-
-              case 9:
-                if (!(+window.ethereum.networkVersion !== _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId)) {
-                  _context4.next = 12;
-                  break;
-                }
-
-                alert('Please switch network to ' + _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId);
-                return _context4.abrupt("return");
-
-              case 12:
-                _context4.next = 14;
-                return _this3.requestAccount();
-
-              case 14:
-                account = _context4.sent;
-
-                if (!account) {
-                  alert(_this3.$t('request_account_failed'));
-                } else {
-                  localStorage.setItem('userConnected', 'true');
-                }
-
-              case 16:
+              case 3:
               case "end":
                 return _context4.stop();
             }
@@ -39916,85 +39914,188 @@ var paddingZero = function paddingZero(value) {
         }, _callee4);
       }))();
     },
-    requestAccount: function requestAccount(isLocalStorage, address) {
+    connectWallet: function connectWallet() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-        var account, accounts, provider, _accounts;
-
+        var account;
         return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                _context5.prev = 0;
-                account = address;
-
                 if (!(_this4.currentSpace === 'core')) {
-                  _context5.next = 11;
+                  _context5.next = 6;
                   break;
                 }
 
-                _context5.next = 5;
+                if (window.conflux) {
+                  _context5.next = 4;
+                  break;
+                }
+
+                alert(_this4.$t('install_conflux_wallet'));
+                return _context5.abrupt("return");
+
+              case 4:
+                _context5.next = 12;
+                break;
+
+              case 6:
+                if (window.ethereum) {
+                  _context5.next = 9;
+                  break;
+                }
+
+                alert('Please install Metamask');
+                return _context5.abrupt("return");
+
+              case 9:
+                if (!(+window.ethereum.networkVersion !== _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId)) {
+                  _context5.next = 12;
+                  break;
+                }
+
+                alert('Please switch network to ' + _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId);
+                return _context5.abrupt("return");
+
+              case 12:
+                _context5.next = 14;
+                return _this4.requestAccount();
+
+              case 14:
+                account = _context5.sent;
+
+                if (!account) {
+                  alert(_this4.$t('request_account_failed'));
+                } else {
+                  localStorage.setItem('userConnected', 'true');
+                }
+
+              case 16:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
+    changeWallet: function changeWallet(_ref4) {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        var wallet, type;
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                wallet = _ref4.wallet, type = _ref4.type;
+                localStorage.setItem('wallet', wallet);
+                localStorage.setItem('space', type);
+
+                if (!(_this5.currentSpace !== type)) {
+                  _context6.next = 6;
+                  break;
+                }
+
+                window.location.reload();
+                return _context6.abrupt("return");
+
+              case 6:
+                _this5.userInfo.wallet = wallet;
+                _this5.extensionPriority = false;
+                _context6.next = 10;
+                return _this5.loadUserInfo();
+
+              case 10:
+                _this5.userInfo.connected = true;
+
+              case 11:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    requestAccount: function requestAccount(isLocalStorage, address) {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        var account, accounts, provider, _accounts;
+
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.prev = 0;
+                account = address;
+
+                if (!(_this6.currentSpace === 'core')) {
+                  _context7.next = 11;
+                  break;
+                }
+
+                _context7.next = 5;
                 return window.conflux.request({
                   method: 'cfx_requestAccounts'
                 });
 
               case 5:
-                accounts = _context5.sent;
+                accounts = _context7.sent;
                 account = accounts[0];
 
                 if (account) {
-                  _context5.next = 9;
+                  _context7.next = 9;
                   break;
                 }
 
-                return _context5.abrupt("return", null);
+                return _context7.abrupt("return", null);
 
               case 9:
-                _context5.next = 23;
+                _context7.next = 23;
                 break;
 
               case 11:
                 if (account) {
-                  _context5.next = 23;
+                  _context7.next = 23;
                   break;
                 }
 
                 provider = new ethers__WEBPACK_IMPORTED_MODULE_10__.Web3Provider(window.ethereum);
-                _context5.next = 15;
+                _context7.next = 15;
                 return provider.send('eth_requestAccounts');
 
               case 15:
-                _accounts = _context5.sent;
+                _accounts = _context7.sent;
 
                 if (!(_accounts.length === 0)) {
-                  _context5.next = 19;
+                  _context7.next = 19;
                   break;
                 }
 
                 alert('Request account failed');
-                return _context5.abrupt("return");
+                return _context7.abrupt("return");
 
               case 19:
                 account = ethers__WEBPACK_IMPORTED_MODULE_9__.getAddress(_accounts[0]);
-                _context5.next = 22;
+                _context7.next = 22;
                 return provider.getBlockNumber();
 
               case 22:
-                _this4.eSpaceBlockNumber = _context5.sent;
+                _this6.eSpaceBlockNumber = _context7.sent;
 
               case 23:
-                _this4.userInfo.account = account;
-                _this4.userInfo.connected = true;
-                _context5.next = 27;
-                return Promise.all([_this4.loadUserInfo(), _this4.loadLockingList(), _this4.loadUnlockingList(), _this4.saveWallet()]);
+                _this6.userInfo.account = account;
+                _this6.userInfo.connected = true;
+                _context7.next = 27;
+                return Promise.all([_this6.loadUserInfo(), _this6.saveWallet()]);
 
               case 27:
-                return _context5.abrupt("return", account);
+                return _context7.abrupt("return", account);
 
               case 30:
-                _context5.prev = 30;
-                _context5.t0 = _context5["catch"](0);
+                _context7.prev = 30;
+                _context7.t0 = _context7["catch"](0);
 
                 if (isLocalStorage) {
                   localStorage.removeItem('userConnected');
@@ -40002,68 +40103,54 @@ var paddingZero = function paddingZero(value) {
 
               case 33:
               case "end":
-                return _context5.stop();
+                return _context7.stop();
             }
           }
-        }, _callee5, null, [[0, 30]]);
+        }, _callee7, null, [[0, 30]]);
       }))();
     },
     loadUserInfo: function loadUserInfo() {
-      var _this5 = this;
+      var _this7 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-        var userSummary, userInterest, balance;
-        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+        var account, userSummary, userInterest, balance, lockingList, unlockingList;
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
-                _context6.next = 2;
-                return _this5.poolContract.userSummary(_this5.userInfo.account);
+                account = _this7.extensionPriority ? _this7.userInfo.account : _this7.userInfo.wallet;
+                _context8.next = 3;
+                return Promise.all([_this7.poolContract.userSummary(account).then(function (response) {
+                  userSummary = response;
+                }), _this7.poolContract.userInterest(account).then(function (response) {
+                  userInterest = response;
+                }), _this7.currentSpace === 'core' ? _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.conflux.cfx.getBalance(account).then(function (response) {
+                  balance = response;
+                }) : _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.spaceProvider.getBalance(account).then(function (response) {
+                  balance = response;
+                }), _this7.poolContract['userInQueue(address)'](account).then(function (response) {
+                  lockingList = response;
+                }), _this7.poolContract['userOutQueue(address)'](account).then(function (response) {
+                  unlockingList = response;
+                })]);
 
-              case 2:
-                userSummary = _context6.sent;
-                _context6.next = 5;
-                return _this5.poolContract.userInterest(_this5.userInfo.account);
-
-              case 5:
-                userInterest = _context6.sent;
-
-                if (!(_this5.currentSpace === 'core')) {
-                  _context6.next = 12;
-                  break;
-                }
-
-                _context6.next = 9;
-                return _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.conflux.cfx.getBalance(_this5.userInfo.account);
-
-              case 9:
-                _context6.t0 = _context6.sent;
-                _context6.next = 15;
-                break;
+              case 3:
+                _this7.userInfo.userStaked = BigInt(userSummary[0].toString());
+                _this7.userInfo.available = BigInt(userSummary[1].toString());
+                _this7.userInfo.locked = BigInt(userSummary[2].toString());
+                _this7.userInfo.unlocked = BigInt(userSummary[3].toString());
+                _this7.userInfo.unlockedRaw = userSummary[3];
+                _this7.userInfo.userInterest = _this7.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.Drip)(userInterest.toString()).toCFX());
+                _this7.userInfo.balance = _this7.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.Drip)(balance).toCFX());
+                _this7.userInfo.userInQueue = lockingList.map(_this7.mapQueueItem);
+                _this7.userInfo.userOutOueue = unlockingList.map(_this7.mapQueueItem);
 
               case 12:
-                _context6.next = 14;
-                return _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.spaceProvider.getBalance(_this5.userInfo.account);
-
-              case 14:
-                _context6.t0 = _context6.sent;
-
-              case 15:
-                balance = _context6.t0;
-                _this5.userInfo.userStaked = BigInt(userSummary[0].toString());
-                _this5.userInfo.available = BigInt(userSummary[1].toString());
-                _this5.userInfo.locked = BigInt(userSummary[2].toString());
-                _this5.userInfo.unlocked = BigInt(userSummary[3].toString());
-                _this5.userInfo.unlockedRaw = userSummary[3];
-                _this5.userInfo.userInterest = _this5.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.Drip)(userInterest.toString()).toCFX());
-                _this5.userInfo.balance = _this5.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.Drip)(balance).toCFX());
-
-              case 23:
               case "end":
-                return _context6.stop();
+                return _context8.stop();
             }
           }
-        }, _callee6);
+        }, _callee8);
       }))();
     },
     resetUserInfo: function resetUserInfo() {
@@ -40081,129 +40168,129 @@ var paddingZero = function paddingZero(value) {
       localStorage.removeItem('userConnected');
     },
     saveWallet: function saveWallet() {
-      var _this6 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
-        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-                _context7.prev = 0;
-
-                if (!_this6.wallets.find(function (wallet) {
-                  return wallet.public_key === _this6.userInfo.account;
-                })) {
-                  _context7.next = 3;
-                  break;
-                }
-
-                return _context7.abrupt("return");
-
-              case 3:
-                _context7.next = 5;
-                return _this6.$api.post('/api/new_wallet', {
-                  user_id: _this6.user.id,
-                  public_key: _this6.userInfo.account,
-                  wallet_type: _this6.currentSpace.toUpperCase()
-                });
-
-              case 5:
-                _context7.next = 7;
-                return _this6.fetchWallets();
-
-              case 7:
-                _context7.next = 11;
-                break;
-
-              case 9:
-                _context7.prev = 9;
-                _context7.t0 = _context7["catch"](0);
-
-              case 11:
-              case "end":
-                return _context7.stop();
-            }
-          }
-        }, _callee7, null, [[0, 9]]);
-      }))();
-    },
-    fetchWallets: function fetchWallets() {
-      var _this7 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
-        var response;
-        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                _context8.prev = 0;
-                _context8.next = 3;
-                return _this7.$api.get("/api/get-wallets/".concat(_this7.user.id));
-
-              case 3:
-                response = _context8.sent;
-                _this7.wallets = response.data;
-                _context8.next = 9;
-                break;
-
-              case 7:
-                _context8.prev = 7;
-                _context8.t0 = _context8["catch"](0);
-
-              case 9:
-              case "end":
-                return _context8.stop();
-            }
-          }
-        }, _callee8, null, [[0, 7]]);
-      }))();
-    },
-    loadLockingList: function loadLockingList() {
       var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
-        var list;
         return _regeneratorRuntime().wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
-                _context9.next = 2;
-                return _this8.poolContract['userInQueue(address)'](_this8.userInfo.account);
+                _context9.prev = 0;
 
-              case 2:
-                list = _context9.sent;
-                _this8.userInfo.userInQueue = list.map(_this8.mapQueueItem);
+                if (!_this8.wallets.find(function (wallet) {
+                  return wallet.public_key === _this8.userInfo.account;
+                })) {
+                  _context9.next = 3;
+                  break;
+                }
 
-              case 4:
+                return _context9.abrupt("return");
+
+              case 3:
+                _context9.next = 5;
+                return _this8.$api.post('/api/new_wallet', {
+                  user_id: _this8.user.id,
+                  public_key: _this8.userInfo.account,
+                  wallet_type: _this8.currentSpace.toUpperCase()
+                });
+
+              case 5:
+                _context9.next = 7;
+                return _this8.fetchWallets();
+
+              case 7:
+                _context9.next = 11;
+                break;
+
+              case 9:
+                _context9.prev = 9;
+                _context9.t0 = _context9["catch"](0);
+
+              case 11:
               case "end":
                 return _context9.stop();
             }
           }
-        }, _callee9);
+        }, _callee9, null, [[0, 9]]);
       }))();
     },
-    loadUnlockingList: function loadUnlockingList() {
+    fetchWallets: function fetchWallets() {
       var _this9 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
-        var list;
+        var response;
         return _regeneratorRuntime().wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
-                _context10.next = 2;
-                return _this9.poolContract['userOutQueue(address)'](_this9.userInfo.account);
+                _context10.prev = 0;
+                _context10.next = 3;
+                return _this9.$api.get("/api/get-wallets/".concat(_this9.user.id));
 
-              case 2:
-                list = _context10.sent;
-                _this9.userInfo.userOutOueue = list.map(_this9.mapQueueItem);
+              case 3:
+                response = _context10.sent;
+                _this9.wallets = response.data;
+                _context10.next = 9;
+                break;
 
-              case 4:
+              case 7:
+                _context10.prev = 7;
+                _context10.t0 = _context10["catch"](0);
+
+              case 9:
               case "end":
                 return _context10.stop();
             }
           }
-        }, _callee10);
+        }, _callee10, null, [[0, 7]]);
+      }))();
+    },
+    loadLockingList: function loadLockingList() {
+      var _this10 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+        var list;
+        return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+          while (1) {
+            switch (_context11.prev = _context11.next) {
+              case 0:
+                _context11.next = 2;
+                return _this10.poolContract['userInQueue(address)'](_this10.userInfo.account);
+
+              case 2:
+                list = _context11.sent;
+                _this10.userInfo.userInQueue = list.map(_this10.mapQueueItem);
+
+              case 4:
+              case "end":
+                return _context11.stop();
+            }
+          }
+        }, _callee11);
+      }))();
+    },
+    loadUnlockingList: function loadUnlockingList() {
+      var _this11 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
+        var list;
+        return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+          while (1) {
+            switch (_context12.prev = _context12.next) {
+              case 0:
+                _context12.next = 2;
+                return _this11.poolContract['userOutQueue(address)'](_this11.userInfo.account);
+
+              case 2:
+                list = _context12.sent;
+                _this11.userInfo.userOutOueue = list.map(_this11.mapQueueItem);
+
+              case 4:
+              case "end":
+                return _context12.stop();
+            }
+          }
+        }, _callee12);
       }))();
     },
     mapQueueItem: function mapQueueItem(item) {
@@ -40229,6 +40316,53 @@ var paddingZero = function paddingZero(value) {
       }
 
       return "".concat(parts[0], ".").concat(parts[1].substr(0, 4));
+    },
+    confirmDelete: function confirmDelete(_ref5) {
+      var id = _ref5.id,
+          wallet = _ref5.wallet;
+      this.deletingWallet.id = id;
+      this.deletingWallet.address = wallet;
+      bootstrap.Modal.getOrCreateInstance('#deleteWalletModal').show();
+    },
+    deleteWallet: function deleteWallet() {
+      var _this12 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
+        return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                _context13.prev = 0;
+                _this12.deletingWallet.loading = true;
+                _context13.next = 4;
+                return _this12.$api["delete"]("/api/delete_wallet/".concat(_this12.deletingWallet.id));
+
+              case 4:
+                _this12.deletingWallet.loading = false;
+                _this12.wallets = _this12.wallets.filter(function (wallet) {
+                  return wallet.id !== _this12.deletingWallet.id;
+                });
+                _this12.deletingWallet.id = null;
+                _this12.deletingWallet.address = null;
+                bootstrap.Modal.getOrCreateInstance('#deleteWalletModal').hide();
+
+                _this12.toast.success('Вы успешно удалили кошелек!');
+
+                _context13.next = 15;
+                break;
+
+              case 12:
+                _context13.prev = 12;
+                _context13.t0 = _context13["catch"](0);
+                _this12.deletingWallet.loading = false;
+
+              case 15:
+              case "end":
+                return _context13.stop();
+            }
+          }
+        }, _callee13, null, [[0, 12]]);
+      }))();
     }
   },
   watch: {
@@ -40436,7 +40570,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     user: Object,
     userInfo: Object,
     currentSpace: String,
-    wallets: Array
+    wallets: Array,
+    extensionPriority: Boolean
   },
   data: function data() {
     return {
@@ -40445,7 +40580,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     shortenAccount: function shortenAccount() {
-      var account = this.userInfo.account;
+      var account = this.extensionPriority ? this.userInfo.account : this.userInfo.wallet;
 
       if (account.match(':')) {
         return _utils_cfx__WEBPACK_IMPORTED_MODULE_0__.address.shortenCfxAddress(account);
@@ -40473,6 +40608,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       localStorage.setItem('space', space);
       window.location.reload();
     },
+    changeWallet: function changeWallet(wallet, type) {
+      this.$emit('changeWallet', {
+        wallet: wallet,
+        type: type.toLowerCase()
+      });
+    },
+    deleteWallet: function deleteWallet(id, wallet) {
+      this.$emit('deleteWallet', {
+        id: id,
+        wallet: wallet
+      });
+    },
     logout: function logout() {
       var _this = this;
 
@@ -40488,21 +40635,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
                 _this.isLoggingOut = false;
+                localStorage.removeItem('wallet');
                 window.location.href = '/';
-                _context.next = 11;
+                _context.next = 12;
                 break;
 
-              case 8:
-                _context.prev = 8;
+              case 9:
+                _context.prev = 9;
                 _context.t0 = _context["catch"](0);
                 _this.isLoggingOut = false;
 
-              case 11:
+              case 12:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 8]]);
+        }, _callee, null, [[0, 9]]);
       }))();
     }
   }
@@ -41036,6 +41184,57 @@ var _hoisted_7 = {
 var _hoisted_8 = {
   "class": "container"
 };
+var _hoisted_9 = {
+  key: 0,
+  "class": "modal fade",
+  id: "deleteWalletModal",
+  tabindex: "-1"
+};
+var _hoisted_10 = {
+  "class": "modal-dialog modal-dialog-centered"
+};
+var _hoisted_11 = {
+  "class": "modal-content"
+};
+
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "modal-header",
+  style: {
+    "border-bottom": "none"
+  }
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
+  "class": "modal-title"
+}, "Удаление кошелька"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  type: "button",
+  "class": "btn-close",
+  "data-bs-dismiss": "modal"
+})], -1
+/* HOISTED */
+);
+
+var _hoisted_13 = {
+  "class": "modal-body pt-0 pb-4"
+};
+var _hoisted_14 = {
+  "class": "fw-bold text-truncate"
+};
+var _hoisted_15 = {
+  "class": "modal-footer"
+};
+
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  type: "button",
+  "class": "btn btn-secondary",
+  "data-bs-dismiss": "modal"
+}, "Закрыть", -1
+/* HOISTED */
+);
+
+var _hoisted_17 = ["disabled"];
+var _hoisted_18 = {
+  key: 0,
+  "class": "spinner spinner-border spinner-border-sm"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Header = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Header");
 
@@ -41056,16 +41255,40 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "user-info": $data.userInfo,
     "current-space": $data.currentSpace,
     wallets: $data.wallets,
-    onConnectWallet: $options.connectWallet
+    extensionPriority: $data.extensionPriority,
+    onConnectWallet: $options.connectWallet,
+    onChangeWallet: $options.changeWallet,
+    onDeleteWallet: $options.confirmDelete
   }, null, 8
   /* PROPS */
-  , ["user", "user-info", "current-space", "wallets", "onConnectWallet"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_view, {
+  , ["user", "user-info", "current-space", "wallets", "extensionPriority", "onConnectWallet", "onChangeWallet", "onDeleteWallet"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_view, {
+    extensionPriority: $data.extensionPriority,
     user: $props.user,
-    "user-info": $data.userInfo
+    "user-info": $data.userInfo,
+    "pool-address": $data.poolAddress,
+    "pool-contract": $data.poolContract,
+    onLoadUserInfo: $options.loadUserInfo
   }, null, 8
   /* PROPS */
-  , ["user", "user-info"])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Footer)])])]), !$props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    key: 0
+  , ["extensionPriority", "user", "user-info", "pool-address", "pool-contract", "onLoadUserInfo"])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Footer)])])]), $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.deletingWallet.address), 1
+  /* TEXT */
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "position-relative btn btn-primary",
+    disabled: $data.deletingWallet.loading,
+    onClick: _cache[0] || (_cache[0] = function () {
+      return $options.deleteWallet && $options.deleteWallet.apply($options, arguments);
+    })
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
+      invisible: $data.deletingWallet.loading
+    })
+  }, " Удалить ", 2
+  /* CLASS */
+  ), $data.deletingWallet.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_18)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
+  /* PROPS */
+  , _hoisted_17)])])])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 1
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_LoginModal, {
     "google-auth": $props.googleAuth,
     "facebook-auth": $props.facebookAuth
@@ -41082,7 +41305,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["reset-token"])], 64
   /* STABLE_FRAGMENT */
-  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64
+  ))], 64
   /* STABLE_FRAGMENT */
   );
 }
@@ -41251,60 +41474,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var _assets_img_logo_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/img/logo.svg */ "./resources/js/assets/img/logo.svg");
-/* harmony import */ var _assets_img_en_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/img/en.svg */ "./resources/js/assets/img/en.svg");
-/* harmony import */ var _assets_img_ru_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../assets/img/ru.svg */ "./resources/js/assets/img/ru.svg");
-
+/* harmony import */ var _assets_img_en_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../assets/img/en.svg */ "./resources/js/assets/img/en.svg");
+/* harmony import */ var _assets_img_ru_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/img/ru.svg */ "./resources/js/assets/img/ru.svg");
 
 
 
 var _hoisted_1 = {
-  "class": "row align-items-center justify-content-between"
+  "class": "row align-items-center"
 };
 var _hoisted_2 = {
-  "class": "col-auto"
+  "class": "col"
 };
 var _hoisted_3 = {
-  "class": "row align-items-center"
+  "class": "row align-items-center justify-content-between"
 };
 var _hoisted_4 = {
   "class": "col-auto"
 };
-
-var _hoisted_5 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-  src: _assets_img_logo_svg__WEBPACK_IMPORTED_MODULE_1__["default"],
-  "class": "img-fluid",
-  width: "100",
-  alt: ""
-}, null, -1
-/* HOISTED */
-);
-
+var _hoisted_5 = {
+  "class": "nav"
+};
 var _hoisted_6 = {
-  "class": "col-auto"
+  "class": "nav-item"
 };
 var _hoisted_7 = {
-  "class": "nav pt-2"
+  "class": "nav-item"
 };
 var _hoisted_8 = {
-  "class": "nav-item"
+  "class": "col-auto"
 };
 var _hoisted_9 = {
-  "class": "nav-item"
+  "class": "col-12 col-md-auto py-2 py-md-0"
 };
 var _hoisted_10 = {
-  "class": "col-auto"
+  "class": "row align-items-center justify-content-between"
 };
 var _hoisted_11 = {
-  "class": "row align-items-center"
+  "class": "col-auto"
 };
 var _hoisted_12 = {
-  "class": "col-auto"
-};
-var _hoisted_13 = {
-  "class": "col-auto"
-};
-var _hoisted_14 = {
   key: 1,
   "class": "btn text-primary",
   style: {
@@ -41313,86 +41521,111 @@ var _hoisted_14 = {
   }
 };
 
-var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<button class=\"btn btn-outline-danger dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\"><i class=\"bi bi-person-circle\"></i></button><div class=\"dropdown-menu dropdown-menu-end\"><div class=\"px-3\"><button class=\"btn btn-primary d-block mb-1 w-100\" data-bs-toggle=\"modal\" data-bs-target=\"#loginModal\"> Войти </button><button class=\"btn btn-block btn-link px-0 w-100\" data-bs-toggle=\"modal\" data-bs-target=\"#registrationModal\"> Регистрация </button></div></div>", 2);
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<button class=\"btn btn-outline-danger dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\"><i class=\"bi bi-person-circle\"></i></button><div class=\"dropdown-menu dropdown-menu-end\"><div class=\"px-3\"><button class=\"btn btn-primary d-block mb-1 w-100\" data-bs-toggle=\"modal\" data-bs-target=\"#loginModal\"> Войти </button><button class=\"btn btn-block btn-link px-0 w-100\" data-bs-toggle=\"modal\" data-bs-target=\"#registrationModal\"> Регистрация </button></div></div>", 2);
 
-var _hoisted_17 = {
+var _hoisted_15 = {
   key: 0,
   "class": "col-auto"
 };
-var _hoisted_18 = {
+var _hoisted_16 = {
   "class": "dropdown"
 };
-var _hoisted_19 = {
-  "class": "btn btn-outline-danger dropdown-toggle",
+var _hoisted_17 = {
   type: "button",
+  "class": "btn btn-outline-danger dropdown-toggle",
   "data-bs-toggle": "dropdown"
 };
 
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_18 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "bi bi-person-circle"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_21 = {
+var _hoisted_19 = {
   "class": "dropdown-menu dropdown-menu-end"
 };
 
-var _hoisted_22 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "mb-1 px-3 fw-bold"
 }, " Core wallets ", -1
 /* HOISTED */
 );
 
-var _hoisted_23 = {
+var _hoisted_21 = {
   "class": "list-unstyled m-0"
 };
+var _hoisted_22 = {
+  "class": "row flex-nowrap align-items-center me-0"
+};
+var _hoisted_23 = {
+  "class": "col pe-5"
+};
+var _hoisted_24 = ["onClick"];
+var _hoisted_25 = {
+  "class": "col-auto px-0 w-0"
+};
+var _hoisted_26 = ["onClick"];
 
-var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "bi bi-x-lg"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_28 = [_hoisted_27];
+
+var _hoisted_29 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
   "class": "dropdown-divider"
 })], -1
 /* HOISTED */
 );
 
-var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "mb-1 px-3 fw-bold"
 }, " eSpace wallets ", -1
 /* HOISTED */
 );
 
-var _hoisted_26 = {
+var _hoisted_31 = {
   "class": "list-unstyled m-0"
 };
+var _hoisted_32 = {
+  "class": "row flex-nowrap align-items-center me-0"
+};
+var _hoisted_33 = {
+  "class": "col pe-5"
+};
+var _hoisted_34 = ["onClick"];
+var _hoisted_35 = {
+  "class": "col-auto px-0 w-0"
+};
+var _hoisted_36 = ["onClick"];
 
-var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
+var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "bi bi-x-lg"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_38 = [_hoisted_37];
+
+var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("hr", {
   "class": "dropdown-divider"
 })], -1
 /* HOISTED */
 );
 
-var _hoisted_28 = {
+var _hoisted_40 = {
   "class": "list-unstyled m-0"
 };
-var _hoisted_29 = ["disabled"];
-var _hoisted_30 = {
+var _hoisted_41 = ["disabled"];
+var _hoisted_42 = {
   key: 0,
   "class": "spinner spinner-border spinner-border-sm"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_router_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
-
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-    to: {
-      name: 'home'
-    }
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_hoisted_5];
-    }),
-    _: 1
-    /* STABLE */
-
-  })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["btn nav-link", {
       'disabled': $props.currentSpace === 'core'
     }]),
@@ -41401,17 +41634,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, " Core ", 2
   /* CLASS */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["btn nav-link", {
-      'disabled': $props.currentSpace === 'eSpace'
+      'disabled': $props.currentSpace === 'espace'
     }]),
     onClick: _cache[1] || (_cache[1] = function ($event) {
-      return $options.changeSpace('eSpace');
+      return $options.changeSpace('espace');
     })
   }, " eSpace ", 2
   /* CLASS */
-  )])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-    src: _assets_img_en_svg__WEBPACK_IMPORTED_MODULE_2__["default"],
+  )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    src: _assets_img_en_svg__WEBPACK_IMPORTED_MODULE_1__["default"],
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["lang", {
       active: _ctx.$i18n.locale === 'en'
     }]),
@@ -41422,7 +41655,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 2
   /* CLASS */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-    src: _assets_img_ru_svg__WEBPACK_IMPORTED_MODULE_3__["default"],
+    src: _assets_img_ru_svg__WEBPACK_IMPORTED_MODULE_2__["default"],
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["lang", {
       active: _ctx.$i18n.locale === 'ru'
     }]),
@@ -41432,7 +41665,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 2
   /* CLASS */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [$props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  )])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [$props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 0
   }, [!$props.userInfo.connected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
@@ -41442,75 +41675,75 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.currentSpace === 'core' ? _ctx.$t('connect_fluent') : _ctx.$t('connect_metamask')), 1
   /* TEXT */
-  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.shortenAccount), 1
+  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.shortenAccount), 1
   /* TEXT */
   ))], 64
   /* STABLE_FRAGMENT */
   )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 1
-  }, [_hoisted_15], 64
+  }, [_hoisted_13], 64
   /* STABLE_FRAGMENT */
-  ))]), $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_19, [_hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.user.name), 1
+  ))]), $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_17, [_hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.user.name), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [$options.coreWallets.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [$options.coreWallets.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 0
-  }, [_hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_23, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.coreWallets, function (wallet) {
+  }, [_hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_21, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.coreWallets, function (wallet) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
       key: wallet.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-      to: {
-        name: 'address',
-        params: {
-          wallet: wallet.public_key
-        }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      type: "button",
+      "class": "dropdown-item text-truncate",
+      onClick: function onClick($event) {
+        return $options.changeWallet(wallet.public_key, wallet.wallet_type);
+      }
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(wallet.public_key), 9
+    /* TEXT, PROPS */
+    , _hoisted_24)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      type: "button",
+      "class": "btn btn-danger px-1 py-0",
+      style: {
+        "margin-left": "-2.25rem"
       },
-      "class": "dropdown-item text-truncate"
-    }, {
-      "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-        return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(wallet.public_key), 1
-        /* TEXT */
-        )];
-      }),
-      _: 2
-      /* DYNAMIC */
-
-    }, 1032
-    /* PROPS, DYNAMIC_SLOTS */
-    , ["to"])]);
+      onClick: function onClick($event) {
+        return $options.deleteWallet(wallet.id, wallet.public_key);
+      }
+    }, _hoisted_28, 8
+    /* PROPS */
+    , _hoisted_26)])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  )), _hoisted_24])], 64
+  )), _hoisted_29])], 64
   /* STABLE_FRAGMENT */
   )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $options.eSpaceWallets.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 1
-  }, [_hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_26, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.eSpaceWallets, function (wallet) {
+  }, [_hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_31, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.eSpaceWallets, function (wallet) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
       key: wallet.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-      to: {
-        name: 'address',
-        params: {
-          wallet: wallet.public_key
-        }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      type: "button",
+      "class": "dropdown-item text-truncate",
+      onClick: function onClick($event) {
+        return $options.changeWallet(wallet.public_key, wallet.wallet_type);
+      }
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(wallet.public_key), 9
+    /* TEXT, PROPS */
+    , _hoisted_34)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      type: "button",
+      "class": "btn btn-danger px-1 py-0",
+      style: {
+        "margin-left": "-2.25rem"
       },
-      "class": "dropdown-item text-truncate"
-    }, {
-      "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-        return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(wallet.public_key), 1
-        /* TEXT */
-        )];
-      }),
-      _: 2
-      /* DYNAMIC */
-
-    }, 1032
-    /* PROPS, DYNAMIC_SLOTS */
-    , ["to"])]);
+      onClick: function onClick($event) {
+        return $options.deleteWallet(wallet.id, wallet.public_key);
+      }
+    }, _hoisted_38, 8
+    /* PROPS */
+    , _hoisted_36)])])]);
   }), 128
   /* KEYED_FRAGMENT */
-  )), _hoisted_27])], 64
+  )), _hoisted_39])], 64
   /* STABLE_FRAGMENT */
-  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "position-relative dropdown-item",
     type: "button",
     onClick: _cache[5] || (_cache[5] = function () {
@@ -41523,9 +41756,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, " Выйти ", 2
   /* CLASS */
-  ), $data.isLoggingOut ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_30)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
+  ), $data.isLoggingOut ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_42)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
   /* PROPS */
-  , _hoisted_29)])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
+  , _hoisted_41)])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
 }
 
 /***/ }),
@@ -48465,21 +48698,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/en.svg?a8fb2964863cbbcfa36705c9f7fddf52");
-
-/***/ }),
-
-/***/ "./resources/js/assets/img/logo.svg":
-/*!******************************************!*\
-  !*** ./resources/js/assets/img/logo.svg ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/logo.svg?3193716b4bb74f746993a7a6ee41f3f8");
 
 /***/ }),
 

@@ -1,14 +1,9 @@
 <template>
-	<div class="row align-items-center justify-content-between">
-		<div class="col-auto">
-			<div class="row align-items-center">
+	<div class="row align-items-center">
+		<div class="col">
+			<div class="row align-items-center justify-content-between">
 				<div class="col-auto">
-					<router-link :to="{name: 'home'}">
-						<img src="../assets/img/logo.svg" class="img-fluid" width="100" alt="">
-					</router-link>
-				</div>
-				<div class="col-auto">
-					<ul class="nav pt-2">
+					<ul class="nav">
 						<li class="nav-item">
 							<button
 								class="btn nav-link"
@@ -21,18 +16,14 @@
 						<li class="nav-item">
 							<button
 								class="btn nav-link"
-								:class="{'disabled': currentSpace === 'eSpace'}"
-								@click="changeSpace('eSpace')"
+								:class="{'disabled': currentSpace === 'espace'}"
+								@click="changeSpace('espace')"
 							>
 								eSpace
 							</button>
 						</li>
 					</ul>
 				</div>
-			</div>
-		</div>
-		<div class="col-auto">
-			<div class="row align-items-center">
 				<div class="col-auto">
 					<img
 						src="../assets/img/en.svg"
@@ -49,6 +40,10 @@
 						@click="changeLanguage('ru')"
 					>
 				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-auto py-2 py-md-0">
+			<div class="row align-items-center justify-content-between">
 				<div class="col-auto">
 					<template v-if="user">
 						<button
@@ -80,7 +75,7 @@
 				</div>
 				<div class="col-auto" v-if="user">
 					<div class="dropdown">
-						<button class="btn btn-outline-danger dropdown-toggle" type="button" data-bs-toggle="dropdown">
+						<button type="button" class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown">
 							<i class="bi bi-person-circle"></i>
 							{{ user.name }}
 						</button>
@@ -91,12 +86,27 @@
 								</div>
 								<ul class="list-unstyled m-0">
 									<li v-for="wallet in coreWallets" :key="wallet.id">
-										<router-link
-											:to="{name: 'address', params: {wallet: wallet.public_key}}"
-											class="dropdown-item text-truncate"
-										>
-											{{ wallet.public_key }}
-										</router-link>
+										<div class="row flex-nowrap align-items-center me-0">
+											<div class="col pe-5">
+												<button
+													type="button"
+													class="dropdown-item text-truncate"
+													@click="changeWallet(wallet.public_key, wallet.wallet_type)"
+												>
+													{{ wallet.public_key }}
+												</button>
+											</div>
+											<div class="col-auto px-0 w-0">
+												<button
+													type="button"
+													class="btn btn-danger px-1 py-0"
+													style="margin-left:-2.25rem"
+													@click="deleteWallet(wallet.id, wallet.public_key)"
+												>
+													<i class="bi bi-x-lg"></i>
+												</button>
+											</div>
+										</div>
 									</li>
 									<li><hr class="dropdown-divider"></li>
 								</ul>
@@ -107,12 +117,27 @@
 								</div>
 								<ul class="list-unstyled m-0">
 									<li v-for="wallet in eSpaceWallets" :key="wallet.id">
-										<router-link
-											:to="{name: 'address', params: {wallet: wallet.public_key}}"
-											class="dropdown-item text-truncate"
-										>
-											{{ wallet.public_key }}
-										</router-link>
+										<div class="row flex-nowrap align-items-center me-0">
+											<div class="col pe-5">
+												<button
+													type="button"
+													class="dropdown-item text-truncate"
+													@click="changeWallet(wallet.public_key, wallet.wallet_type)"
+												>
+													{{ wallet.public_key }}
+												</button>
+											</div>
+											<div class="col-auto px-0 w-0">
+												<button
+													type="button"
+													class="btn btn-danger px-1 py-0"
+													style="margin-left:-2.25rem"
+													@click="deleteWallet(wallet.id, wallet.public_key)"
+												>
+													<i class="bi bi-x-lg"></i>
+												</button>
+											</div>
+										</div>
 									</li>
 									<li><hr class="dropdown-divider"></li>
 								</ul>
@@ -150,6 +175,7 @@ export default {
 		userInfo: Object,
 		currentSpace: String,
 		wallets: Array,
+		extensionPriority: Boolean,
 	},
 	data() {
 		return {
@@ -158,7 +184,7 @@ export default {
 	},
 	computed: {
 		shortenAccount() {
-			const account = this.userInfo.account;
+			const account = this.extensionPriority ? this.userInfo.account : this.userInfo.wallet
 			if (account.match(':')) {
 				return address.shortenCfxAddress(account);
 			} else {
@@ -181,11 +207,18 @@ export default {
 			localStorage.setItem('space', space)
 			window.location.reload()
 		},
+		changeWallet(wallet, type) {
+			this.$emit('changeWallet', {wallet, type: type.toLowerCase()})
+		},
+		deleteWallet(id, wallet) {
+			this.$emit('deleteWallet', {id, wallet})
+		},
 		async logout() {
 			try {
 				this.isLoggingOut = true
 				await this.$api.post('/logout')
 				this.isLoggingOut = false
+				localStorage.removeItem('wallet')
 				window.location.href = '/'
 			} catch (e) {
 				this.isLoggingOut = false

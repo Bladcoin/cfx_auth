@@ -8,14 +8,21 @@
 						:user-info="userInfo"
 						:current-space="currentSpace"
 						:wallets="wallets"
+						:extensionPriority="extensionPriority"
 						@connectWallet="connectWallet"
+						@changeWallet="changeWallet"
+						@deleteWallet="confirmDelete"
 					/>
 				</div>
 			</div>
 			<div class="container position-relative">
 				<router-view
+					:extensionPriority="extensionPriority"
 					:user="user"
 					:user-info="userInfo"
+					:pool-address="poolAddress"
+					:pool-contract="poolContract"
+					@loadUserInfo="loadUserInfo"
 				/>
 			</div>
 		</div>
@@ -27,7 +34,36 @@
 			</div>
 		</div>
 	</div>
-	<template v-if="!user">
+	<div class="modal fade" id="deleteWalletModal" tabindex="-1" v-if="user">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header" style="border-bottom: none">
+					<h5 class="modal-title">Удаление кошелька</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body pt-0 pb-4">
+					<div class="fw-bold text-truncate">
+						{{ deletingWallet.address }}
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					<button
+						type="button"
+						class="position-relative btn btn-primary"
+						:disabled="deletingWallet.loading"
+						@click="deleteWallet"
+					>
+						<span :class="{invisible: deletingWallet.loading}">
+							Удалить
+						</span>
+						<span class="spinner spinner-border spinner-border-sm" v-if="deletingWallet.loading"></span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<template v-else>
 		<LoginModal
 			:google-auth="googleAuth"
 			:facebook-auth="facebookAuth"
@@ -81,6 +117,7 @@ export default {
 	},
 	data() {
 		return {
+			extensionPriority: false,
 			currentSpace: localStorage.getItem('space') || 'core',
 			chainStatus: {},
 			poolContract: null,
@@ -92,6 +129,7 @@ export default {
 				available: BigInt(0),
 				userInterest: 0,
 				account: '',
+				wallet: localStorage.getItem('wallet'),
 				locked: BigInt(0),
 				unlocked: BigInt(0),
 				unlockedRaw: 0,
@@ -99,12 +137,18 @@ export default {
 				userOutOueue: [],
 			},
 			wallets: [],
+			deletingWallet: {
+				id: null,
+				address: null,
+				loading: false,
+			},
 			eSpaceBlockNumber: 0,
 		}
 	},
 	async created() {
 		this.poolContract = this.currentSpace === 'core' ? getPosPoolContract(config.mainnet.poolAddress) : getSpaceContract(config.mainnet.spaceAddress)
 		this.poolAddress = this.currentSpace === 'core' ? config.mainnet.poolAddress : config.mainnet.spaceAddress
+		this.extensionPriority = !!(window.ethereum || window.conflux)
 	},
 	async mounted() {
 		if (this.referrer.indexOf(`${window.location.origin}/email/verify/`) === 0 && !this.user) { // Редирект при верификации почты
@@ -115,7 +159,10 @@ export default {
 		}
 
 		if (this.user) {
-			await this.fetchWallets()
+			await Promise.all([
+				await this.loadChainInfo(),
+				await this.fetchWallets()
+			])
 		}
 
 		if (window.conflux) {
@@ -123,6 +170,7 @@ export default {
 				if (accounts.length === 0) {
 					this.userInfo.account = ''
 					this.userInfo.connected = false
+					this.extensionPriority = true
 					localStorage.removeItem('userConnected')
 				}
 			})
@@ -131,6 +179,7 @@ export default {
 		if (window.ethereum) {
 			window.ethereum.on('chainChanged', () => {
 				this.resetUserInfo()
+				this.extensionPriority = true
 			})
 
 			window.ethereum.on('accountsChanged', async ([newAddress]) => {
@@ -139,15 +188,23 @@ export default {
 				}
 
 				localStorage.setItem('userConnected', 'true')
+				this.extensionPriority = true
 				await this.requestAccount(true, utils.getAddress(newAddress))
 			})
 		}
 
-		if (this.user && window.conflux && localStorage.getItem('userConnected')) {
+		if (this.user && (window.conflux || window.ethereum) && localStorage.getItem('userConnected')) {
 			await this.requestAccount(true)
+		} else if (this.user && !window.conflux && !window.ethereum && this.userInfo.wallet) {
+			this.extensionPriority = false
+			await this.loadUserInfo()
+			this.userInfo.connected = true
 		}
 	},
 	methods: {
+		async loadChainInfo() {
+			this.chainStatus = await conflux.cfx.getStatus()
+		},
 		async connectWallet() {
 			if (this.currentSpace === 'core') {
 				if (!window.conflux) {
@@ -173,6 +230,20 @@ export default {
 			} else {
 				localStorage.setItem('userConnected', 'true')
 			}
+		},
+		async changeWallet({wallet, type}) {
+			localStorage.setItem('wallet', wallet)
+			localStorage.setItem('space', type)
+
+			if (this.currentSpace !== type) {
+				window.location.reload()
+				return
+			}
+
+			this.userInfo.wallet = wallet
+			this.extensionPriority = false
+			await this.loadUserInfo()
+			this.userInfo.connected = true
 		},
 		async requestAccount(isLocalStorage, address) {
 			try {
@@ -205,8 +276,6 @@ export default {
 
 				await Promise.all([
 					this.loadUserInfo(),
-					this.loadLockingList(),
-					this.loadUnlockingList(),
 					this.saveWallet(),
 				])
 
@@ -218,9 +287,18 @@ export default {
 			}
 		},
 		async loadUserInfo() {
-			const userSummary = await this.poolContract.userSummary(this.userInfo.account);
-			const userInterest = await this.poolContract.userInterest(this.userInfo.account);
-			const balance = this.currentSpace === 'core' ? await conflux.cfx.getBalance(this.userInfo.account) : await spaceProvider.getBalance(this.userInfo.account);
+			const account = this.extensionPriority ? this.userInfo.account : this.userInfo.wallet
+			let userSummary, userInterest, balance, lockingList, unlockingList
+
+			await Promise.all([
+				this.poolContract.userSummary(account).then(response => { userSummary = response }),
+				this.poolContract.userInterest(account).then(response => { userInterest = response }),
+				this.currentSpace === 'core'
+					? conflux.cfx.getBalance(account).then(response => { balance = response })
+					: spaceProvider.getBalance(account).then(response => { balance = response }),
+				this.poolContract['userInQueue(address)'](account).then(response => { lockingList = response }),
+				this.poolContract['userOutQueue(address)'](account).then(response => { unlockingList = response }),
+			])
 
 			this.userInfo.userStaked = BigInt(userSummary[0].toString());
 			this.userInfo.available = BigInt(userSummary[1].toString());
@@ -229,6 +307,8 @@ export default {
 			this.userInfo.unlockedRaw = userSummary[3];
 			this.userInfo.userInterest = this.trimPoints(Drip(userInterest.toString()).toCFX());
 			this.userInfo.balance = this.trimPoints(Drip(balance).toCFX());
+			this.userInfo.userInQueue = lockingList.map(this.mapQueueItem);
+			this.userInfo.userOutOueue = unlockingList.map(this.mapQueueItem);
 		},
 		resetUserInfo() {
 			this.userInfo.balance = 0
@@ -294,6 +374,25 @@ export default {
 			}
 			return `${parts[0]}.${parts[1].substr(0, 4)}`;
 		},
+		confirmDelete({id, wallet}) {
+			this.deletingWallet.id = id
+			this.deletingWallet.address = wallet
+			bootstrap.Modal.getOrCreateInstance('#deleteWalletModal').show()
+		},
+		async deleteWallet() {
+			try {
+				this.deletingWallet.loading = true
+				await this.$api.delete(`/api/delete_wallet/${this.deletingWallet.id}`)
+				this.deletingWallet.loading = false
+				this.wallets = this.wallets.filter(wallet => wallet.id !== this.deletingWallet.id)
+				this.deletingWallet.id = null
+				this.deletingWallet.address = null
+				bootstrap.Modal.getOrCreateInstance('#deleteWalletModal').hide()
+				this.toast.success('Вы успешно удалили кошелек!')
+			} catch (e) {
+				this.deletingWallet.loading = false
+			}
+		}
 	},
 	watch: {
 		$route(to) {

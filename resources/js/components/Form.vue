@@ -1,85 +1,89 @@
 <template>
 	<div class="mt-4 border rounded-3 p-4 bg-light">
-		<div class="row">
-			<div class="col-lg-3 col-md-6 col-12">
-				<div>
-					<div><span class="h-num">{{ userStakedCFX }}</span></div>
-					<span class="intro-title">{{ $t('my_staked') }}</span>
-				</div>
-				<div class="row mt-2">
-					<div class="col-md-7 col-12 mb-2">
-						<input class="form-control" type="number" v-model="stakeCount">
+		<form>
+			<fieldset :disabled="!extensionPriority && userInfo.wallet !== userInfo.account">
+				<div class="row">
+					<div class="col-lg-3 col-md-6 col-12">
+						<div>
+							<div><span class="h-num">{{ userStakedCFX }}</span></div>
+							<span class="intro-title">{{ $t('my_staked') }}</span>
+						</div>
+						<div class="row mt-2">
+							<div class="col-md-7 col-12 mb-2">
+								<input class="form-control" type="number" v-model="stakeCount">
+							</div>
+							<div class="col-md-5 col-12 mb-2">
+								<button
+									class="position-relative btn btn-primary"
+									@click="stake"
+									:disabled="!userInfo.connected || stakeLoading"
+								>
+									{{ $t('stake') }}
+								</button>
+							</div>
+						</div>
+						<p class="intro-title" v-if="userInfo.connected">
+							{{ $t('balance') }}: {{ userInfo.balance }} CFX
+						</p>
 					</div>
-					<div class="col-md-5 col-12 mb-2">
+					<div class="col-lg-3 col-md-6 col-12">
+						<div>
+							<div><span class="h-num">{{ userInfo.userInterest }}</span></div>
+							<span class="intro-title">{{ $t('my_rewards') }}</span>
+						</div>
 						<button
-							class="position-relative btn btn-primary"
-							@click="stake"
-							:disabled="!userInfo.connected || stakeLoading"
+							class="position-relative btn btn-primary mt-2"
+							@click="claim"
+							:disabled="!userInfo.connected || claimLoading"
 						>
-							{{ $t('stake') }}
+							<span :class="{invisible: claimLoading}">
+								{{ $t('claim') }}
+							</span>
+							<span class="spinner spinner-border spinner-border-sm" v-if="claimLoading"></span>
+						</button>
+						<p class="intro-title mt-2" v-if="userInfo.connected && poolInfo.lastRewardTime > 0">
+							{{ $t('last_update') }}: {{ lastRewardTime }}
+						</p>
+					</div>
+					<div class="col-lg-3 col-md-6 col-12">
+						<div>
+							<div><span class="h-num">{{ unstakeableCFX }}</span></div>
+							<span class="intro-title">{{ $t('unstakeable') }}</span>
+						</div>
+						<div class="row mt-2">
+							<div class="col-md-7 col-12 mb-2">
+								<input class="form-control" type="number" v-model="unstakeCount">
+							</div>
+							<div class="col-md-5 col-12">
+								<button
+									class="position-relative btn btn-primary"
+									@click="unstake"
+									:disabled="!userInfo.connected || unstakeLoading"
+								>
+									{{ $t('unstake') }}
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6 col-12 mt-3 mt-md-0">
+						<div>
+							<div><span class="h-num">{{ withdrawableCFX }}</span></div>
+							<span class="intro-title">{{ $t('withdrawable') }}</span>
+						</div>
+						<button
+							class="position-relative btn btn-primary mt-2"
+							@click="withdraw"
+							:disabled="!userInfo.connected || withdrawLoading"
+						>
+							<span :class="{invisible: withdrawLoading}">
+								{{ $t('withdraw') }}
+							</span>
+							<span class="spinner spinner-border spinner-border-sm" v-if="withdrawLoading"></span>
 						</button>
 					</div>
 				</div>
-				<p class="intro-title" v-if="userInfo.connected">
-					{{ $t('balance') }}: {{ userInfo.balance }} CFX
-				</p>
-			</div>
-			<div class="col-lg-3 col-md-6 col-12">
-				<div>
-					<div><span class="h-num">{{ userInfo.userInterest }}</span></div>
-					<span class="intro-title">{{ $t('my_rewards') }}</span>
-				</div>
-				<button
-					class="position-relative btn btn-primary mt-2"
-					@click="claim"
-					:disabled="!userInfo.connected || claimLoading"
-				>
-					<span :class="{invisible: claimLoading}">
-						{{ $t('claim') }}
-					</span>
-					<span class="spinner spinner-border spinner-border-sm" v-if="claimLoading"></span>
-				</button>
-				<p class="intro-title mt-2" v-if="userInfo.connected && poolInfo.lastRewardTime > 0">
-					{{ $t('last_update') }}: {{ lastRewardTime }}
-				</p>
-			</div>
-			<div class="col-lg-3 col-md-6 col-12">
-				<div>
-					<div><span class="h-num">{{ unstakeableCFX }}</span></div>
-					<span class="intro-title">{{ $t('unstakeable') }}</span>
-				</div>
-				<div class="row mt-2">
-					<div class="col-md-7 col-12 mb-2">
-						<input class="form-control" type="number" v-model="unstakeCount">
-					</div>
-					<div class="col-md-5 col-12">
-						<button
-							class="position-relative btn btn-primary"
-							@click="unstake"
-							:disabled="!userInfo.connected || unstakeLoading"
-						>
-							{{ $t('unstake') }}
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-6 col-12 mt-3 mt-md-0">
-				<div>
-					<div><span class="h-num">{{ withdrawableCFX }}</span></div>
-					<span class="intro-title">{{ $t('withdrawable') }}</span>
-				</div>
-				<button
-					class="position-relative btn btn-primary mt-2"
-					@click="withdraw"
-					:disabled="!userInfo.connected || withdrawLoading"
-				>
-					<span :class="{invisible: withdrawLoading}">
-						{{ $t('withdraw') }}
-					</span>
-					<span class="spinner spinner-border spinner-border-sm" v-if="withdrawLoading"></span>
-				</button>
-			</div>
-		</div>
+			</fieldset>
+		</form>
 	</div>
 
 	<div class="modal fade" id="stakeModal" tabindex="-1">
@@ -180,11 +184,11 @@
 </template>
 
 <script>
-//import BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 import { Unit, sendTransaction as sendTransactionWithFluent } from '@cfxjs/use-wallet'
 import { provider as metaMaskProvider, sendTransaction as sendTransactionWithMetaMask } from '@cfxjs/use-wallet/dist/ethereum'
-import { Drip, format } from '../utils/cfx'
-import { BigNumber, ethers, utils } from 'ethers'
+import { format } from '../utils/cfx'
+import { utils } from 'ethers'
 import { formatDateTime, calculateGasMargin } from '../utils/index.js'
 import poolConfig from '../pool.config.js'
 import { abi as posPoolAbi } from '../abi/IPoSPool.json'
@@ -194,11 +198,14 @@ const poolInterface = new utils.Interface(posPoolAbi)
 export default {
 	name: 'Form',
 	props: {
+		extensionPriority: Boolean,
 		poolInfo: Object,
+		poolAddress: String,
 		userInfo: Object,
 		poolContract: Object,
 		currentSpace: String,
 	},
+	emits: ['loadUserInfo'],
 	data() {
 		return {
 			stakeLoading: false,
@@ -227,6 +234,9 @@ export default {
 		},
 		withdrawableCFX() {
 			return this.userInfo.unlocked * BigInt(ONE_VOTE_CFX);
+		},
+		isFormDisabled() {
+
 		},
 	},
 	mounted() {
@@ -324,12 +334,6 @@ export default {
 							])
 						}
 
-						/*estimateData = await this.poolContract
-							.withdrawStake(new BigNumber(this.userInfo.unlocked).toString(10))
-							.estimateGasAndCollateral({
-								from: this.userInfo.account,
-							})
-						data = this.poolContract.withdrawStake(this.userInfo.unlocked).data*/
 						break
 					default:
 						break
@@ -337,37 +341,24 @@ export default {
 
 				const txParams = {
 					to:	this.currentSpace === 'core'
-						? format.address(this.poolInfo.poolAddress, poolConfig.mainnet.core.networkId)
-						: this.poolInfo.poolAddress,
+						? format.address(this.poolAddress, poolConfig.mainnet.core.networkId)
+						: this.poolAddress,
 					data,
 					value: Unit.fromMinUnit(value).toHexMinUnit()
 				}
 
-				/*const txParams = {
-					to: format.address(this.poolInfo.poolAddress, poolConfig.mainnet.core.networkId),
-					data,
-					gas: Unit.fromMinUnit(
-						calculateGasMargin(estimateData?.gasLimit || 0),
-					).toHexMinUnit(),
-					storageLimit: Unit.fromMinUnit(
-						calculateGasMargin(String(estimateData?.storageCollateralized || 0)),
-					).toHexMinUnit(),
-					value: Unit.fromMinUnit(value).toHexMinUnit(),
-				}*/
-
-				if (this.currentSpace === 'eSpace') {
-					estimateData.gasLimit = await metaMaskProvider
-						.request({
-							method: 'eth_estimateGas',
-							params: [
-								{
-									from: this.userInfo.account,
-									data,
-									to: this.poolInfo.poolAddress,
-									value: Unit.fromMinUnit(value).toHexMinUnit(),
-								},
-							],
-						})
+				if (this.currentSpace === 'espace') {
+					estimateData.gasLimit = await metaMaskProvider.request({
+						method: 'eth_estimateGas',
+						params: [
+							{
+								from: this.userInfo.account,
+								data,
+								to: this.poolAddress,
+								value: Unit.fromMinUnit(value).toHexMinUnit(),
+							},
+						],
+					})
 				}
 
 				if (estimateData?.gasLimit) {
@@ -387,9 +378,8 @@ export default {
 					this.unstakeLoading = false
 				}
 
-				const txHash = this.currentSpace === 'core' ? await sendTransactionWithFluent(txParams) : await sendTransactionWithMetaMask(txParams)
+				this.txHash = this.currentSpace === 'core' ? await sendTransactionWithFluent(txParams) : await sendTransactionWithMetaMask(txParams)
 
-				this.txHash = txHash
 				this.hashModal.show()
 
 				if (type === 'stake') {
@@ -410,8 +400,7 @@ export default {
 					alert(this.$t('withdraw_success'))
 				}
 
-				this.$parent.loadUserInfo();
-				this.$parent.loadLockingList();
+				this.$emit('loadUserInfo')
 			} catch (error) {
 				console.error('error', error)
 				if (type === 'stake') {

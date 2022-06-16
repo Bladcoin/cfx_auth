@@ -11,14 +11,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @cfxjs/use-wallet */ "./node_modules/@cfxjs/use-wallet/dist/index.js");
-/* harmony import */ var _cfxjs_use_wallet_dist_ethereum__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @cfxjs/use-wallet/dist/ethereum */ "./node_modules/@cfxjs/use-wallet/dist/ethereum/index.js");
-/* harmony import */ var _utils_cfx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/cfx */ "./resources/js/utils/cfx.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/abi/lib.esm/interface.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/bignumber/lib.esm/bignumber.js");
-/* harmony import */ var _utils_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/index.js */ "./resources/js/utils/index.js");
-/* harmony import */ var _pool_config_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../pool.config.js */ "./resources/js/pool.config.js");
-/* harmony import */ var _abi_IPoSPool_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../abi/IPoSPool.json */ "./resources/js/abi/IPoSPool.json");
+/* harmony import */ var bignumber_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bignumber.js */ "./node_modules/bignumber.js/bignumber.js");
+/* harmony import */ var bignumber_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(bignumber_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @cfxjs/use-wallet */ "./node_modules/@cfxjs/use-wallet/dist/index.js");
+/* harmony import */ var _cfxjs_use_wallet_dist_ethereum__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @cfxjs/use-wallet/dist/ethereum */ "./node_modules/@cfxjs/use-wallet/dist/ethereum/index.js");
+/* harmony import */ var _utils_cfx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/cfx */ "./resources/js/utils/cfx.js");
+/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/abi/lib.esm/interface.js");
+/* harmony import */ var _utils_index_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/index.js */ "./resources/js/utils/index.js");
+/* harmony import */ var _pool_config_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../pool.config.js */ "./resources/js/pool.config.js");
+/* harmony import */ var _abi_IPoSPool_json__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../abi/IPoSPool.json */ "./resources/js/abi/IPoSPool.json");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
@@ -27,7 +28,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//import BigNumber from 'bignumber.js'
+
 
 
 
@@ -36,15 +37,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 var ONE_VOTE_CFX = 1000;
-var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSPool_json__WEBPACK_IMPORTED_MODULE_5__.abi);
+var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_7__.Interface(_abi_IPoSPool_json__WEBPACK_IMPORTED_MODULE_6__.abi);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Form',
   props: {
+    extensionPriority: Boolean,
     poolInfo: Object,
+    poolAddress: String,
     userInfo: Object,
     poolContract: Object,
     currentSpace: String
   },
+  emits: ['loadUserInfo'],
   data: function data() {
     return {
       stakeLoading: false,
@@ -69,11 +73,12 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
     },
     lastRewardTime: function lastRewardTime() {
       var lastTime = new Date(this.poolInfo.lastRewardTime * 1000);
-      return (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_3__.formatDateTime)(lastTime);
+      return (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_4__.formatDateTime)(lastTime);
     },
     withdrawableCFX: function withdrawableCFX() {
       return this.userInfo.unlocked * BigInt(ONE_VOTE_CFX);
-    }
+    },
+    isFormDisabled: function isFormDisabled() {}
   },
   mounted: function mounted() {
     this.stakeModal = new bootstrap.Modal(document.getElementById('stakeModal'), {});
@@ -86,7 +91,7 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var _estimateData, _estimateData3, data, estimateData, value, stakeVote, unstakeVote, _this$userInfo$unlock, _this$userInfo$unlock2, txParams, _estimateData2, _estimateData4, txHash;
+        var _estimateData, _estimateData3, data, estimateData, value, stakeVote, unstakeVote, _this$userInfo$unlock, _this$userInfo$unlock2, txParams, _estimateData2, _estimateData4;
 
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) {
@@ -102,8 +107,8 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
 
               case 7:
                 _this.stakeLoading = true;
-                value = new ethers__WEBPACK_IMPORTED_MODULE_7__.BigNumber(_this.stakeCount).multipliedBy(Math.pow(10, 18)).toString(10);
-                stakeVote = new ethers__WEBPACK_IMPORTED_MODULE_7__.BigNumber(_this.stakeCount).dividedBy(ONE_VOTE_CFX).toString(10);
+                value = new (bignumber_js__WEBPACK_IMPORTED_MODULE_0___default())(_this.stakeCount).multipliedBy(Math.pow(10, 18)).toString(10);
+                stakeVote = new (bignumber_js__WEBPACK_IMPORTED_MODULE_0___default())(_this.stakeCount).dividedBy(ONE_VOTE_CFX).toString(10);
 
                 if (!(_this.currentSpace === 'core')) {
                   _context.next = 17;
@@ -131,7 +136,7 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
               case 19:
                 _this.unstakeLoading = true;
                 value = 0;
-                unstakeVote = new ethers__WEBPACK_IMPORTED_MODULE_7__.BigNumber(_this.unstakeCount).dividedBy(ONE_VOTE_CFX).toString(10);
+                unstakeVote = new (bignumber_js__WEBPACK_IMPORTED_MODULE_0___default())(_this.unstakeCount).dividedBy(ONE_VOTE_CFX).toString(10);
 
                 if (!(_this.currentSpace === 'core')) {
                   _context.next = 29;
@@ -190,9 +195,9 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
                   break;
                 }
 
-                data = _this.poolContract.withdrawStake(new ethers__WEBPACK_IMPORTED_MODULE_7__.BigNumber(((_this$userInfo$unlock = _this.userInfo.unlockedRaw) === null || _this$userInfo$unlock === void 0 ? void 0 : _this$userInfo$unlock._hex) || _this.userInfo.unlockedRaw).toString(10)).data;
+                data = _this.poolContract.withdrawStake(new (bignumber_js__WEBPACK_IMPORTED_MODULE_0___default())(((_this$userInfo$unlock = _this.userInfo.unlockedRaw) === null || _this$userInfo$unlock === void 0 ? void 0 : _this$userInfo$unlock._hex) || _this.userInfo.unlockedRaw).toString(10)).data;
                 _context.next = 48;
-                return _this.poolContract.withdrawStake(new ethers__WEBPACK_IMPORTED_MODULE_7__.BigNumber(_this.userInfo.unlockedRaw).toString(10)).estimateGasAndCollateral({
+                return _this.poolContract.withdrawStake(new (bignumber_js__WEBPACK_IMPORTED_MODULE_0___default())(_this.userInfo.unlockedRaw).toString(10)).estimateGasAndCollateral({
                   from: _this.userInfo.account
                 });
 
@@ -202,7 +207,7 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
                 break;
 
               case 51:
-                data = poolInterface.encodeFunctionData('withdrawStake', [new ethers__WEBPACK_IMPORTED_MODULE_7__.BigNumber(((_this$userInfo$unlock2 = _this.userInfo.unlockedRaw) === null || _this$userInfo$unlock2 === void 0 ? void 0 : _this$userInfo$unlock2._hex) || _this.userInfo.unlockedRaw).toString(10)]);
+                data = poolInterface.encodeFunctionData('withdrawStake', [new (bignumber_js__WEBPACK_IMPORTED_MODULE_0___default())(((_this$userInfo$unlock2 = _this.userInfo.unlockedRaw) === null || _this$userInfo$unlock2 === void 0 ? void 0 : _this$userInfo$unlock2._hex) || _this.userInfo.unlockedRaw).toString(10)]);
 
               case 52:
                 return _context.abrupt("break", 54);
@@ -212,35 +217,24 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
 
               case 54:
                 txParams = {
-                  to: _this.currentSpace === 'core' ? _utils_cfx__WEBPACK_IMPORTED_MODULE_2__.format.address(_this.poolInfo.poolAddress, _pool_config_js__WEBPACK_IMPORTED_MODULE_4__["default"].mainnet.core.networkId) : _this.poolInfo.poolAddress,
+                  to: _this.currentSpace === 'core' ? _utils_cfx__WEBPACK_IMPORTED_MODULE_3__.format.address(_this.poolAddress, _pool_config_js__WEBPACK_IMPORTED_MODULE_5__["default"].mainnet.core.networkId) : _this.poolAddress,
                   data: data,
-                  value: _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_0__.Unit.fromMinUnit(value).toHexMinUnit()
+                  value: _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_1__.Unit.fromMinUnit(value).toHexMinUnit()
                 };
-                /*const txParams = {
-                	to: format.address(this.poolInfo.poolAddress, poolConfig.mainnet.core.networkId),
-                	data,
-                	gas: Unit.fromMinUnit(
-                		calculateGasMargin(estimateData?.gasLimit || 0),
-                	).toHexMinUnit(),
-                	storageLimit: Unit.fromMinUnit(
-                		calculateGasMargin(String(estimateData?.storageCollateralized || 0)),
-                	).toHexMinUnit(),
-                	value: Unit.fromMinUnit(value).toHexMinUnit(),
-                }*/
 
-                if (!(_this.currentSpace === 'eSpace')) {
+                if (!(_this.currentSpace === 'espace')) {
                   _context.next = 59;
                   break;
                 }
 
                 _context.next = 58;
-                return _cfxjs_use_wallet_dist_ethereum__WEBPACK_IMPORTED_MODULE_1__.provider.request({
+                return _cfxjs_use_wallet_dist_ethereum__WEBPACK_IMPORTED_MODULE_2__.provider.request({
                   method: 'eth_estimateGas',
                   params: [{
                     from: _this.userInfo.account,
                     data: data,
-                    to: _this.poolInfo.poolAddress,
-                    value: _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_0__.Unit.fromMinUnit(value).toHexMinUnit()
+                    to: _this.poolAddress,
+                    value: _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_1__.Unit.fromMinUnit(value).toHexMinUnit()
                   }]
                 });
 
@@ -249,11 +243,11 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
 
               case 59:
                 if ((_estimateData = estimateData) !== null && _estimateData !== void 0 && _estimateData.gasLimit) {
-                  txParams.gas = _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_0__.Unit.fromMinUnit((0,_utils_index_js__WEBPACK_IMPORTED_MODULE_3__.calculateGasMargin)(((_estimateData2 = estimateData) === null || _estimateData2 === void 0 ? void 0 : _estimateData2.gasLimit) || 0)).toHexMinUnit();
+                  txParams.gas = _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_1__.Unit.fromMinUnit((0,_utils_index_js__WEBPACK_IMPORTED_MODULE_4__.calculateGasMargin)(((_estimateData2 = estimateData) === null || _estimateData2 === void 0 ? void 0 : _estimateData2.gasLimit) || 0)).toHexMinUnit();
                 }
 
                 if ((_estimateData3 = estimateData) !== null && _estimateData3 !== void 0 && _estimateData3.storageCollateralized) {
-                  txParams.storageLimit = _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_0__.Unit.fromMinUnit((0,_utils_index_js__WEBPACK_IMPORTED_MODULE_3__.calculateGasMargin)(String(((_estimateData4 = estimateData) === null || _estimateData4 === void 0 ? void 0 : _estimateData4.storageCollateralized) || 0))).toHexMinUnit();
+                  txParams.storageLimit = _cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_1__.Unit.fromMinUnit((0,_utils_index_js__WEBPACK_IMPORTED_MODULE_4__.calculateGasMargin)(String(((_estimateData4 = estimateData) === null || _estimateData4 === void 0 ? void 0 : _estimateData4.storageCollateralized) || 0))).toHexMinUnit();
                 }
 
                 if (type === 'stake') {
@@ -274,7 +268,7 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
                 }
 
                 _context.next = 66;
-                return (0,_cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_0__.sendTransaction)(txParams);
+                return (0,_cfxjs_use_wallet__WEBPACK_IMPORTED_MODULE_1__.sendTransaction)(txParams);
 
               case 66:
                 _context.t1 = _context.sent;
@@ -283,14 +277,13 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
 
               case 69:
                 _context.next = 71;
-                return (0,_cfxjs_use_wallet_dist_ethereum__WEBPACK_IMPORTED_MODULE_1__.sendTransaction)(txParams);
+                return (0,_cfxjs_use_wallet_dist_ethereum__WEBPACK_IMPORTED_MODULE_2__.sendTransaction)(txParams);
 
               case 71:
                 _context.t1 = _context.sent;
 
               case 72:
-                txHash = _context.t1;
-                _this.txHash = txHash;
+                _this.txHash = _context.t1;
 
                 _this.hashModal.show();
 
@@ -312,15 +305,13 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
                   alert(_this.$t('withdraw_success'));
                 }
 
-                _this.$parent.loadUserInfo();
+                _this.$emit('loadUserInfo');
 
-                _this.$parent.loadLockingList();
-
-                _context.next = 90;
+                _context.next = 88;
                 break;
 
-              case 83:
-                _context.prev = 83;
+              case 81:
+                _context.prev = 81;
                 _context.t2 = _context["catch"](0);
                 console.error('error', _context.t2);
 
@@ -342,12 +333,12 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_6__.Interface(_abi_IPoSP
                   alert(_this.$t('withdraw_failed'));
                 }
 
-              case 90:
+              case 88:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 83]]);
+        }, _callee, null, [[0, 81]]);
       }))();
     },
     stake: function stake() {
@@ -587,24 +578,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Stats_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Stats.vue */ "./resources/js/components/Stats.vue");
 /* harmony import */ var _components_Form_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Form.vue */ "./resources/js/components/Form.vue");
 /* harmony import */ var _utils_cfx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/cfx */ "./resources/js/utils/cfx.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/address/lib.esm/index.js");
-/* harmony import */ var ethers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ethers */ "./node_modules/@ethersproject/providers/lib.esm/web3-provider.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../constants */ "./resources/js/constants/index.js");
 /* harmony import */ var _utils_index_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/index.js */ "./resources/js/utils/index.js");
 /* harmony import */ var _pool_config_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../pool.config.js */ "./resources/js/pool.config.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 
@@ -620,13 +597,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-
 var ONE_VOTE_CFX = 1000;
-
-function paddingZero(value) {
-  return value < 10 ? "0".concat(value) : value;
-}
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Home',
   components: {
@@ -634,17 +605,18 @@ function paddingZero(value) {
     Form: _components_Form_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: {
-    user: Object //userInfo: Object,
-
+    extensionPriority: Boolean,
+    user: Object,
+    userInfo: Object,
+    poolAddress: String,
+    poolContract: Object
   },
+  emits: ['loadUserInfo'],
   data: function data() {
     return {
       currentSpace: localStorage.getItem('space') || 'core',
       moment: (moment_min_moment_with_locales__WEBPACK_IMPORTED_MODULE_1___default()),
       isLoading: false,
-      chainStatus: {},
-      poolContract: null,
-      wallets: [],
       showChart: false,
       poolInfo: {
         fee: 0,
@@ -656,23 +628,9 @@ function paddingZero(value) {
         apy: 0,
         lastRewardTime: 0,
         stakerNumber: '0',
-        poolAddress: null,
         posAddress: _pool_config_js__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.posAddress,
         inCommittee: false,
         totalAvailable: 0
-      },
-      userInfo: {
-        balance: 0,
-        connected: false,
-        userStaked: BigInt(0),
-        available: BigInt(0),
-        userInterest: 0,
-        account: '',
-        locked: BigInt(0),
-        unlocked: BigInt(0),
-        unlockedRaw: 0,
-        userInQueue: [],
-        userOutOueue: []
       },
       activeTabIndex: 0,
       incomingHistory: null,
@@ -690,235 +648,124 @@ function paddingZero(value) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              //this.isLoading = true
-              _this.poolContract = _this.currentSpace === 'core' ? (0,_utils_cfx__WEBPACK_IMPORTED_MODULE_4__.getPosPoolContract)(_pool_config_js__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.poolAddress) : (0,_utils_cfx__WEBPACK_IMPORTED_MODULE_4__.getSpaceContract)(_pool_config_js__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.spaceAddress);
-              _this.poolInfo.poolAddress = _this.currentSpace === 'core' ? _pool_config_js__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.poolAddress : _pool_config_js__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.spaceAddress;
 
-              _this.moment.locale(_this.$i18n.locale); //await this.loadServerStatus()
+              _this.moment.locale(_this.$i18n.locale);
 
+              _context.next = 4;
+              return Promise.all([_this.loadPoolInfo(), _this.loadLastRewardInfo(), _this.loadRewardData(), _this.loadIncomingHistory()]);
 
-              _context.next = 6;
-              return Promise.all([_this.loadPoolInfo(), _this.loadChainInfo(), _this.loadLastRewardInfo(), _this.loadRewardData(), _this.loadIncomingHistory()]);
-
-            case 6:
-              _this.isLoading = false;
-              _context.next = 12;
+            case 4:
+              _context.next = 8;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 6:
+              _context.prev = 6;
               _context.t0 = _context["catch"](0);
-              _this.isLoading = false;
 
-            case 12:
+            case 8:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[0, 6]]);
     }))();
   },
   mounted: function mounted() {
-    var _this2 = this;
-
-    return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+    return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
-              if (!_this2.user) {
-                _context3.next = 3;
-                break;
-              }
-
-              _context3.next = 3;
-              return _this2.fetchWallets();
-
-            case 3:
-              if (window.conflux) {
-                window.conflux.on('accountsChanged', function (accounts) {
-                  if (accounts.length === 0) {
-                    _this2.userInfo.account = '';
-                    _this2.userInfo.connected = false;
-                    localStorage.removeItem('userConnected');
-                  }
-                });
-              }
-
-              if (window.ethereum) {
-                window.ethereum.on('chainChanged', function () {
-                  _this2.resetUserInfo();
-                });
-                window.ethereum.on('accountsChanged', /*#__PURE__*/function () {
-                  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref) {
-                    var _ref3, newAddress;
-
-                    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                      while (1) {
-                        switch (_context2.prev = _context2.next) {
-                          case 0:
-                            _ref3 = _slicedToArray(_ref, 1), newAddress = _ref3[0];
-
-                            if (!(newAddress === undefined)) {
-                              _context2.next = 3;
-                              break;
-                            }
-
-                            return _context2.abrupt("return", _this2.resetUserInfo());
-
-                          case 3:
-                            localStorage.setItem('userConnected', 'true');
-                            _context2.next = 6;
-                            return _this2.requestAccount(true, ethers__WEBPACK_IMPORTED_MODULE_8__.getAddress(newAddress));
-
-                          case 6:
-                          case "end":
-                            return _context2.stop();
-                        }
-                      }
-                    }, _callee2);
-                  }));
-
-                  return function (_x) {
-                    return _ref2.apply(this, arguments);
-                  };
-                }());
-              }
-
-              if (!(_this2.user && window.conflux && localStorage.getItem('userConnected'))) {
-                _context3.next = 8;
-                break;
-              }
-
-              _context3.next = 8;
-              return _this2.requestAccount(true);
-
-            case 8:
             case "end":
-              return _context3.stop();
+              return _context2.stop();
           }
         }
-      }, _callee3);
+      }, _callee2);
     }))();
   },
   watch: {
     activeTabIndex: function activeTabIndex(index) {
-      var _this3 = this;
+      var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 if (!(index === 0)) {
-                  _context4.next = 3;
+                  _context3.next = 3;
                   break;
                 }
 
-                _context4.next = 3;
-                return _this3.loadIncomingHistory();
+                _context3.next = 3;
+                return _this2.loadIncomingHistory();
 
               case 3:
               case "end":
-                return _context4.stop();
+                return _context3.stop();
             }
           }
-        }, _callee4);
+        }, _callee3);
       }))();
     }
   },
   methods: {
     loadServerStatus: function loadServerStatus() {
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var fetchResult, result;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                _context4.next = 3;
+                return fetch('http://217.30.173.35');
+
+              case 3:
+                fetchResult = _context4.sent;
+                _context4.next = 6;
+                return fetchResult.json();
+
+              case 6:
+                result = _context4.sent;
+
+                if (!fetchResult.ok) {
+                  _context4.next = 9;
+                  break;
+                }
+
+                return _context4.abrupt("return", result);
+
+              case 9:
+                _context4.next = 14;
+                break;
+
+              case 11:
+                _context4.prev = 11;
+                _context4.t0 = _context4["catch"](0);
+                console.log(_context4.t0);
+
+              case 14:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 11]]);
+      }))();
+    },
+    loadPoolInfo: function loadPoolInfo() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        var _account$status;
+
+        var poolContract, poolSummary, stakerNumber, apy, account, userShareRatio;
         return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                _context5.prev = 0;
+                poolContract = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRaw)(_this3.poolContract);
                 _context5.next = 3;
-                return fetch('http://217.30.173.35');
-
-              case 3:
-                fetchResult = _context5.sent;
-                _context5.next = 6;
-                return fetchResult.json();
-
-              case 6:
-                result = _context5.sent;
-
-                if (!fetchResult.ok) {
-                  _context5.next = 9;
-                  break;
-                }
-
-                return _context5.abrupt("return", result);
-
-              case 9:
-                _context5.next = 14;
-                break;
-
-              case 11:
-                _context5.prev = 11;
-                _context5.t0 = _context5["catch"](0);
-                console.log(_context5.t0);
-
-              case 14:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5, null, [[0, 11]]);
-      }))();
-    },
-    loadChainInfo: function loadChainInfo() {
-      var _this4 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-        var status;
-        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _context6.next = 2;
-                return _utils_cfx__WEBPACK_IMPORTED_MODULE_4__.conflux.cfx.getStatus();
-
-              case 2:
-                status = _context6.sent;
-                _this4.chainStatus = status;
-                return _context6.abrupt("return", status);
-
-              case 5:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6);
-      }))();
-    },
-    loadPoolInfo: function loadPoolInfo() {
-      var _this5 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
-        var _account$status;
-
-        var poolAddress, poolContract, poolSummary, stakerNumber, apy, account, userShareRatio;
-        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-                // try {
-                // 	console.log(posPoolManagerContract)
-                // 	const pools = await posPoolManagerContract.getPools()
-                // 	console.log('loadPoolInfo done')
-                // 	console.log(pools[0][3])
-                // 	// const poolAddress = pools[0][3]
-                // } catch (e) {
-                // 	console.log(e)
-                // }
-                poolAddress = _this5.poolInfo.poolAddress;
-                poolContract = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRaw)(_this5.poolContract);
-                _context7.next = 4;
                 return Promise.all([poolContract.poolSummary().then(function (response) {
                   poolSummary = response;
                 })["catch"](function (e) {
@@ -931,7 +778,7 @@ function paddingZero(value) {
                   apy = response;
                 })["catch"](function (e) {
                   console.log(e);
-                }), (0,_utils_cfx__WEBPACK_IMPORTED_MODULE_4__.getPosAccountByPowAddress)(poolAddress).then(function (response) {
+                }), (0,_utils_cfx__WEBPACK_IMPORTED_MODULE_4__.getPosAccountByPowAddress)(_this3.poolAddress).then(function (response) {
                   account = response;
                 })["catch"](function (e) {
                   console.log(e);
@@ -941,46 +788,45 @@ function paddingZero(value) {
                   console.log(e);
                 })]);
 
-              case 4:
-                _this5.poolInfo.totalLocked = BigInt(poolSummary[0].toString()) * BigInt(ONE_VOTE_CFX) * BigInt('1000000000000000000');
-                _this5.poolInfo.totalRevenue = BigInt((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_4__.Drip)(poolSummary[2].toString()));
-                _this5.poolInfo.apy = Number(apy) / 100;
-                _this5.poolInfo.fee = Number((BigInt(10000) - BigInt(Array.isArray(userShareRatio) ? userShareRatio[0] : userShareRatio)) / BigInt(100));
-                _this5.poolInfo.stakerNumber = stakerNumber.toString();
-                _this5.poolInfo.status = ((_account$status = account.status) === null || _account$status === void 0 ? void 0 : _account$status.forceRetired) === null ? _constants__WEBPACK_IMPORTED_MODULE_5__.StatusPosNode.success : _constants__WEBPACK_IMPORTED_MODULE_5__.StatusPosNode.error; //this.poolInfo.poolAddress = poolAddress
-                //this.poolInfo.posAddress = account.address
+              case 3:
+                _this3.poolInfo.totalLocked = BigInt(poolSummary[0].toString()) * BigInt(ONE_VOTE_CFX) * BigInt('1000000000000000000');
+                _this3.poolInfo.totalRevenue = BigInt((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_4__.Drip)(poolSummary[2].toString()));
+                _this3.poolInfo.apy = Number(apy) / 100;
+                _this3.poolInfo.fee = Number((BigInt(10000) - BigInt(Array.isArray(userShareRatio) ? userShareRatio[0] : userShareRatio)) / BigInt(100));
+                _this3.poolInfo.stakerNumber = stakerNumber.toString();
+                _this3.poolInfo.status = ((_account$status = account.status) === null || _account$status === void 0 ? void 0 : _account$status.forceRetired) === null ? _constants__WEBPACK_IMPORTED_MODULE_5__.StatusPosNode.success : _constants__WEBPACK_IMPORTED_MODULE_5__.StatusPosNode.error;
 
-              case 10:
+              case 9:
               case "end":
-                return _context7.stop();
+                return _context5.stop();
             }
           }
-        }, _callee7);
+        }, _callee5);
       }))();
     },
     loadIncomingHistory: function loadIncomingHistory() {
-      var _this6 = this;
+      var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
         var url, response, history, list;
-        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context8.prev = _context8.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
-                _context8.prev = 0;
-                _this6.incomingHistoryLoading = true;
-                _this6.incomingHistory = null;
-                url = "https://confluxscan.io/stat/list-pos-account-reward?identifier=".concat(_this6.poolInfo.posAddress, "&limit=10&orderBy=createdAt&reverse=true&skip=0&tab=incoming-history");
-                _context8.next = 6;
+                _context6.prev = 0;
+                _this4.incomingHistoryLoading = true;
+                _this4.incomingHistory = null;
+                url = "https://confluxscan.io/stat/list-pos-account-reward?identifier=".concat(_this4.poolInfo.posAddress, "&limit=10&orderBy=createdAt&reverse=true&skip=0&tab=incoming-history");
+                _context6.next = 6;
                 return fetch(url);
 
               case 6:
-                response = _context8.sent;
-                _context8.next = 9;
+                response = _context6.sent;
+                _context6.next = 9;
                 return response.json();
 
               case 9:
-                history = _context8.sent;
+                history = _context6.sent;
                 list = history.list.map(function (item) {
                   var formatted = (0,_utils_index_js__WEBPACK_IMPORTED_MODULE_6__.formatUnit)(item.reward, 'CFX');
                   var onlyValue = formatted.split(' ')[0];
@@ -990,48 +836,48 @@ function paddingZero(value) {
                     powBlockHash: item.powBlockHash
                   };
                 });
-                _this6.incomingHistory = list;
-                _this6.incomingHistoryLoading = false;
-                _context8.next = 20;
+                _this4.incomingHistory = list;
+                _this4.incomingHistoryLoading = false;
+                _context6.next = 20;
                 break;
 
               case 15:
-                _context8.prev = 15;
-                _context8.t0 = _context8["catch"](0);
-                _this6.incomingHistory = null;
-                _this6.incomingHistoryLoading = false;
-                throw _context8.t0;
+                _context6.prev = 15;
+                _context6.t0 = _context6["catch"](0);
+                _this4.incomingHistory = null;
+                _this4.incomingHistoryLoading = false;
+                throw _context6.t0;
 
               case 20:
               case "end":
-                return _context8.stop();
+                return _context6.stop();
             }
           }
-        }, _callee8, null, [[0, 15]]);
+        }, _callee6, null, [[0, 15]]);
       }))();
     },
     loadRewardData: function loadRewardData() {
-      var _this7 = this;
+      var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
         var url;
-        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context9.prev = _context9.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
-                url = "https://confluxscan.io/stat/list-pos-account-reward?identifier=".concat(_this7.poolInfo.posAddress, "&limit=20&orderBy=createdAt&reverse=true");
+                url = "https://confluxscan.io/stat/list-pos-account-reward?identifier=".concat(_this5.poolInfo.posAddress, "&limit=20&orderBy=createdAt&reverse=true");
                 fetch(url).then(function (response) {
                   return response.json();
                 }).then(function (data) {
-                  _this7.initChart(data);
+                  _this5.initChart(data);
                 });
 
               case 2:
               case "end":
-                return _context9.stop();
+                return _context7.stop();
             }
           }
-        }, _callee9);
+        }, _callee7);
       }))();
     },
     initChart: function initChart(rewards) {
@@ -1069,432 +915,53 @@ function paddingZero(value) {
       this.chart = new Chart(this.$refs.chart, config);
     },
     loadLastRewardInfo: function loadLastRewardInfo() {
-      var _this8 = this;
+      var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
         var _yield$conflux$pos$ge, epoch, lastReward, block;
 
-        return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context10.prev = _context10.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
-                _context10.next = 2;
+                _context8.next = 2;
                 return _utils_cfx__WEBPACK_IMPORTED_MODULE_4__.conflux.pos.getStatus();
 
               case 2:
-                _yield$conflux$pos$ge = _context10.sent;
+                _yield$conflux$pos$ge = _context8.sent;
                 epoch = _yield$conflux$pos$ge.epoch;
-                _context10.next = 6;
+                _context8.next = 6;
                 return _utils_cfx__WEBPACK_IMPORTED_MODULE_4__.conflux.pos.getRewardsByEpoch(epoch - 1);
 
               case 6:
-                lastReward = _context10.sent;
+                lastReward = _context8.sent;
 
                 if (lastReward) {
-                  _context10.next = 11;
+                  _context8.next = 11;
                   break;
                 }
 
-                _context10.next = 10;
+                _context8.next = 10;
                 return _utils_cfx__WEBPACK_IMPORTED_MODULE_4__.conflux.pos.getRewardsByEpoch(epoch - 2);
 
               case 10:
-                lastReward = _context10.sent;
+                lastReward = _context8.sent;
 
               case 11:
-                _context10.next = 13;
+                _context8.next = 13;
                 return _utils_cfx__WEBPACK_IMPORTED_MODULE_4__.conflux.cfx.getBlockByHash(lastReward.powEpochHash, false);
 
               case 13:
-                block = _context10.sent;
-                _this8.poolInfo.lastRewardTime = block.timestamp;
+                block = _context8.sent;
+                _this6.poolInfo.lastRewardTime = block.timestamp;
 
               case 15:
               case "end":
-                return _context10.stop();
+                return _context8.stop();
             }
           }
-        }, _callee10);
+        }, _callee8);
       }))();
-    },
-    connectWallet: function connectWallet() {
-      var _this9 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
-        var account;
-        return _regeneratorRuntime().wrap(function _callee11$(_context11) {
-          while (1) {
-            switch (_context11.prev = _context11.next) {
-              case 0:
-                if (!(_this9.currentSpace === 'core')) {
-                  _context11.next = 6;
-                  break;
-                }
-
-                if (window.conflux) {
-                  _context11.next = 4;
-                  break;
-                }
-
-                alert(_this9.$t('install_conflux_wallet'));
-                return _context11.abrupt("return");
-
-              case 4:
-                _context11.next = 12;
-                break;
-
-              case 6:
-                if (window.ethereum) {
-                  _context11.next = 9;
-                  break;
-                }
-
-                alert('Please install Metamask');
-                return _context11.abrupt("return");
-
-              case 9:
-                if (!(+window.ethereum.networkVersion !== _pool_config_js__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId)) {
-                  _context11.next = 12;
-                  break;
-                }
-
-                alert('Please switch network to ' + _pool_config_js__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId);
-                return _context11.abrupt("return");
-
-              case 12:
-                _context11.next = 14;
-                return _this9.requestAccount();
-
-              case 14:
-                account = _context11.sent;
-
-                if (!account) {
-                  alert(_this9.$t('request_account_failed'));
-                } else {
-                  localStorage.setItem('userConnected', 'true');
-                }
-
-              case 16:
-              case "end":
-                return _context11.stop();
-            }
-          }
-        }, _callee11);
-      }))();
-    },
-    requestAccount: function requestAccount(isLocalStorage, address) {
-      var _this10 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
-        var account, accounts, provider, _accounts;
-
-        return _regeneratorRuntime().wrap(function _callee12$(_context12) {
-          while (1) {
-            switch (_context12.prev = _context12.next) {
-              case 0:
-                _context12.prev = 0;
-                account = address;
-
-                if (!(_this10.currentSpace === 'core')) {
-                  _context12.next = 11;
-                  break;
-                }
-
-                _context12.next = 5;
-                return window.conflux.request({
-                  method: 'cfx_requestAccounts'
-                });
-
-              case 5:
-                accounts = _context12.sent;
-                account = accounts[0];
-
-                if (account) {
-                  _context12.next = 9;
-                  break;
-                }
-
-                return _context12.abrupt("return", null);
-
-              case 9:
-                _context12.next = 23;
-                break;
-
-              case 11:
-                if (account) {
-                  _context12.next = 23;
-                  break;
-                }
-
-                provider = new ethers__WEBPACK_IMPORTED_MODULE_9__.Web3Provider(window.ethereum);
-                _context12.next = 15;
-                return provider.send('eth_requestAccounts');
-
-              case 15:
-                _accounts = _context12.sent;
-
-                if (!(_accounts.length === 0)) {
-                  _context12.next = 19;
-                  break;
-                }
-
-                alert('Request account failed');
-                return _context12.abrupt("return");
-
-              case 19:
-                account = ethers__WEBPACK_IMPORTED_MODULE_8__.getAddress(_accounts[0]);
-                _context12.next = 22;
-                return provider.getBlockNumber();
-
-              case 22:
-                _this10.eSpaceBlockNumber = _context12.sent;
-
-              case 23:
-                _this10.userInfo.account = account;
-                _this10.userInfo.connected = true;
-                _context12.next = 27;
-                return Promise.all([_this10.loadUserInfo(), _this10.loadLockingList(), _this10.loadUnlockingList(), _this10.saveWallet()]);
-
-              case 27:
-                return _context12.abrupt("return", account);
-
-              case 30:
-                _context12.prev = 30;
-                _context12.t0 = _context12["catch"](0);
-
-                if (isLocalStorage) {
-                  localStorage.removeItem('userConnected');
-                }
-
-              case 33:
-              case "end":
-                return _context12.stop();
-            }
-          }
-        }, _callee12, null, [[0, 30]]);
-      }))();
-    },
-    loadUserInfo: function loadUserInfo() {
-      var _this11 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
-        var userSummary, userInterest, balance;
-        return _regeneratorRuntime().wrap(function _callee13$(_context13) {
-          while (1) {
-            switch (_context13.prev = _context13.next) {
-              case 0:
-                _context13.next = 2;
-                return _this11.poolContract.userSummary(_this11.userInfo.account);
-
-              case 2:
-                userSummary = _context13.sent;
-                _context13.next = 5;
-                return _this11.poolContract.userInterest(_this11.userInfo.account);
-
-              case 5:
-                userInterest = _context13.sent;
-
-                if (!(_this11.currentSpace === 'core')) {
-                  _context13.next = 12;
-                  break;
-                }
-
-                _context13.next = 9;
-                return _utils_cfx__WEBPACK_IMPORTED_MODULE_4__.conflux.cfx.getBalance(_this11.userInfo.account);
-
-              case 9:
-                _context13.t0 = _context13.sent;
-                _context13.next = 15;
-                break;
-
-              case 12:
-                _context13.next = 14;
-                return _utils_cfx__WEBPACK_IMPORTED_MODULE_4__.spaceProvider.getBalance(_this11.userInfo.account);
-
-              case 14:
-                _context13.t0 = _context13.sent;
-
-              case 15:
-                balance = _context13.t0;
-                _this11.userInfo.userStaked = BigInt(userSummary[0].toString());
-                _this11.userInfo.available = BigInt(userSummary[1].toString());
-                _this11.userInfo.locked = BigInt(userSummary[2].toString());
-                _this11.userInfo.unlocked = BigInt(userSummary[3].toString());
-                _this11.userInfo.unlockedRaw = userSummary[3];
-                _this11.userInfo.userInterest = _this11.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_4__.Drip)(userInterest.toString()).toCFX());
-                _this11.userInfo.balance = _this11.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_4__.Drip)(balance).toCFX());
-
-              case 23:
-              case "end":
-                return _context13.stop();
-            }
-          }
-        }, _callee13);
-      }))();
-    },
-    resetUserInfo: function resetUserInfo() {
-      this.userInfo.balance = 0;
-      this.userInfo.connected = false;
-      this.userInfo.userStaked = BigInt(0);
-      this.userInfo.available = BigInt(0);
-      this.userInfo.userInterest = 0;
-      this.userInfo.account = '';
-      this.userInfo.locked = BigInt(0);
-      this.userInfo.unlocked = BigInt(0);
-      this.userInfo.unlockedRaw = 0;
-      this.userInfo.userInQueue = [];
-      this.userInfo.userOutOueue = [];
-      localStorage.removeItem('userConnected');
-    },
-    saveWallet: function saveWallet() {
-      var _this12 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
-        return _regeneratorRuntime().wrap(function _callee14$(_context14) {
-          while (1) {
-            switch (_context14.prev = _context14.next) {
-              case 0:
-                _context14.prev = 0;
-
-                if (!_this12.wallets.find(function (wallet) {
-                  return wallet.public_key === _this12.userInfo.account;
-                })) {
-                  _context14.next = 3;
-                  break;
-                }
-
-                return _context14.abrupt("return");
-
-              case 3:
-                _context14.next = 5;
-                return _this12.$api.post('/api/new_wallet', {
-                  user_id: _this12.user.id,
-                  public_key: _this12.userInfo.account,
-                  wallet_type: _this12.currentSpace.toUpperCase()
-                });
-
-              case 5:
-                _context14.next = 7;
-                return _this12.fetchWallets();
-
-              case 7:
-                _context14.next = 11;
-                break;
-
-              case 9:
-                _context14.prev = 9;
-                _context14.t0 = _context14["catch"](0);
-
-              case 11:
-              case "end":
-                return _context14.stop();
-            }
-          }
-        }, _callee14, null, [[0, 9]]);
-      }))();
-    },
-    fetchWallets: function fetchWallets() {
-      var _this13 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
-        var response;
-        return _regeneratorRuntime().wrap(function _callee15$(_context15) {
-          while (1) {
-            switch (_context15.prev = _context15.next) {
-              case 0:
-                _context15.prev = 0;
-                _context15.next = 3;
-                return _this13.$api.get("/api/get-wallets/".concat(_this13.user.id));
-
-              case 3:
-                response = _context15.sent;
-                _this13.wallets = response.data;
-                _context15.next = 9;
-                break;
-
-              case 7:
-                _context15.prev = 7;
-                _context15.t0 = _context15["catch"](0);
-
-              case 9:
-              case "end":
-                return _context15.stop();
-            }
-          }
-        }, _callee15, null, [[0, 7]]);
-      }))();
-    },
-    loadLockingList: function loadLockingList() {
-      var _this14 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16() {
-        var list;
-        return _regeneratorRuntime().wrap(function _callee16$(_context16) {
-          while (1) {
-            switch (_context16.prev = _context16.next) {
-              case 0:
-                _context16.next = 2;
-                return _this14.poolContract['userInQueue(address)'](_this14.userInfo.account);
-
-              case 2:
-                list = _context16.sent;
-                _this14.userInfo.userInQueue = list.map(_this14.mapQueueItem);
-
-              case 4:
-              case "end":
-                return _context16.stop();
-            }
-          }
-        }, _callee16);
-      }))();
-    },
-    loadUnlockingList: function loadUnlockingList() {
-      var _this15 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
-        var list;
-        return _regeneratorRuntime().wrap(function _callee17$(_context17) {
-          while (1) {
-            switch (_context17.prev = _context17.next) {
-              case 0:
-                _context17.next = 2;
-                return _this15.poolContract['userOutQueue(address)'](_this15.userInfo.account);
-
-              case 2:
-                list = _context17.sent;
-                _this15.userInfo.userOutOueue = list.map(_this15.mapQueueItem);
-
-              case 4:
-              case "end":
-                return _context17.stop();
-            }
-          }
-        }, _callee17);
-      }))();
-    },
-    mapQueueItem: function mapQueueItem(item) {
-      var now = new Date().getTime();
-      var unlockBlockNumber = Number(item[1].toString()) - this.chainStatus.blockNumber;
-      var unlockTime = new Date(now + unlockBlockNumber / 2 * 1000);
-      return {
-        amount: this.voteToCFX(item[0]),
-        endTime: this.formatDateTime(unlockTime)
-      };
-    },
-    voteToCFX: function voteToCFX(vote) {
-      return BigInt(vote.toString()) * BigInt(ONE_VOTE_CFX);
-    },
-    formatDateTime: function formatDateTime(date) {
-      return "".concat(date.getFullYear(), "-").concat(paddingZero(date.getMonth() + 1), "-").concat(paddingZero(date.getDate()), " ").concat(paddingZero(date.getHours()), ":").concat(paddingZero(date.getMinutes()), ":").concat(paddingZero(date.getSeconds()));
-    },
-    trimPoints: function trimPoints(str) {
-      var parts = str.split('.');
-
-      if (parts.length !== 2) {
-        return str;
-      }
-
-      return "".concat(parts[0], ".").concat(parts[1].substr(0, 4));
     }
   }
 });
@@ -1517,102 +984,103 @@ __webpack_require__.r(__webpack_exports__);
 var _hoisted_1 = {
   "class": "mt-4 border rounded-3 p-4 bg-light"
 };
-var _hoisted_2 = {
+var _hoisted_2 = ["disabled"];
+var _hoisted_3 = {
   "class": "row"
 };
-var _hoisted_3 = {
+var _hoisted_4 = {
   "class": "col-lg-3 col-md-6 col-12"
 };
-var _hoisted_4 = {
+var _hoisted_5 = {
   "class": "h-num"
 };
-var _hoisted_5 = {
+var _hoisted_6 = {
   "class": "intro-title"
 };
-var _hoisted_6 = {
+var _hoisted_7 = {
   "class": "row mt-2"
 };
-var _hoisted_7 = {
+var _hoisted_8 = {
   "class": "col-md-7 col-12 mb-2"
 };
-var _hoisted_8 = {
+var _hoisted_9 = {
   "class": "col-md-5 col-12 mb-2"
 };
-var _hoisted_9 = ["disabled"];
-var _hoisted_10 = {
+var _hoisted_10 = ["disabled"];
+var _hoisted_11 = {
   key: 0,
   "class": "intro-title"
 };
-var _hoisted_11 = {
+var _hoisted_12 = {
   "class": "col-lg-3 col-md-6 col-12"
 };
-var _hoisted_12 = {
+var _hoisted_13 = {
   "class": "h-num"
 };
-var _hoisted_13 = {
+var _hoisted_14 = {
   "class": "intro-title"
 };
-var _hoisted_14 = ["disabled"];
-var _hoisted_15 = {
+var _hoisted_15 = ["disabled"];
+var _hoisted_16 = {
   key: 0,
   "class": "spinner spinner-border spinner-border-sm"
 };
-var _hoisted_16 = {
+var _hoisted_17 = {
   key: 0,
   "class": "intro-title mt-2"
 };
-var _hoisted_17 = {
+var _hoisted_18 = {
   "class": "col-lg-3 col-md-6 col-12"
 };
-var _hoisted_18 = {
-  "class": "h-num"
-};
 var _hoisted_19 = {
-  "class": "intro-title"
+  "class": "h-num"
 };
 var _hoisted_20 = {
-  "class": "row mt-2"
-};
-var _hoisted_21 = {
-  "class": "col-md-7 col-12 mb-2"
-};
-var _hoisted_22 = {
-  "class": "col-md-5 col-12"
-};
-var _hoisted_23 = ["disabled"];
-var _hoisted_24 = {
-  "class": "col-lg-3 col-md-6 col-12 mt-3 mt-md-0"
-};
-var _hoisted_25 = {
-  "class": "h-num"
-};
-var _hoisted_26 = {
   "class": "intro-title"
 };
-var _hoisted_27 = ["disabled"];
-var _hoisted_28 = {
+var _hoisted_21 = {
+  "class": "row mt-2"
+};
+var _hoisted_22 = {
+  "class": "col-md-7 col-12 mb-2"
+};
+var _hoisted_23 = {
+  "class": "col-md-5 col-12"
+};
+var _hoisted_24 = ["disabled"];
+var _hoisted_25 = {
+  "class": "col-lg-3 col-md-6 col-12 mt-3 mt-md-0"
+};
+var _hoisted_26 = {
+  "class": "h-num"
+};
+var _hoisted_27 = {
+  "class": "intro-title"
+};
+var _hoisted_28 = ["disabled"];
+var _hoisted_29 = {
   key: 0,
   "class": "spinner spinner-border spinner-border-sm"
 };
-var _hoisted_29 = {
+var _hoisted_30 = {
   "class": "modal fade",
   id: "stakeModal",
   tabindex: "-1"
 };
-var _hoisted_30 = {
+var _hoisted_31 = {
   "class": "modal-dialog modal-dialog-centered"
 };
-var _hoisted_31 = {
+var _hoisted_32 = {
   "class": "modal-content"
 };
-var _hoisted_32 = {
+var _hoisted_33 = {
   "class": "modal-header"
 };
-var _hoisted_33 = {
+var _hoisted_34 = {
   "class": "modal-title"
 };
 
-var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   type: "button",
   "class": "btn-close",
   "data-bs-dismiss": "modal"
@@ -1620,47 +1088,47 @@ var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_35 = {
+var _hoisted_36 = {
   "class": "modal-body"
 };
-var _hoisted_36 = {
+var _hoisted_37 = {
   "class": "h6 text-center text-danger mt-2 mb-4"
 };
-var _hoisted_37 = {
+var _hoisted_38 = {
   "class": "pre-line"
 };
-var _hoisted_38 = {
+var _hoisted_39 = {
   "class": "modal-footer"
 };
-var _hoisted_39 = {
+var _hoisted_40 = {
   type: "button",
   "class": "btn btn-secondary",
   "data-bs-dismiss": "modal"
 };
-var _hoisted_40 = ["disabled"];
-var _hoisted_41 = {
+var _hoisted_41 = ["disabled"];
+var _hoisted_42 = {
   key: 0,
   "class": "spinner spinner-border spinner-border-sm"
 };
-var _hoisted_42 = {
+var _hoisted_43 = {
   "class": "modal fade",
   id: "unstakeModal",
   tabindex: "-1"
 };
-var _hoisted_43 = {
+var _hoisted_44 = {
   "class": "modal-dialog modal-dialog-centered"
 };
-var _hoisted_44 = {
+var _hoisted_45 = {
   "class": "modal-content"
 };
-var _hoisted_45 = {
+var _hoisted_46 = {
   "class": "modal-header"
 };
-var _hoisted_46 = {
+var _hoisted_47 = {
   "class": "modal-title"
 };
 
-var _hoisted_47 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_48 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
   type: "button",
   "class": "btn-close",
   "data-bs-dismiss": "modal"
@@ -1668,38 +1136,38 @@ var _hoisted_47 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_48 = {
+var _hoisted_49 = {
   "class": "modal-body"
 };
-var _hoisted_49 = {
+var _hoisted_50 = {
   "class": "pre-line"
 };
-var _hoisted_50 = {
+var _hoisted_51 = {
   "class": "modal-footer"
 };
-var _hoisted_51 = {
+var _hoisted_52 = {
   type: "button",
   "class": "btn btn-secondary",
   "data-bs-dismiss": "modal"
 };
-var _hoisted_52 = ["disabled"];
-var _hoisted_53 = {
+var _hoisted_53 = ["disabled"];
+var _hoisted_54 = {
   key: 0,
   "class": "spinner spinner-border spinner-border-sm"
 };
-var _hoisted_54 = {
+var _hoisted_55 = {
   "class": "modal fade",
   id: "hashModal",
   tabindex: "-1"
 };
-var _hoisted_55 = {
+var _hoisted_56 = {
   "class": "modal-dialog modal-dialog-centered"
 };
-var _hoisted_56 = {
+var _hoisted_57 = {
   "class": "modal-content"
 };
 
-var _hoisted_57 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_58 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "modal-header",
   style: {
     "border-bottom": "none"
@@ -1712,11 +1180,11 @@ var _hoisted_57 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_58 = {
+var _hoisted_59 = {
   "class": "modal-body pt-0 pb-5 text-center"
 };
 
-var _hoisted_59 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_60 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "mb-3"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "bi-check-circle-fill",
@@ -1728,20 +1196,20 @@ var _hoisted_59 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_60 = ["href"];
-var _hoisted_61 = {
+var _hoisted_61 = ["href"];
+var _hoisted_62 = {
   "class": "modal fade",
   id: "withdrawModal",
   tabindex: "-1"
 };
-var _hoisted_62 = {
+var _hoisted_63 = {
   "class": "modal-dialog"
 };
-var _hoisted_63 = {
+var _hoisted_64 = {
   "class": "modal-content"
 };
 
-var _hoisted_64 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_65 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "modal-header",
   style: {
     "border-bottom": "none"
@@ -1754,11 +1222,11 @@ var _hoisted_64 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_65 = {
+var _hoisted_66 = {
   "class": "modal-body pt-0 pb-5 text-center"
 };
 
-var _hoisted_66 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_67 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "bi-hourglass-split",
   style: {
     "font-size": "40px",
@@ -1769,11 +1237,13 @@ var _hoisted_66 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 );
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.userStakedCFX), 1
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("fieldset", {
+    disabled: !$props.extensionPriority && $props.userInfo.wallet !== $props.userInfo.account
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.userStakedCFX), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('my_staked')), 1
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('my_staked')), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "form-control",
     type: "number",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
@@ -1781,7 +1251,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.stakeCount]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.stakeCount]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "position-relative btn btn-primary",
     onClick: _cache[1] || (_cache[1] = function () {
       return $options.stake && $options.stake.apply($options, arguments);
@@ -1789,11 +1259,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     disabled: !$props.userInfo.connected || $data.stakeLoading
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('stake')), 9
   /* TEXT, PROPS */
-  , _hoisted_9)])]), $props.userInfo.connected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('balance')) + ": " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.userInfo.balance) + " CFX ", 1
+  , _hoisted_10)])]), $props.userInfo.connected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('balance')) + ": " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.userInfo.balance) + " CFX ", 1
   /* TEXT */
-  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.userInfo.userInterest), 1
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.userInfo.userInterest), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('my_rewards')), 1
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('my_rewards')), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "position-relative btn btn-primary mt-2",
@@ -1807,15 +1277,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('claim')), 3
   /* TEXT, CLASS */
-  ), $data.claimLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_15)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
+  ), $data.claimLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_16)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
   /* PROPS */
-  , _hoisted_14), $props.userInfo.connected && $props.poolInfo.lastRewardTime > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('last_update')) + ": " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.lastRewardTime), 1
+  , _hoisted_15), $props.userInfo.connected && $props.poolInfo.lastRewardTime > 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("p", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('last_update')) + ": " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.lastRewardTime), 1
   /* TEXT */
-  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.unstakeableCFX), 1
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.unstakeableCFX), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('unstakeable')), 1
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('unstakeable')), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "class": "form-control",
     type: "number",
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
@@ -1823,7 +1293,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.unstakeCount]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.unstakeCount]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "position-relative btn btn-primary",
     onClick: _cache[4] || (_cache[4] = function () {
       return $options.unstake && $options.unstake.apply($options, arguments);
@@ -1831,9 +1301,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     disabled: !$props.userInfo.connected || $data.unstakeLoading
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('unstake')), 9
   /* TEXT, PROPS */
-  , _hoisted_23)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.withdrawableCFX), 1
+  , _hoisted_24)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.withdrawableCFX), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('withdrawable')), 1
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('withdrawable')), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "position-relative btn btn-primary mt-2",
@@ -1847,15 +1317,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('withdraw')), 3
   /* TEXT, CLASS */
-  ), $data.withdrawLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_28)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
+  ), $data.withdrawLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_29)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
   /* PROPS */
-  , _hoisted_27)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('confirm')), 1
+  , _hoisted_28)])])], 8
+  /* PROPS */
+  , _hoisted_2)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('confirm')), 1
   /* TEXT */
-  ), _hoisted_34]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('stake_modal_title')), 1
+  ), _hoisted_35]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('stake_modal_title')), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('stake_modal_text')), 1
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('stake_modal_text')), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('cancel')), 1
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_40, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('cancel')), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
@@ -1870,13 +1342,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('stake')), 3
   /* TEXT, CLASS */
-  ), $data.stakeLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_41)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
+  ), $data.stakeLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_42)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
   /* PROPS */
-  , _hoisted_40)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('confirm')), 1
+  , _hoisted_41)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_46, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('confirm')), 1
   /* TEXT */
-  ), _hoisted_47]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('unstake_modal_text')), 1
+  ), _hoisted_48]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('unstake_modal_text')), 1
   /* TEXT */
-  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('cancel')), 1
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_51, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_52, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('cancel')), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
@@ -1891,9 +1363,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('unstake')), 3
   /* TEXT, CLASS */
-  ), $data.unstakeLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_53)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
+  ), $data.unstakeLoading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_54)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 8
   /* PROPS */
-  , _hoisted_52)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_54, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_55, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_56, [_hoisted_57, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_58, [_hoisted_59, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('transaction_submitted')), 1
+  , _hoisted_53)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_55, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_56, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_57, [_hoisted_58, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_59, [_hoisted_60, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('transaction_submitted')), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('transaction_hash')) + ": ", 1
   /* TEXT */
@@ -1902,7 +1374,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     target: "_blank"
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.txHash.slice(0, 7)), 9
   /* TEXT, PROPS */
-  , _hoisted_60)])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_61, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_62, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_63, [_hoisted_64, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_65, [_hoisted_66, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('unlock_time_text')), 1
+  , _hoisted_61)])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_62, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_63, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_64, [_hoisted_65, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_66, [_hoisted_67, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('unlock_time_text')), 1
   /* TEXT */
   )])])])])], 64
   /* STABLE_FRAGMENT */
@@ -2320,21 +1792,26 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* NEED_PATCH */
   )], 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.showChart]]), $data.userInfo.connected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Form, {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.showChart]]), $props.userInfo.connected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Form, {
     key: 0,
-    poolContract: $data.poolContract,
+    extensionPriority: $props.extensionPriority,
+    poolContract: $props.poolContract,
+    poolAddress: $props.poolAddress,
     poolInfo: $data.poolInfo,
-    userInfo: $data.userInfo,
-    currentSpace: $data.currentSpace
+    userInfo: $props.userInfo,
+    currentSpace: $data.currentSpace,
+    onLoadUserInfo: _cache[0] || (_cache[0] = function ($event) {
+      return _ctx.$emit('loadUserInfo');
+    })
   }, null, 8
   /* PROPS */
-  , ["poolContract", "poolInfo", "userInfo", "currentSpace"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.userInfo.connected && ($data.userInfo.userInQueue.length || $data.userInfo.userOutOueue.length) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("caption", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('locking_votes')), 1
+  , ["extensionPriority", "poolContract", "poolAddress", "poolInfo", "userInfo", "currentSpace"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.userInfo.connected && ($props.userInfo.userInQueue.length || $props.userInfo.userOutOueue.length) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("caption", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('locking_votes')), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('amount')) + " (CFX)", 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('date')), 1
   /* TEXT */
-  )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.userInfo.userInQueue, function (item) {
+  )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.userInfo.userInQueue, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.amount), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.endTime), 1
@@ -2348,7 +1825,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('date')), 1
   /* TEXT */
-  )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.userInfo.userOutOueue, function (item) {
+  )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.userInfo.userOutOueue, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.amount), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.endTime), 1
@@ -2361,7 +1838,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       active: $data.activeTabIndex === 0
     }]),
     href: "#",
-    onClick: _cache[0] || (_cache[0] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+    onClick: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
       return $data.activeTabIndex = 0;
     }, ["prevent"]))
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('incoming_history')), 3
@@ -2371,7 +1848,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       active: $data.activeTabIndex === 1
     }]),
     href: "#",
-    onClick: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+    onClick: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
       return $data.activeTabIndex = 1;
     }, ["prevent"]))
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('voting_history')), 3
@@ -2381,7 +1858,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       active: $data.activeTabIndex === 2
     }]),
     href: "#",
-    onClick: _cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+    onClick: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
       return $data.activeTabIndex = 2;
     }, ["prevent"]))
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('pending_rights_status')), 3
@@ -10464,6 +9941,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/empty-battery.png?03e441024de1e584244aba3cd534f915");
+
+/***/ }),
+
+/***/ "./resources/js/assets/img/logo.svg":
+/*!******************************************!*\
+  !*** ./resources/js/assets/img/logo.svg ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/logo.svg?3193716b4bb74f746993a7a6ee41f3f8");
 
 /***/ }),
 
