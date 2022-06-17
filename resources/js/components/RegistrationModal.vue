@@ -3,13 +3,15 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header" style="border-bottom: none">
-					<h5 class="modal-title">Регистрация</h5>
+					<h5 class="modal-title">
+						{{ $t('registration') }}
+					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body pt-0 pb-4">
 					<div class="row mb-3">
 						<div class="col-auto">
-							Войти с помощью:
+							{{ $t('login_with') }}
 						</div>
 						<div class="col">
 							<a :href="googleAuth" class="mx-1">
@@ -30,10 +32,10 @@
 									name="name"
 									class="form-control"
 									:class="{'is-invalid': v$.form.name.$error && submitted}"
-									placeholder="Имя"
+									:placeholder="$t('name')"
 								>
 								<div v-if="v$.form.name.required.$invalid && submitted" class="invalid-feedback">
-									Введите имя
+									{{ $t('name_required') }}
 								</div>
 							</div>
 							<div class="mb-3">
@@ -46,10 +48,10 @@
 									placeholder="Email"
 								>
 								<div v-if="v$.form.email.required.$invalid && submitted" class="invalid-feedback">
-									Введите адрес электронной почты
+									{{ $t('email_required') }}
 								</div>
 								<div v-else-if="v$.form.email.email.$invalid && submitted" class="invalid-feedback">
-									Не верный формат электронной почты
+									{{ $t('email_invalid') }}
 								</div>
 							</div>
 							<div class="mb-3">
@@ -58,13 +60,13 @@
 									type="password"
 									class="form-control"
 									:class="{'is-invalid': v$.form.password.$error && submitted}"
-									placeholder="Пароль (не менее 6 символов)"
+									:placeholder="$t('password')"
 								>
 								<div v-if="v$.form.password.required.$invalid && submitted" class="invalid-feedback">
-									Введите пароль
+									{{ $t('password_required') }}
 								</div>
 								<div v-else-if="v$.form.password.minLength.$invalid && submitted" class="invalid-feedback">
-									Длина не менее {{ v$.form.password.minLength.$params.min }} символов
+									{{ $t('password_min_length', { length: v$.form.password.minLength.$params.min }) }}
 								</div>
 							</div>
 							<div class="mb-3">
@@ -73,16 +75,16 @@
 									type="password"
 									class="form-control"
 									:class="{'is-invalid': v$.form.repeatPassword.$error && submitted}"
-									placeholder="Повторите пароль"
+									:placeholder="$t('repeat_password')"
 								>
 								<div v-if="v$.form.repeatPassword.required.$invalid && submitted" class="invalid-feedback">
-									Введите пароль еще раз
+									{{ $t('repeat_password') }}
 								</div>
 								<div v-else-if="v$.form.repeatPassword.minLength.$invalid && submitted" class="invalid-feedback">
-									Длина не менее {{ v$.form.repeatPassword.minLength.$params.min }} символов
+									{{ $t('password_min_length', { length: v$.form.repeatPassword.minLength.$params.min }) }}
 								</div>
 								<div v-else-if="v$.form.repeatPassword.sameAsPassword.$invalid && submitted" class="invalid-feedback">
-									Пароли не совпадают
+									{{ $t('passwords_mismatch') }}
 								</div>
 							</div>
 							<button
@@ -90,7 +92,7 @@
 								:disabled="isLoading"
 							>
 								<span :class="{invisible: isLoading}">
-									Зарегистрироваться
+									{{ $t('sign_up') }}
 								</span>
 								<span class="spinner spinner-border spinner-border-sm" v-if="isLoading"></span>
 							</button>
@@ -99,7 +101,7 @@
 							<div class="d-flex">
 								<i class="bi-check-circle-fill text-success fs-2"></i>
 								<div class="ps-3">
-									На указанный электронный адрес отправлена инструкция для завершения регистрации
+									{{ $t('registration_instruction_sent') }}
 								</div>
 							</div>
 						</div>
@@ -187,10 +189,6 @@ export default {
 				this.success = true
 			} catch (e) {
 				this.isLoading = false
-				// if (e.response?.status === 400) {
-				// 	console.log('error 400')
-				// }
-				// console.log(e)
 			}
 		},
 		reset() {
@@ -205,7 +203,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-
-</style>

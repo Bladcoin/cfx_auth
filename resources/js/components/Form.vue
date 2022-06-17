@@ -1,5 +1,5 @@
 <template>
-	<div class="mt-4 border rounded-3 p-4 bg-light">
+	<div class="border rounded-3 p-4 bg-light">
 		<form>
 			<fieldset :disabled="!extensionPriority && userInfo.wallet !== userInfo.account">
 				<div class="row">
@@ -420,11 +420,6 @@ export default {
 			}
 		},
 
-
-
-
-
-
 		stake() {
 			if (this.stakeCount === 0 || this.stakeCount % ONE_VOTE_CFX !== 0 ) {
 				alert(this.$t('stake_count_multiple'));
@@ -436,37 +431,6 @@ export default {
 			}
 
 			this.stakeModal.show()
-			return
-
-			/*try {
-				this.stakeLoading = true
-				const tx = this.poolContract
-					.increaseStake(this.stakeCount / ONE_VOTE_CFX)
-					.sendTransaction({
-						from: this.userInfo.account,
-						value: Drip.fromCFX(this.stakeCount),
-					});
-				const hash = await tx;
-				this.txHash = hash;
-				this.hashModal.show();
-
-				const receipt = await tx.executed();
-				this.hashModal.hide();
-
-				if (receipt.outcomeStatus === 0) {
-					this.$parent.loadUserInfo();
-					this.$parent.loadLockingList();
-					this.stakeCount = 0;  // clear stake count
-					// alert('Stake success');
-				} else {
-					alert(this.$t('stake_failed'));
-				}
-
-				this.stakeLoading = false
-			} catch (e) {
-				console.log(e)
-				this.stakeLoading = false
-			}*/
 		},
 
 		unstake() {
@@ -480,78 +444,15 @@ export default {
 			}
 
 			this.unstakeModal.show()
-			return
-
-			/*try {
-				this.unstakeLoading = true
-				const unstakeVotePower = this.unstakeCount / ONE_VOTE_CFX;
-
-				let tx = this.poolContract
-					.decreaseStake(unstakeVotePower)
-					.sendTransaction({
-						from: this.userInfo.account,
-					});
-
-				const hash = await tx;
-				this.txHash = hash;
-				this.hashModal.show();
-
-				let receipt = await tx.executed();
-				this.hashModal.hide();
-
-				if (receipt.outcomeStatus === 0) {
-					this.$parent.loadUserInfo();
-					this.$parent.loadUnlockingList();
-					this.unstakeCount = 0;  // clear unstake count
-					// alert('UnStake success');
-				} else {
-					alert(this.$t('unstake_failed'));
-				}
-
-				this.unstakeLoading = false
-			} catch (e) {
-				console.log(e)
-				this.unstakeLoading = false
-			}*/
 		},
 
-		async claim() {
+		claim() {
 			if (this.userInfo.userInterest === 0 || this.userInfo.userInterest === '0') {
 				alert(this.$t('no_claimable_interest'));
 				return;
 			}
 
 			this.submit('claim')
-
-			return
-
-			/*try {
-				this.claimLoading = true
-				let tx = this.poolContract
-					.claimAllInterest()
-					.sendTransaction({
-						from: this.userInfo.account,
-					});
-
-				const hash = await tx;
-				this.txHash = hash;
-				this.hashModal.show();
-
-				const receipt = await tx.executed();
-				this.hashModal.hide();
-
-				if (receipt.outcomeStatus === 0) {
-					this.$parent.loadUserInfo();
-					// alert('Claim success');
-				} else {
-					alert(this.$t('claim_failed'));
-				}
-
-				this.claimLoading = false
-			} catch (e) {
-				console.log(e)
-				this.claimLoading = false
-			}*/
 		},
 
 		withdraw() {
@@ -561,37 +462,6 @@ export default {
 			}
 
 			this.submit('withdraw')
-
-			return
-
-			/*try {
-				this.withdrawLoading = true
-				let tx = this.poolContract
-					.withdrawStake(this.userInfo.unlocked.toString())
-					.sendTransaction({
-						from: this.userInfo.account,
-					});
-
-				const hash = await tx;
-				this.txHash = hash;
-				this.hashModal.show();
-
-				const receipt = await tx.executed();
-				this.hashModal.hide();
-
-				if (receipt.outcomeStatus === 0) {
-					this.$parent.loadUserInfo();
-					// alert('Withdraw success');
-				} else {
-					alert(this.$t('withdraw_failed'));
-				}
-
-				this.withdrawLoading = false
-			} catch(err) {
-				alert(this.$('ulock_time_text'))
-				this.withdrawModal.show();
-				this.withdrawLoading = false
-			}*/
 		},
 	}
 }

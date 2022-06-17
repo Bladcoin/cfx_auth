@@ -148,5 +148,5 @@ a, a:hover{
 }
 
 .dropdown-menu {
-	max-width: calc(100vw - 1rem);
+	max-width: calc(100vw - 1.5rem);
 }

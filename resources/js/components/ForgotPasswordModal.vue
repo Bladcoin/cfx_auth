@@ -3,13 +3,15 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header" style="border-bottom: none">
-					<h5 class="modal-title">Восстановление пароля</h5>
+					<h5 class="modal-title">
+						{{ $t('password_reset') }}
+					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body pt-0 pb-4">
 					<form @submit.prevent="onSubmit" novalidate>
 						<fieldset :disabled="success">
-							<p>Введите email на который зарегистрирован ваш аккаунт</p>
+							<p>{{ $t('enter_registered_email') }}</p>
 							<div class="mb-3">
 								<input
 									v-model.trim="form.email"
@@ -20,10 +22,10 @@
 									placeholder="Email"
 								>
 								<div v-if="v$.form.email.required.$invalid && submitted" class="invalid-feedback">
-									Введите адрес электронной почты
+									{{ $t('email_required') }}
 								</div>
 								<div v-else-if="v$.form.email.email.$invalid && submitted" class="invalid-feedback">
-									Не верный формат электронной почты
+									{{ $t('email_invalid') }}
 								</div>
 							</div>
 							<button
@@ -31,7 +33,7 @@
 								:disabled="isLoading"
 							>
 								<span :class="{invisible: isLoading}">
-									Далее
+									{{ $t('next') }}
 								</span>
 								<span class="spinner spinner-border spinner-border-sm" v-if="isLoading"></span>
 							</button>
@@ -40,7 +42,7 @@
 							</div>
 						</fieldset>
 						<div class="alert alert-success mt-3" v-if="success">
-							На указанный электронный адрес отправлена ссылка для сброса пароля
+							{{ $t('reset_password_instruction_sent') }}
 						</div>
 					</form>
 				</div>
@@ -106,7 +108,7 @@ export default {
 			} catch (e) {
 				this.isLoading = false
 				if (e.response.status === 400) {
-					this.errorMessage = 'Пользователь с таким email не найден'
+					this.errorMessage = this.$t('user_not_found')
 				} else if (e.response.status === 422) {
 					this.errorMessage = e.response.data.message
 				}
@@ -130,7 +132,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-
-</style>

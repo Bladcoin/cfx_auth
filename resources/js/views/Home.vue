@@ -19,16 +19,18 @@
 		<canvas ref="chart" class="chart"></canvas>
 	</div>
 
-	<Form
-		v-if="userInfo.connected"
-		:extensionPriority="extensionPriority"
-		:poolContract="poolContract"
-		:poolAddress="poolAddress"
-		:poolInfo="poolInfo"
-		:userInfo="userInfo"
-		:currentSpace="currentSpace"
-		@loadUserInfo="$emit('loadUserInfo')"
-	/>
+	<div id="user-form" :class="{'pt-4': userInfo.connected}">
+		<Form
+			v-if="userInfo.connected"
+			:extensionPriority="extensionPriority"
+			:poolContract="poolContract"
+			:poolAddress="poolAddress"
+			:poolInfo="poolInfo"
+			:userInfo="userInfo"
+			:currentSpace="currentSpace"
+			@loadUserInfo="$emit('loadUserInfo')"
+		/>
+	</div>
 
 	<div
 		class="mt-4 border rounded-3 p-4 bg-light"

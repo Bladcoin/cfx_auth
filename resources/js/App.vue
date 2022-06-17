@@ -38,7 +38,7 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header" style="border-bottom: none">
-					<h5 class="modal-title">Удаление кошелька</h5>
+					<h5 class="modal-title">{{ $t('delete_wallet') }}</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body pt-0 pb-4">
@@ -47,7 +47,9 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+						{{ $t('close') }}
+					</button>
 					<button
 						type="button"
 						class="position-relative btn btn-primary"
@@ -55,7 +57,7 @@
 						@click="deleteWallet"
 					>
 						<span :class="{invisible: deletingWallet.loading}">
-							Удалить
+							{{ $t('delete') }}
 						</span>
 						<span class="spinner spinner-border spinner-border-sm" v-if="deletingWallet.loading"></span>
 					</button>
@@ -208,17 +210,17 @@ export default {
 		async connectWallet() {
 			if (this.currentSpace === 'core') {
 				if (!window.conflux) {
-					alert(this.$t('install_conflux_wallet'));
+					alert(this.$t('install_conflux'));
 					return;
 				}
 			} else {
 				if (!window.ethereum) {
-					alert('Please install Metamask');
+					alert(this.$t('install_metamask'));
 					return;
 				}
 
 				if (+window.ethereum.networkVersion !== config.mainnet.eSpace.networkId) {
-					alert('Please switch network to ' + config.mainnet.eSpace.networkId);
+					alert(this.$t('switch_network', {id: config.mainnet.eSpace.networkId}));
 					return;
 				}
 			}
@@ -232,12 +234,18 @@ export default {
 			}
 		},
 		async changeWallet({wallet, type}) {
+			const userForm = document.getElementById('user-form')
+
 			localStorage.setItem('wallet', wallet)
 			localStorage.setItem('space', type)
 
 			if (this.currentSpace !== type) {
 				window.location.reload()
 				return
+			}
+
+			if (window.innerWidth < 768 && userForm) {
+				userForm.scrollIntoView({behavior: 'smooth'})
 			}
 
 			this.userInfo.wallet = wallet
@@ -263,7 +271,7 @@ export default {
 					const accounts = await provider.send('eth_requestAccounts');
 
 					if (accounts.length === 0) {
-						alert('Request account failed');
+						alert(this.$t('request_account_failed'));
 						return;
 					}
 
@@ -388,7 +396,7 @@ export default {
 				this.deletingWallet.id = null
 				this.deletingWallet.address = null
 				bootstrap.Modal.getOrCreateInstance('#deleteWalletModal').hide()
-				this.toast.success('Вы успешно удалили кошелек!')
+				this.toast.success('Кошелек удален!')
 			} catch (e) {
 				this.deletingWallet.loading = false
 			}

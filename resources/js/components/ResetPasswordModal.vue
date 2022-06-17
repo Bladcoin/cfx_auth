@@ -3,7 +3,9 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header" style="border-bottom: none">
-					<h5 class="modal-title">Сброс пароля</h5>
+					<h5 class="modal-title">
+						{{ $t('password_reset') }}
+					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body pt-0 pb-4">
@@ -14,13 +16,13 @@
 								type="password"
 								class="form-control"
 								:class="{'is-invalid': v$.form.password.$error && submitted}"
-								placeholder="Новый пароль"
+								:placeholder="$t('new_password')"
 							>
 							<div v-if="v$.form.password.required.$invalid && submitted" class="invalid-feedback">
-								Введите пароль
+								{{ $t('password_required') }}
 							</div>
 							<div v-else-if="v$.form.password.minLength.$invalid && submitted" class="invalid-feedback">
-								Длина не менее {{ v$.form.password.minLength.$params.min }} символов
+								{{ $t('password_min_length', { length: v$.form.password.minLength.$params.min }) }}
 							</div>
 						</div>
 						<div class="mb-3">
@@ -29,16 +31,16 @@
 								type="password"
 								class="form-control"
 								:class="{'is-invalid': v$.form.passwordConfirmation.$error && submitted}"
-								placeholder="Повторите пароль"
+								:placeholder="$t('repeat_password')"
 							>
 							<div v-if="v$.form.passwordConfirmation.required.$invalid && submitted" class="invalid-feedback">
-								Введите пароль еще раз
+								{{ $t('repeat_password') }}
 							</div>
 							<div v-else-if="v$.form.passwordConfirmation.minLength.$invalid && submitted" class="invalid-feedback">
-								Длина не менее {{ v$.form.passwordConfirmation.minLength.$params.min }} символов
+								{{ $t('password_min_length', { length: v$.form.passwordConfirmation.minLength.$params.min }) }}
 							</div>
 							<div v-else-if="v$.form.passwordConfirmation.sameAsPassword.$invalid && submitted" class="invalid-feedback">
-								Пароли не совпадают
+								{{ $t('passwords_mismatch') }}
 							</div>
 						</div>
 						<button
@@ -46,7 +48,7 @@
 							:disabled="isLoading"
 						>
 							<span :class="{invisible: isLoading}">
-								Сохранить новый пароль
+								{{ $t('save_new_password') }}
 							</span>
 							<span class="spinner spinner-border spinner-border-sm" v-if="isLoading"></span>
 						</button>
@@ -127,13 +129,13 @@ export default {
 					token: this.resetToken,
 				})
 				this.isLoading = false
-				this.toast.success('Вы успешно изменили пароль!')
+				this.toast.success(this.$t('change_password_success'))
 				bootstrap.Modal.getOrCreateInstance('#resetPasswordModal').hide()
 				bootstrap.Modal.getOrCreateInstance('#loginModal').show()
 			} catch (e) {
 				this.isLoading = false
 				if (e.response.status === 400) {
-					this.errorMessage = 'Не удалось изменить пароль'
+					this.errorMessage = this.$t('change_password_fail')
 				} else if (e.response.status === 422) {
 					this.errorMessage = e.response.data.message
 				}
@@ -156,7 +158,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-
-</style>

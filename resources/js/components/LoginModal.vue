@@ -3,13 +3,15 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header" style="border-bottom: none">
-					<h5 class="modal-title">Вход</h5>
+					<h5 class="modal-title">
+						{{ $t('login') }}
+					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 				</div>
 				<div class="modal-body pt-0 pb-4">
 					<div class="row mb-3">
 						<div class="col-auto">
-							Войти с помощью:
+							{{ $t('login_with') }}
 						</div>
 						<div class="col">
 							<a :href="googleAuth" class="mx-1">
@@ -32,10 +34,10 @@
 								placeholder="Email"
 							>
 							<div v-if="v$.form.email.required.$invalid && submitted" class="invalid-feedback">
-								Введите адрес электронной почты
+								{{ $t('email_required') }}
 							</div>
 							<div v-else-if="v$.form.email.email.$invalid && submitted" class="invalid-feedback">
-								Не верный формат электронной почты
+								{{ $t('email_invalid') }}
 							</div>
 						</div>
 						<div class="mb-3">
@@ -44,13 +46,13 @@
 								type="password"
 								class="form-control"
 								:class="{'is-invalid': v$.form.password.$error && submitted}"
-								placeholder="Пароль"
+								:placeholder="$t('password')"
 							>
 							<div v-if="v$.form.password.required.$invalid && submitted" class="invalid-feedback">
-								Введите пароль
+								{{ $t('password_required') }}
 							</div>
 							<div v-else-if="v$.form.password.minLength.$invalid && submitted" class="invalid-feedback">
-								Длина не менее {{ v$.form.password.minLength.$params.min }} символов
+								{{ $t('password_min_length', { length: v$.form.password.minLength.$params.min }) }}
 							</div>
 						</div>
 						<div class="row align-items-center">
@@ -60,13 +62,15 @@
 									:disabled="isLoading"
 								>
 									<span :class="{invisible: isLoading}">
-										Войти
+										{{ $t('sign_in') }}
 									</span>
 									<span class="spinner spinner-border spinner-border-sm" v-if="isLoading"></span>
 								</button>
 							</div>
 							<div class="col-auto">
-								<button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Забыли пароль?</button>
+								<button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+									{{ $t('forgot_password') }}
+								</button>
 							</div>
 						</div>
 						<div class="alert alert-danger mt-3" v-if="errorMessage">
@@ -145,7 +149,7 @@ export default {
 			} catch (e) {
 				this.isLoading = false
 				if (e.response.status === 400) {
-					this.errorMessage = 'Неверный email и/или пароль'
+					this.errorMessage = this.$t('wrong_email_password')
 				} else if (e.response.status === 422) {
 					this.errorMessage = e.response.data.message
 				}
@@ -169,7 +173,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-
-</style>

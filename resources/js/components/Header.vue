@@ -6,7 +6,7 @@
 					<ul class="nav">
 						<li class="nav-item">
 							<button
-								class="btn nav-link"
+								class="btn nav-link me-3 px-0"
 								:class="{'disabled': currentSpace === 'core'}"
 								@click="changeSpace('core')"
 							>
@@ -15,7 +15,7 @@
 						</li>
 						<li class="nav-item">
 							<button
-								class="btn nav-link"
+								class="btn nav-link px-0"
 								:class="{'disabled': currentSpace === 'espace'}"
 								@click="changeSpace('espace')"
 							>
@@ -42,19 +42,23 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-12 col-md-auto py-2 py-md-0">
+		<div
+			class="col-md-auto py-2 py-md-0"
+			:class="user ? 'col-12' : 'col-auto'"
+		>
 			<div class="row align-items-center justify-content-between">
-				<div class="col-auto">
+				<div class="col-12 col-sm-auto text-center">
 					<template v-if="user">
 						<button
 							v-if="!userInfo.connected"
-							class="btn btn-primary"
+							class="w-100 btn btn-primary"
 							@click="$emit('connectWallet')"
 						>
 							{{ currentSpace === 'core' ? $t('connect_fluent') : $t('connect_metamask') }}
 						</button>
-						<div class="btn text-primary" style="cursor:auto;user-select:auto;" v-else>
-							{{ shortenAccount }}
+						<div class="btn text-primary px-0" style="cursor:auto;user-select:auto;" v-else>
+							{{ $t('account') }}:
+							<span class="fw-bold">{{ shortenAccount }}</span>
 						</div>
 					</template>
 					<template v-else>
@@ -64,25 +68,25 @@
 						<div class="dropdown-menu dropdown-menu-end">
 							<div class="px-3">
 								<button class="btn btn-primary d-block mb-1 w-100" data-bs-toggle="modal" data-bs-target="#loginModal">
-									Войти
+									{{ $t('sign_in') }}
 								</button>
 								<button class="btn btn-block btn-link px-0 w-100" data-bs-toggle="modal" data-bs-target="#registrationModal">
-									Регистрация
+									{{ $t('sign_up') }}
 								</button>
 							</div>
 						</div>
 					</template>
 				</div>
-				<div class="col-auto" v-if="user">
+				<div class="col-12 col-sm-auto mt-2 mt-sm-0" v-if="user">
 					<div class="dropdown">
-						<button type="button" class="btn btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown">
+						<button type="button" class="btn btn-outline-danger dropdown-toggle w-100" data-bs-toggle="dropdown">
 							<i class="bi bi-person-circle"></i>
 							{{ user.name }}
 						</button>
 						<div class="dropdown-menu dropdown-menu-end">
 							<template v-if="coreWallets.length">
 								<div class="mb-1 px-3 fw-bold">
-									Core wallets
+									{{ $t('core_wallets') }}
 								</div>
 								<ul class="list-unstyled m-0">
 									<li v-for="wallet in coreWallets" :key="wallet.id">
@@ -113,7 +117,7 @@
 							</template>
 							<template v-if="eSpaceWallets.length">
 								<div class="mb-1 px-3 fw-bold">
-									eSpace wallets
+									{{ $t('espace_wallets') }}
 								</div>
 								<ul class="list-unstyled m-0">
 									<li v-for="wallet in eSpaceWallets" :key="wallet.id">
@@ -151,7 +155,7 @@
 										:disabled="isLoggingOut"
 									>
 										<span :class="{invisible: isLoggingOut}">
-											Выйти
+											{{ $t('sign_out') }}
 										</span>
 										<span class="spinner spinner-border spinner-border-sm" v-if="isLoggingOut"></span>
 									</button>
@@ -227,7 +231,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -353,33 +353,6 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_7__.Interface(_abi_IPoSP
       }
 
       this.stakeModal.show();
-      return;
-      /*try {
-      	this.stakeLoading = true
-      	const tx = this.poolContract
-      		.increaseStake(this.stakeCount / ONE_VOTE_CFX)
-      		.sendTransaction({
-      			from: this.userInfo.account,
-      			value: Drip.fromCFX(this.stakeCount),
-      		});
-      	const hash = await tx;
-      	this.txHash = hash;
-      	this.hashModal.show();
-      		const receipt = await tx.executed();
-      	this.hashModal.hide();
-      		if (receipt.outcomeStatus === 0) {
-      		this.$parent.loadUserInfo();
-      		this.$parent.loadLockingList();
-      		this.stakeCount = 0;  // clear stake count
-      		// alert('Stake success');
-      	} else {
-      		alert(this.$t('stake_failed'));
-      	}
-      		this.stakeLoading = false
-      } catch (e) {
-      	console.log(e)
-      	this.stakeLoading = false
-      }*/
     },
     unstake: function unstake() {
       if (this.userInfo.locked === BigInt(0)) {
@@ -393,62 +366,14 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_7__.Interface(_abi_IPoSP
       }
 
       this.unstakeModal.show();
-      return;
-      /*try {
-      	this.unstakeLoading = true
-      	const unstakeVotePower = this.unstakeCount / ONE_VOTE_CFX;
-      		let tx = this.poolContract
-      		.decreaseStake(unstakeVotePower)
-      		.sendTransaction({
-      			from: this.userInfo.account,
-      		});
-      		const hash = await tx;
-      	this.txHash = hash;
-      	this.hashModal.show();
-      		let receipt = await tx.executed();
-      	this.hashModal.hide();
-      		if (receipt.outcomeStatus === 0) {
-      		this.$parent.loadUserInfo();
-      		this.$parent.loadUnlockingList();
-      		this.unstakeCount = 0;  // clear unstake count
-      		// alert('UnStake success');
-      	} else {
-      		alert(this.$t('unstake_failed'));
-      	}
-      		this.unstakeLoading = false
-      } catch (e) {
-      	console.log(e)
-      	this.unstakeLoading = false
-      }*/
     },
     claim: function claim() {
-      var _this2 = this;
+      if (this.userInfo.userInterest === 0 || this.userInfo.userInterest === '0') {
+        alert(this.$t('no_claimable_interest'));
+        return;
+      }
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (!(_this2.userInfo.userInterest === 0 || _this2.userInfo.userInterest === '0')) {
-                  _context2.next = 3;
-                  break;
-                }
-
-                alert(_this2.$t('no_claimable_interest'));
-                return _context2.abrupt("return");
-
-              case 3:
-                _this2.submit('claim');
-
-                return _context2.abrupt("return");
-
-              case 5:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
+      this.submit('claim');
     },
     withdraw: function withdraw() {
       if (this.userInfo.unlocked === BigInt(0)) {
@@ -457,31 +382,6 @@ var poolInterface = new ethers__WEBPACK_IMPORTED_MODULE_7__.Interface(_abi_IPoSP
       }
 
       this.submit('withdraw');
-      return;
-      /*try {
-      	this.withdrawLoading = true
-      	let tx = this.poolContract
-      		.withdrawStake(this.userInfo.unlocked.toString())
-      		.sendTransaction({
-      			from: this.userInfo.account,
-      		});
-      		const hash = await tx;
-      	this.txHash = hash;
-      	this.hashModal.show();
-      		const receipt = await tx.executed();
-      	this.hashModal.hide();
-      		if (receipt.outcomeStatus === 0) {
-      		this.$parent.loadUserInfo();
-      		// alert('Withdraw success');
-      	} else {
-      		alert(this.$t('withdraw_failed'));
-      	}
-      		this.withdrawLoading = false
-      } catch(err) {
-      	alert(this.$('ulock_time_text'))
-      	this.withdrawModal.show();
-      	this.withdrawLoading = false
-      }*/
     }
   }
 });
@@ -982,7 +882,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "mt-4 border rounded-3 p-4 bg-light"
+  "class": "border rounded-3 p-4 bg-light"
 };
 var _hoisted_2 = ["disabled"];
 var _hoisted_3 = {
@@ -1687,7 +1587,7 @@ var _hoisted_9 = {
   "class": "chart"
 };
 var _hoisted_10 = {
-  key: 1,
+  key: 0,
   "class": "mt-4 border rounded-3 p-4 bg-light"
 };
 var _hoisted_11 = {
@@ -1718,7 +1618,7 @@ var _hoisted_19 = {
   "class": "w-50"
 };
 var _hoisted_20 = {
-  key: 2,
+  key: 1,
   "class": "mt-4"
 };
 var _hoisted_21 = {
@@ -1792,7 +1692,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* NEED_PATCH */
   )], 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.showChart]]), $props.userInfo.connected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Form, {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.showChart]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    id: "user-form",
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)({
+      'pt-4': $props.userInfo.connected
+    })
+  }, [$props.userInfo.connected ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Form, {
     key: 0,
     extensionPriority: $props.extensionPriority,
     poolContract: $props.poolContract,
@@ -1805,7 +1710,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 8
   /* PROPS */
-  , ["extensionPriority", "poolContract", "poolAddress", "poolInfo", "userInfo", "currentSpace"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.userInfo.connected && ($props.userInfo.userInQueue.length || $props.userInfo.userOutOueue.length) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("caption", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('locking_votes')), 1
+  , ["extensionPriority", "poolContract", "poolAddress", "poolInfo", "userInfo", "currentSpace"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 2
+  /* CLASS */
+  ), $props.userInfo.connected && ($props.userInfo.userInQueue.length || $props.userInfo.userOutOueue.length) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("caption", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('locking_votes')), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('amount')) + " (CFX)", 1
   /* TEXT */
