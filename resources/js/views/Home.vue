@@ -4,7 +4,7 @@
 			<div class="mb-2">
 				<img src="../assets/img/logo.svg" class="logo img-fluid" width="377" height="203" alt="">
 			</div>
-			{{ $t('tagline') }}
+			{{ translations && translations.about[$i18n.locale] }}
 		</div>
 	</div>
 
@@ -152,14 +152,14 @@
 		<div class="alert alert-success">
 			<h5>{{ $t('features') }}</h5>
 			<div class="pre-line">
-				{{ $t('features_text') }}
+				{{ translations && translations.features[$i18n.locale] }}
 			</div>
 		</div>
 	</div>
 	<div class="mt-4 border rounded-3 p-3 bg-light">
 		<h5>{{ $t('staking_rules') }}</h5>
 		<div class="pre-line">
-			{{ $t('staking_rules_text') }}
+			{{ translations && translations.rules[$i18n.locale] }}
 		</div>
 	</div>
 </template>
@@ -183,6 +183,7 @@ export default {
 		Form,
 	},
 	props: {
+		translations: Object,
 		extensionPriority: Boolean,
 		user: Object,
 		userInfo: Object,

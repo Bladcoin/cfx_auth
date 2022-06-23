@@ -1,7 +1,6 @@
 export default {
 	connect_fluent: `Connect Fluent`,
 	connect_metamask: `Connect MetaMask`,
-	tagline: `Stake your CFX in Conflux PoS to help improve the network's finality and earn PoS rewards`,
 	staking_vault: `Staking Vault`,
 	total_earned: `Total Earned`,
 	expected_apy: `Expected APY`,
@@ -52,16 +51,7 @@ export default {
 	request_account_failed: `Request account failed`,
 	no_matching_entries: `There are no matching entries`,
 	features: `Features:`,
-	features_text: `1. The PHX PoS Pool Dapp is simple and easy to use.
-2. Controlled by contract, pure decentralized.
-3. The operation team are very professional, the PoS node is stable and safe.
-4. Contract code are open sourced at Github and verified in ConfluxScan.
-5. Contract is sponsored by Conflux Foundation, no transaction fee when interacting with it.`,
 	staking_rules: `Staking Rules:`,
-	staking_rules_text: `• The Stake/Unstake CFX amount must be multiple of 1000
-• The lock period of Stake/Unstake is 7 day
-• The reward will updated every hour
-• The reward can be claimed any time`,
 	stake_modal_title: `Unstake need 7 + 7 days`,
 	stake_modal_text: `According to Conflux PoS mechanism.
 When you staked your CFX, those CFX can unstake after 7 days.

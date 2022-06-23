@@ -17,6 +17,7 @@
 			</div>
 			<div class="container position-relative">
 				<router-view
+					:translations="translations"
 					:extensionPriority="extensionPriority"
 					:user="user"
 					:user-info="userInfo"
@@ -30,7 +31,7 @@
 	<div class="d-table-row">
 		<div class="d-table-cell bg-light">
 			<div class="container">
-				<Footer />
+				<Footer :translations="translations" />
 			</div>
 		</div>
 	</div>
@@ -145,12 +146,14 @@ export default {
 				loading: false,
 			},
 			eSpaceBlockNumber: 0,
+			translations: null,
 		}
 	},
 	async created() {
 		this.poolContract = this.currentSpace === 'core' ? getPosPoolContract(config.mainnet.poolAddress) : getSpaceContract(config.mainnet.spaceAddress)
 		this.poolAddress = this.currentSpace === 'core' ? config.mainnet.poolAddress : config.mainnet.spaceAddress
 		this.extensionPriority = !!(window.ethereum || window.conflux)
+		await this.fetchTranslations()
 	},
 	async mounted() {
 		if (this.referrer.indexOf(`${window.location.origin}/email/verify/`) === 0 && !this.user) { // Редирект при верификации почты
@@ -204,6 +207,27 @@ export default {
 		}
 	},
 	methods: {
+		async fetchTranslations() {
+			try {
+				const data = (await this.axios.get('https://hddpool.pro/api/get_sections/by/1')).data.data
+				const translations = {}
+
+				Array.from(new Set(data.map(item => item.column_name))).forEach(section => {
+					const ru = data.find(item => item.column_name === section && item.lang === 'ru')
+					const en = data.find(item => item.column_name === section && item.lang === 'en')
+					translations[section] = {}
+
+					if (ru) {
+						translations[section].ru = ru.description
+					}
+					if (en) {
+						translations[section].en = en.description
+					}
+				})
+
+				this.translations = translations
+			} catch (e) {}
+		},
 		async loadChainInfo() {
 			this.chainStatus = await conflux.cfx.getStatus()
 		},

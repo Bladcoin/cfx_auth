@@ -204,8 +204,10 @@ export default {
 	},
 	methods: {
 		changeLanguage(locale) {
-			localStorage.setItem('locale', locale)
-			window.location.reload()
+			if (locale !== this.$i18n.locale) {
+				localStorage.setItem('locale', locale)
+				window.location.reload()
+			}
 		},
 		changeSpace(space) {
 			localStorage.setItem('space', space)

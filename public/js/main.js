@@ -39742,7 +39742,8 @@ var paddingZero = function paddingZero(value) {
         address: null,
         loading: false
       },
-      eSpaceBlockNumber: 0
+      eSpaceBlockNumber: 0,
+      translations: null
     };
   },
   created: function created() {
@@ -39756,8 +39757,10 @@ var paddingZero = function paddingZero(value) {
               _this.poolContract = _this.currentSpace === 'core' ? (0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.getPosPoolContract)(_pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.poolAddress) : (0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.getSpaceContract)(_pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.spaceAddress);
               _this.poolAddress = _this.currentSpace === 'core' ? _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.poolAddress : _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.spaceAddress;
               _this.extensionPriority = !!(window.ethereum || window.conflux);
+              _context.next = 5;
+              return _this.fetchTranslations();
 
-            case 3:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -39892,88 +39895,72 @@ var paddingZero = function paddingZero(value) {
     }))();
   },
   methods: {
-    loadChainInfo: function loadChainInfo() {
+    fetchTranslations: function fetchTranslations() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var data, translations;
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _context4.next = 2;
-                return _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.conflux.cfx.getStatus();
-
-              case 2:
-                _this3.chainStatus = _context4.sent;
+                _context4.prev = 0;
+                _context4.next = 3;
+                return _this3.axios.get('https://hddpool.pro/api/get_sections/by/1');
 
               case 3:
+                data = _context4.sent.data.data;
+                translations = {};
+                Array.from(new Set(data.map(function (item) {
+                  return item.column_name;
+                }))).forEach(function (section) {
+                  var ru = data.find(function (item) {
+                    return item.column_name === section && item.lang === 'ru';
+                  });
+                  var en = data.find(function (item) {
+                    return item.column_name === section && item.lang === 'en';
+                  });
+                  translations[section] = {};
+
+                  if (ru) {
+                    translations[section].ru = ru.description;
+                  }
+
+                  if (en) {
+                    translations[section].en = en.description;
+                  }
+                });
+                _this3.translations = translations;
+                _context4.next = 11;
+                break;
+
+              case 9:
+                _context4.prev = 9;
+                _context4.t0 = _context4["catch"](0);
+
+              case 11:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4);
+        }, _callee4, null, [[0, 9]]);
       }))();
     },
-    connectWallet: function connectWallet() {
+    loadChainInfo: function loadChainInfo() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-        var account;
         return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                if (!(_this4.currentSpace === 'core')) {
-                  _context5.next = 6;
-                  break;
-                }
+                _context5.next = 2;
+                return _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.conflux.cfx.getStatus();
 
-                if (window.conflux) {
-                  _context5.next = 4;
-                  break;
-                }
+              case 2:
+                _this4.chainStatus = _context5.sent;
 
-                alert(_this4.$t('install_conflux'));
-                return _context5.abrupt("return");
-
-              case 4:
-                _context5.next = 12;
-                break;
-
-              case 6:
-                if (window.ethereum) {
-                  _context5.next = 9;
-                  break;
-                }
-
-                alert(_this4.$t('install_metamask'));
-                return _context5.abrupt("return");
-
-              case 9:
-                if (!(+window.ethereum.networkVersion !== _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId)) {
-                  _context5.next = 12;
-                  break;
-                }
-
-                alert(_this4.$t('switch_network', {
-                  id: _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId
-                }));
-                return _context5.abrupt("return");
-
-              case 12:
-                _context5.next = 14;
-                return _this4.requestAccount();
-
-              case 14:
-                account = _context5.sent;
-
-                if (!account) {
-                  alert(_this4.$t('request_account_failed'));
-                } else {
-                  localStorage.setItem('userConnected', 'true');
-                }
-
-              case 16:
+              case 3:
               case "end":
                 return _context5.stop();
             }
@@ -39981,27 +39968,94 @@ var paddingZero = function paddingZero(value) {
         }, _callee5);
       }))();
     },
-    changeWallet: function changeWallet(_ref4) {
+    connectWallet: function connectWallet() {
       var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-        var wallet, type, userForm;
+        var account;
         return _regeneratorRuntime().wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
+              case 0:
+                if (!(_this5.currentSpace === 'core')) {
+                  _context6.next = 6;
+                  break;
+                }
+
+                if (window.conflux) {
+                  _context6.next = 4;
+                  break;
+                }
+
+                alert(_this5.$t('install_conflux'));
+                return _context6.abrupt("return");
+
+              case 4:
+                _context6.next = 12;
+                break;
+
+              case 6:
+                if (window.ethereum) {
+                  _context6.next = 9;
+                  break;
+                }
+
+                alert(_this5.$t('install_metamask'));
+                return _context6.abrupt("return");
+
+              case 9:
+                if (!(+window.ethereum.networkVersion !== _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId)) {
+                  _context6.next = 12;
+                  break;
+                }
+
+                alert(_this5.$t('switch_network', {
+                  id: _pool_config__WEBPACK_IMPORTED_MODULE_7__["default"].mainnet.eSpace.networkId
+                }));
+                return _context6.abrupt("return");
+
+              case 12:
+                _context6.next = 14;
+                return _this5.requestAccount();
+
+              case 14:
+                account = _context6.sent;
+
+                if (!account) {
+                  alert(_this5.$t('request_account_failed'));
+                } else {
+                  localStorage.setItem('userConnected', 'true');
+                }
+
+              case 16:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    changeWallet: function changeWallet(_ref4) {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        var wallet, type, userForm;
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
               case 0:
                 wallet = _ref4.wallet, type = _ref4.type;
                 userForm = document.getElementById('user-form');
                 localStorage.setItem('wallet', wallet);
                 localStorage.setItem('space', type);
 
-                if (!(_this5.currentSpace !== type)) {
-                  _context6.next = 7;
+                if (!(_this6.currentSpace !== type)) {
+                  _context7.next = 7;
                   break;
                 }
 
                 window.location.reload();
-                return _context6.abrupt("return");
+                return _context7.abrupt("return");
 
               case 7:
                 if (window.innerWidth < 768 && userForm) {
@@ -40010,101 +40064,101 @@ var paddingZero = function paddingZero(value) {
                   });
                 }
 
-                _this5.userInfo.wallet = wallet;
-                _this5.extensionPriority = false;
-                _context6.next = 12;
-                return _this5.loadUserInfo();
+                _this6.userInfo.wallet = wallet;
+                _this6.extensionPriority = false;
+                _context7.next = 12;
+                return _this6.loadUserInfo();
 
               case 12:
-                _this5.userInfo.connected = true;
+                _this6.userInfo.connected = true;
 
               case 13:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
           }
-        }, _callee6);
+        }, _callee7);
       }))();
     },
     requestAccount: function requestAccount(isLocalStorage, address) {
-      var _this6 = this;
+      var _this7 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
         var account, accounts, provider, _accounts;
 
-        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
-                _context7.prev = 0;
+                _context8.prev = 0;
                 account = address;
 
-                if (!(_this6.currentSpace === 'core')) {
-                  _context7.next = 11;
+                if (!(_this7.currentSpace === 'core')) {
+                  _context8.next = 11;
                   break;
                 }
 
-                _context7.next = 5;
+                _context8.next = 5;
                 return window.conflux.request({
                   method: 'cfx_requestAccounts'
                 });
 
               case 5:
-                accounts = _context7.sent;
+                accounts = _context8.sent;
                 account = accounts[0];
 
                 if (account) {
-                  _context7.next = 9;
+                  _context8.next = 9;
                   break;
                 }
 
-                return _context7.abrupt("return", null);
+                return _context8.abrupt("return", null);
 
               case 9:
-                _context7.next = 23;
+                _context8.next = 23;
                 break;
 
               case 11:
                 if (account) {
-                  _context7.next = 23;
+                  _context8.next = 23;
                   break;
                 }
 
                 provider = new ethers__WEBPACK_IMPORTED_MODULE_10__.Web3Provider(window.ethereum);
-                _context7.next = 15;
+                _context8.next = 15;
                 return provider.send('eth_requestAccounts');
 
               case 15:
-                _accounts = _context7.sent;
+                _accounts = _context8.sent;
 
                 if (!(_accounts.length === 0)) {
-                  _context7.next = 19;
+                  _context8.next = 19;
                   break;
                 }
 
-                alert(_this6.$t('request_account_failed'));
-                return _context7.abrupt("return");
+                alert(_this7.$t('request_account_failed'));
+                return _context8.abrupt("return");
 
               case 19:
                 account = ethers__WEBPACK_IMPORTED_MODULE_9__.getAddress(_accounts[0]);
-                _context7.next = 22;
+                _context8.next = 22;
                 return provider.getBlockNumber();
 
               case 22:
-                _this6.eSpaceBlockNumber = _context7.sent;
+                _this7.eSpaceBlockNumber = _context8.sent;
 
               case 23:
-                _this6.userInfo.account = account;
-                _this6.userInfo.connected = true;
-                _context7.next = 27;
-                return Promise.all([_this6.loadUserInfo(), _this6.saveWallet()]);
+                _this7.userInfo.account = account;
+                _this7.userInfo.connected = true;
+                _context8.next = 27;
+                return Promise.all([_this7.loadUserInfo(), _this7.saveWallet()]);
 
               case 27:
-                return _context7.abrupt("return", account);
+                return _context8.abrupt("return", account);
 
               case 30:
-                _context7.prev = 30;
-                _context7.t0 = _context7["catch"](0);
+                _context8.prev = 30;
+                _context8.t0 = _context8["catch"](0);
 
                 if (isLocalStorage) {
                   localStorage.removeItem('userConnected');
@@ -40112,54 +40166,54 @@ var paddingZero = function paddingZero(value) {
 
               case 33:
               case "end":
-                return _context7.stop();
+                return _context8.stop();
             }
           }
-        }, _callee7, null, [[0, 30]]);
+        }, _callee8, null, [[0, 30]]);
       }))();
     },
     loadUserInfo: function loadUserInfo() {
-      var _this7 = this;
+      var _this8 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
         var account, userSummary, userInterest, balance, lockingList, unlockingList;
-        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context8.prev = _context8.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
-                account = _this7.extensionPriority ? _this7.userInfo.account : _this7.userInfo.wallet;
-                _context8.next = 3;
-                return Promise.all([_this7.poolContract.userSummary(account).then(function (response) {
+                account = _this8.extensionPriority ? _this8.userInfo.account : _this8.userInfo.wallet;
+                _context9.next = 3;
+                return Promise.all([_this8.poolContract.userSummary(account).then(function (response) {
                   userSummary = response;
-                }), _this7.poolContract.userInterest(account).then(function (response) {
+                }), _this8.poolContract.userInterest(account).then(function (response) {
                   userInterest = response;
-                }), _this7.currentSpace === 'core' ? _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.conflux.cfx.getBalance(account).then(function (response) {
+                }), _this8.currentSpace === 'core' ? _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.conflux.cfx.getBalance(account).then(function (response) {
                   balance = response;
                 }) : _utils_cfx__WEBPACK_IMPORTED_MODULE_8__.spaceProvider.getBalance(account).then(function (response) {
                   balance = response;
-                }), _this7.poolContract['userInQueue(address)'](account).then(function (response) {
+                }), _this8.poolContract['userInQueue(address)'](account).then(function (response) {
                   lockingList = response;
-                }), _this7.poolContract['userOutQueue(address)'](account).then(function (response) {
+                }), _this8.poolContract['userOutQueue(address)'](account).then(function (response) {
                   unlockingList = response;
                 })]);
 
               case 3:
-                _this7.userInfo.userStaked = BigInt(userSummary[0].toString());
-                _this7.userInfo.available = BigInt(userSummary[1].toString());
-                _this7.userInfo.locked = BigInt(userSummary[2].toString());
-                _this7.userInfo.unlocked = BigInt(userSummary[3].toString());
-                _this7.userInfo.unlockedRaw = userSummary[3];
-                _this7.userInfo.userInterest = _this7.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.Drip)(userInterest.toString()).toCFX());
-                _this7.userInfo.balance = _this7.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.Drip)(balance).toCFX());
-                _this7.userInfo.userInQueue = lockingList.map(_this7.mapQueueItem);
-                _this7.userInfo.userOutOueue = unlockingList.map(_this7.mapQueueItem);
+                _this8.userInfo.userStaked = BigInt(userSummary[0].toString());
+                _this8.userInfo.available = BigInt(userSummary[1].toString());
+                _this8.userInfo.locked = BigInt(userSummary[2].toString());
+                _this8.userInfo.unlocked = BigInt(userSummary[3].toString());
+                _this8.userInfo.unlockedRaw = userSummary[3];
+                _this8.userInfo.userInterest = _this8.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.Drip)(userInterest.toString()).toCFX());
+                _this8.userInfo.balance = _this8.trimPoints((0,_utils_cfx__WEBPACK_IMPORTED_MODULE_8__.Drip)(balance).toCFX());
+                _this8.userInfo.userInQueue = lockingList.map(_this8.mapQueueItem);
+                _this8.userInfo.userOutOueue = unlockingList.map(_this8.mapQueueItem);
 
               case 12:
               case "end":
-                return _context8.stop();
+                return _context9.stop();
             }
           }
-        }, _callee8);
+        }, _callee9);
       }))();
     },
     resetUserInfo: function resetUserInfo() {
@@ -40177,108 +40231,84 @@ var paddingZero = function paddingZero(value) {
       localStorage.removeItem('userConnected');
     },
     saveWallet: function saveWallet() {
-      var _this8 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
-        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
-          while (1) {
-            switch (_context9.prev = _context9.next) {
-              case 0:
-                _context9.prev = 0;
-
-                if (!_this8.wallets.find(function (wallet) {
-                  return wallet.public_key === _this8.userInfo.account;
-                })) {
-                  _context9.next = 3;
-                  break;
-                }
-
-                return _context9.abrupt("return");
-
-              case 3:
-                _context9.next = 5;
-                return _this8.$api.post('/api/new_wallet', {
-                  user_id: _this8.user.id,
-                  public_key: _this8.userInfo.account,
-                  wallet_type: _this8.currentSpace.toUpperCase()
-                });
-
-              case 5:
-                _context9.next = 7;
-                return _this8.fetchWallets();
-
-              case 7:
-                _context9.next = 11;
-                break;
-
-              case 9:
-                _context9.prev = 9;
-                _context9.t0 = _context9["catch"](0);
-
-              case 11:
-              case "end":
-                return _context9.stop();
-            }
-          }
-        }, _callee9, null, [[0, 9]]);
-      }))();
-    },
-    fetchWallets: function fetchWallets() {
       var _this9 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
-        var response;
         return _regeneratorRuntime().wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
                 _context10.prev = 0;
-                _context10.next = 3;
-                return _this9.$api.get("/api/get-wallets/".concat(_this9.user.id));
+
+                if (!_this9.wallets.find(function (wallet) {
+                  return wallet.public_key === _this9.userInfo.account;
+                })) {
+                  _context10.next = 3;
+                  break;
+                }
+
+                return _context10.abrupt("return");
 
               case 3:
-                response = _context10.sent;
-                _this9.wallets = response.data;
-                _context10.next = 9;
-                break;
+                _context10.next = 5;
+                return _this9.$api.post('/api/new_wallet', {
+                  user_id: _this9.user.id,
+                  public_key: _this9.userInfo.account,
+                  wallet_type: _this9.currentSpace.toUpperCase()
+                });
+
+              case 5:
+                _context10.next = 7;
+                return _this9.fetchWallets();
 
               case 7:
-                _context10.prev = 7;
-                _context10.t0 = _context10["catch"](0);
+                _context10.next = 11;
+                break;
 
               case 9:
+                _context10.prev = 9;
+                _context10.t0 = _context10["catch"](0);
+
+              case 11:
               case "end":
                 return _context10.stop();
             }
           }
-        }, _callee10, null, [[0, 7]]);
+        }, _callee10, null, [[0, 9]]);
       }))();
     },
-    loadLockingList: function loadLockingList() {
+    fetchWallets: function fetchWallets() {
       var _this10 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
-        var list;
+        var response;
         return _regeneratorRuntime().wrap(function _callee11$(_context11) {
           while (1) {
             switch (_context11.prev = _context11.next) {
               case 0:
-                _context11.next = 2;
-                return _this10.poolContract['userInQueue(address)'](_this10.userInfo.account);
+                _context11.prev = 0;
+                _context11.next = 3;
+                return _this10.$api.get("/api/get-wallets/".concat(_this10.user.id));
 
-              case 2:
-                list = _context11.sent;
-                _this10.userInfo.userInQueue = list.map(_this10.mapQueueItem);
+              case 3:
+                response = _context11.sent;
+                _this10.wallets = response.data;
+                _context11.next = 9;
+                break;
 
-              case 4:
+              case 7:
+                _context11.prev = 7;
+                _context11.t0 = _context11["catch"](0);
+
+              case 9:
               case "end":
                 return _context11.stop();
             }
           }
-        }, _callee11);
+        }, _callee11, null, [[0, 7]]);
       }))();
     },
-    loadUnlockingList: function loadUnlockingList() {
+    loadLockingList: function loadLockingList() {
       var _this11 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12() {
@@ -40288,11 +40318,11 @@ var paddingZero = function paddingZero(value) {
             switch (_context12.prev = _context12.next) {
               case 0:
                 _context12.next = 2;
-                return _this11.poolContract['userOutQueue(address)'](_this11.userInfo.account);
+                return _this11.poolContract['userInQueue(address)'](_this11.userInfo.account);
 
               case 2:
                 list = _context12.sent;
-                _this11.userInfo.userOutOueue = list.map(_this11.mapQueueItem);
+                _this11.userInfo.userInQueue = list.map(_this11.mapQueueItem);
 
               case 4:
               case "end":
@@ -40300,6 +40330,30 @@ var paddingZero = function paddingZero(value) {
             }
           }
         }, _callee12);
+      }))();
+    },
+    loadUnlockingList: function loadUnlockingList() {
+      var _this12 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
+        var list;
+        return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                _context13.next = 2;
+                return _this12.poolContract['userOutQueue(address)'](_this12.userInfo.account);
+
+              case 2:
+                list = _context13.sent;
+                _this12.userInfo.userOutOueue = list.map(_this12.mapQueueItem);
+
+              case 4:
+              case "end":
+                return _context13.stop();
+            }
+          }
+        }, _callee13);
       }))();
     },
     mapQueueItem: function mapQueueItem(item) {
@@ -40334,43 +40388,43 @@ var paddingZero = function paddingZero(value) {
       bootstrap.Modal.getOrCreateInstance('#deleteWalletModal').show();
     },
     deleteWallet: function deleteWallet() {
-      var _this12 = this;
+      var _this13 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
-        return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14() {
+        return _regeneratorRuntime().wrap(function _callee14$(_context14) {
           while (1) {
-            switch (_context13.prev = _context13.next) {
+            switch (_context14.prev = _context14.next) {
               case 0:
-                _context13.prev = 0;
-                _this12.deletingWallet.loading = true;
-                _context13.next = 4;
-                return _this12.$api["delete"]("/api/delete_wallet/".concat(_this12.deletingWallet.id));
+                _context14.prev = 0;
+                _this13.deletingWallet.loading = true;
+                _context14.next = 4;
+                return _this13.$api["delete"]("/api/delete_wallet/".concat(_this13.deletingWallet.id));
 
               case 4:
-                _this12.deletingWallet.loading = false;
-                _this12.wallets = _this12.wallets.filter(function (wallet) {
-                  return wallet.id !== _this12.deletingWallet.id;
+                _this13.deletingWallet.loading = false;
+                _this13.wallets = _this13.wallets.filter(function (wallet) {
+                  return wallet.id !== _this13.deletingWallet.id;
                 });
-                _this12.deletingWallet.id = null;
-                _this12.deletingWallet.address = null;
+                _this13.deletingWallet.id = null;
+                _this13.deletingWallet.address = null;
                 bootstrap.Modal.getOrCreateInstance('#deleteWalletModal').hide();
 
-                _this12.toast.success('Кошелек удален!');
+                _this13.toast.success('Кошелек удален!');
 
-                _context13.next = 15;
+                _context14.next = 15;
                 break;
 
               case 12:
-                _context13.prev = 12;
-                _context13.t0 = _context13["catch"](0);
-                _this12.deletingWallet.loading = false;
+                _context14.prev = 12;
+                _context14.t0 = _context14["catch"](0);
+                _this13.deletingWallet.loading = false;
 
               case 15:
               case "end":
-                return _context13.stop();
+                return _context14.stop();
             }
           }
-        }, _callee13, null, [[0, 12]]);
+        }, _callee14, null, [[0, 12]]);
       }))();
     }
   },
@@ -40610,8 +40664,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     changeLanguage: function changeLanguage(locale) {
-      localStorage.setItem('locale', locale);
-      window.location.reload();
+      if (locale !== this.$i18n.locale) {
+        localStorage.setItem('locale', locale);
+        window.location.reload();
+      }
     },
     changeSpace: function changeSpace(space) {
       localStorage.setItem('space', space);
@@ -41266,6 +41322,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 8
   /* PROPS */
   , ["user", "user-info", "current-space", "wallets", "extensionPriority", "onConnectWallet", "onChangeWallet", "onDeleteWallet"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_view, {
+    translations: $data.translations,
     extensionPriority: $data.extensionPriority,
     user: $props.user,
     "user-info": $data.userInfo,
@@ -41274,7 +41331,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onLoadUserInfo: $options.loadUserInfo
   }, null, 8
   /* PROPS */
-  , ["extensionPriority", "user", "user-info", "pool-address", "pool-contract", "onLoadUserInfo"])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Footer)])])]), $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('delete_wallet')), 1
+  , ["translations", "extensionPriority", "user", "user-info", "pool-address", "pool-contract", "onLoadUserInfo"])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Footer, {
+    translations: $data.translations
+  }, null, 8
+  /* PROPS */
+  , ["translations"])])])]), $props.user ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('delete_wallet')), 1
   /* TEXT */
   ), _hoisted_14]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.deletingWallet.address), 1
   /* TEXT */
@@ -42464,7 +42525,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   connect_fluent: "Connect Fluent",
   connect_metamask: "Connect MetaMask",
-  tagline: "Stake your CFX in Conflux PoS to help improve the network's finality and earn PoS rewards",
   staking_vault: "Staking Vault",
   total_earned: "Total Earned",
   expected_apy: "Expected APY",
@@ -42515,9 +42575,7 @@ __webpack_require__.r(__webpack_exports__);
   request_account_failed: "Request account failed",
   no_matching_entries: "There are no matching entries",
   features: "Features:",
-  features_text: "1. The PHX PoS Pool Dapp is simple and easy to use.\n2. Controlled by contract, pure decentralized.\n3. The operation team are very professional, the PoS node is stable and safe.\n4. Contract code are open sourced at Github and verified in ConfluxScan.\n5. Contract is sponsored by Conflux Foundation, no transaction fee when interacting with it.",
   staking_rules: "Staking Rules:",
-  staking_rules_text: "\u2022 The Stake/Unstake CFX amount must be multiple of 1000\n\u2022 The lock period of Stake/Unstake is 7 day\n\u2022 The reward will updated every hour\n\u2022 The reward can be claimed any time",
   stake_modal_title: "Unstake need 7 + 7 days",
   stake_modal_text: "According to Conflux PoS mechanism.\nWhen you staked your CFX, those CFX can unstake after 7 days.\nAfter submitting the Unstake transaction, you need to wait a 7-day lock-up to claim your CFX.",
   unstake_modal_text: "You need to wait 7-day lock-up to claim your CFX.\nNo profit during 7-day lock-up.\nThe performance fee will be charged.",
@@ -42611,7 +42669,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   connect_fluent: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C Fluent",
   connect_metamask: "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u0442\u044C MetaMask",
-  tagline: "\u0421\u0442\u0430\u0432\u044C\u0442\u0435 CFX \u0432 Conflux PoS \u0447\u0442\u043E\u0431\u044B \u043F\u043E\u043C\u043E\u0447\u044C \u0443\u043B\u0443\u0447\u0448\u0438\u0442\u044C \u0441\u0435\u0442\u0435\u0432\u0443\u044E \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043D\u043E\u0441\u0442\u044C \u0438 \u0437\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C PoS \u043D\u0430\u0433\u0440\u0430\u0434\u044B",
   staking_vault: "\u0425\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435 \u0441\u0442\u0430\u0432\u043E\u043A",
   total_earned: "\u0412\u0441\u0435\u0433\u043E \u0437\u0430\u0440\u0430\u0431\u043E\u0442\u0430\u043D\u043E",
   expected_apy: "\u041E\u0436\u0438\u0434\u0430\u0435\u043C\u043E\u0435 APY",
@@ -42662,9 +42719,7 @@ __webpack_require__.r(__webpack_exports__);
   request_account_failed: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0437\u0430\u043F\u0440\u043E\u0441\u0438\u0442\u044C \u0443\u0447\u0435\u0442\u043D\u0443\u044E \u0437\u0430\u043F\u0438\u0441\u044C",
   no_matching_entries: "\u041D\u0435\u0442 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0438\u0445 \u0437\u0430\u043F\u0438\u0441\u0435\u0439",
   features: "\u0424\u0443\u043D\u043A\u0446\u0438\u0438:",
-  features_text: "1. \u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 PHX PoS Pool Dapp \u043F\u0440\u043E\u0441\u0442\u043E\u0435 \u0438 \u0443\u0434\u043E\u0431\u043D\u043E\u0435 \u0432 \u043A\u043E\u043B\u043B\u0435\u043A\u0446\u0438\u0438.\n2. \u041A\u043E\u043D\u0442\u0440\u043E\u043B\u0438\u0440\u0443\u0435\u0442\u0441\u044F \u043A\u043E\u043D\u0442\u0440\u0430\u043A\u0442\u043E\u043C, \u043F\u043E\u043B\u043D\u043E\u0441\u0442\u044C\u044E \u0434\u0435\u0446\u0435\u043D\u0442\u0440\u0430\u043B\u0438\u0437\u043E\u0432\u0430\u043D.\n3. \u041E\u043F\u0435\u0440\u0430\u0446\u0438\u043E\u043D\u043D\u0430\u044F \u043A\u043E\u043C\u0430\u043D\u0434\u0430 \u043E\u0447\u0435\u043D\u044C \u043F\u0440\u043E\u0444\u0435\u0441\u0441\u0438\u043E\u043D\u0430\u043B\u044C\u043D\u0430, \u0443\u0437\u0435\u043B PoS \u0441\u0442\u0430\u0431\u0438\u043B\u0435\u043D \u0438 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u0435\u043D.\n4. \u041A\u043E\u0434 \u043A\u043E\u043D\u0442\u0440\u0430\u043A\u0442\u0430 \u043D\u0430\u0445\u043E\u0434\u0438\u0442\u0441\u044F \u0432 \u043E\u0442\u043A\u0440\u044B\u0442\u043E\u043C \u0434\u043E\u0441\u0442\u0443\u043F\u0435 \u043D\u0430 Github \u0438 \u043F\u0440\u043E\u0432\u0435\u0440\u0435\u043D \u0432 ConfluxScan.\n5. \u041A\u043E\u043D\u0442\u0440\u0430\u043A\u0442 \u0441\u043F\u043E\u043D\u0441\u0438\u0440\u0443\u0435\u0442\u0441\u044F Conflux Foundation, \u043A\u043E\u043C\u0438\u0441\u0441\u0438\u044F \u0437\u0430 \u0442\u0440\u0430\u043D\u0437\u0430\u043A\u0446\u0438\u044E \u043F\u0440\u0438 \u0432\u0437\u0430\u0438\u043C\u043E\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0438 \u0441 \u043D\u0438\u043C \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442.",
   staking_rules: "\u041F\u0440\u0430\u0432\u0438\u043B\u0430 \u0441\u0442\u0430\u0432\u043E\u043A:",
-  staking_rules_text: "\u2022 \u0421\u0443\u043C\u043C\u0430 Stake/Unstake CFX \u0434\u043E\u043B\u0436\u043D\u0430 \u0431\u044B\u0442\u044C \u043A\u0440\u0430\u0442\u043D\u0430 1000.\n\u2022 \u041F\u0435\u0440\u0438\u043E\u0434 \u0431\u043B\u043E\u043A\u0438\u0440\u043E\u0432\u043A\u0438 Stake/Unstake \u0441\u043E\u0441\u0442\u0430\u0432\u043B\u044F\u0435\u0442 7 \u0434\u043D\u0435\u0439.\n\u2022 \u041D\u0430\u0433\u0440\u0430\u0434\u0430 \u0431\u0443\u0434\u0435\u0442 \u043E\u0431\u043D\u043E\u0432\u043B\u044F\u0442\u044C\u0441\u044F \u043A\u0430\u0436\u0434\u044B\u0439 \u0447\u0430\u0441\n\u2022 \u041D\u0430\u0433\u0440\u0430\u0434\u0443 \u043C\u043E\u0436\u043D\u043E \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u044C \u0432 \u043B\u044E\u0431\u043E\u0435 \u0432\u0440\u0435\u043C\u044F",
   stake_modal_title: "\u0414\u043B\u044F \u0432\u044B\u0432\u043E\u0434\u0430 \u043D\u0443\u0436\u043D\u043E 7 + 7 \u0434\u043D\u0435\u0439",
   stake_modal_text: "\u0421\u043E\u0433\u043B\u0430\u0441\u043D\u043E \u043C\u0435\u0445\u0430\u043D\u0438\u0437\u043C\u0443 Conflux PoS\n\u041A\u043E\u0433\u0434\u0430 \u0432\u044B \u0432\u043A\u043B\u0430\u0434\u044B\u0432\u0430\u0435\u0442\u0435 CFX, \u044D\u0442\u0438 CFX \u043C\u043E\u0436\u043D\u043E \u0432\u044B\u0432\u0435\u0441\u0442\u0438 \u0447\u0435\u0440\u0435\u0437 7 \u0434\u043D\u0435\u0439.\n\u041F\u043E\u0441\u043B\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F \u0432\u044B\u0432\u043E\u0434\u0430 \u0442\u0440\u0430\u043D\u0437\u0430\u043A\u0446\u0438\u0438, \u0432\u0430\u043C \u043D\u0443\u0436\u043D\u043E \u043F\u043E\u0434\u043E\u0436\u0434\u0430\u0442\u044C 7 \u0434\u043D\u0435\u0439 \u0434\u043B\u044F \u0432\u043E\u0441\u0442\u0440\u0435\u0431\u043E\u0432\u0430\u043D\u0438\u044F \u0432\u0430\u0448\u0438\u0445 CFX.",
   unstake_modal_text: "\u0412\u0430\u043C \u043D\u0443\u0436\u043D\u043E \u043F\u043E\u0434\u043E\u0436\u0434\u0430\u0442\u044C  7 \u0434\u043D\u0435\u0439 \u0437\u0430\u043C\u043E\u0440\u043E\u0437\u043A\u0438 \u0447\u0442\u043E\u0431\u044B \u0432\u043E\u0441\u0442\u0440\u0435\u0431\u043E\u0432\u0430\u0442\u044C \u0432\u0430\u0448\u0438 CFX.\n\u0412\u044B \u043D\u0435 \u043F\u043E\u043B\u0443\u0447\u0438\u0442\u0435 \u0437\u0430\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u0432 \u0442\u0435\u0447\u0435\u043D\u0438\u0438 7 \u0437\u0430\u043C\u043E\u0440\u043E\u0436\u0435\u043D\u043D\u044B\u0445 \u0434\u043D\u0435\u0439\n\u0421 \u0432\u0430\u0441 \u0431\u0443\u0434\u0435\u0442 \u0441\u043D\u044F\u0442 \u043D\u0430\u043B\u043E\u0433 \u0437\u0430 \u043E\u0431\u0441\u043B\u0443\u0436\u0438\u0432\u0430\u043D\u0438\u0435",
