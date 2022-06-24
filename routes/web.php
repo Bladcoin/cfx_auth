@@ -3,6 +3,7 @@
 use App\Http\Controllers\EmailVerfifiedController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\FacebookController;
 use App\Http\Controllers\LoginController;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -33,8 +34,8 @@ Route::prefix("google")->group(function () {
 
 
 Route::prefix("facebook")->group(function () {
-    Route::get("/auth/redirect", [GoogleController::class, "authRedirect"])->name("facebook.auth");
-    Route::get("/auth/callback", [GoogleController::class, "authCallback"]);
+    Route::get("/auth/redirect", [FacebookController::class, "authRedirect"])->name("facebook.auth");
+    Route::get("/auth/callback", [FacebookController::class, "authCallback"]);
 });
 
 Route::post("/new-user", [LoginController::class, "newUser"]);
