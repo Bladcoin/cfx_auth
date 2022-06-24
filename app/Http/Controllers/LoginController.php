@@ -30,15 +30,16 @@ class LoginController extends Controller
     public function newUser(RegisterRequest $request)
     {
         try {
+            
             $user = User::create([
-                "email" => $request->email,
-                "password" => bcrypt($request->password),
-                "name" => $request->name
+                  "email" => $request->email,
+                  "password" => bcrypt( $request->password ),
+                  "name" => $request->name
             ]);
-
-
+            
 
             event(new Registered($user));
+
             return response()->json([
                 "status" => 200,
                 "message" => "OK"
