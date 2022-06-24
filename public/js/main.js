@@ -40919,7 +40919,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       isLoading: false,
       submitted: false,
       success: false,
-      errorMessages: null,
+      errorMessage: '',
       form: {
         name: '',
         email: '',
@@ -40994,6 +40994,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var _e$response, _e$response$data, _e$response$data$mess;
+
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -41010,15 +41012,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 4:
                 _this4.isLoading = false;
                 _this4.success = true;
-                _context2.next = 11;
+                _context2.next = 12;
                 break;
 
               case 8:
                 _context2.prev = 8;
                 _context2.t0 = _context2["catch"](0);
+
+                if ((_context2.t0 === null || _context2.t0 === void 0 ? void 0 : (_e$response = _context2.t0.response) === null || _e$response === void 0 ? void 0 : (_e$response$data = _e$response.data) === null || _e$response$data === void 0 ? void 0 : (_e$response$data$mess = _e$response$data.message) === null || _e$response$data$mess === void 0 ? void 0 : _e$response$data$mess.errorInfo[1]) === 1062) {
+                  _this4.errorMessage = _this4.$t('email_already_registered');
+                } else {
+                  _this4.errorMessage = _this4.$t('registration_error');
+                }
+
                 _this4.isLoading = false;
 
-              case 11:
+              case 12:
               case "end":
                 return _context2.stop();
             }
@@ -41029,11 +41038,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     reset: function reset() {
       this.submitted = false;
       this.success = false;
-      this.errorMessages = null;
+      this.errorMessage = '';
       this.form.name = '';
       this.form.email = '';
       this.form.password = '';
       this.form.repeatPassword = '';
+    }
+  },
+  watch: {
+    form: {
+      handler: function handler() {
+        this.errorMessage = '';
+      },
+      deep: true
     }
   }
 });
@@ -41400,13 +41417,10 @@ var _hoisted_1 = {
 var _hoisted_2 = {
   "class": "col-auto footer-item text-center mb-3"
 };
-
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"col-auto footer-item text-center mb-3\"><a href=\"#\" target=\"_blank\">Twitter</a></div><div class=\"col-auto footer-item text-center mb-3\"><a href=\"#\" target=\"_blank\">Github</a></div><div class=\"col-auto footer-item text-center mb-3\"><a href=\"#\">Email</a></div>", 3);
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, " © " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(new Date().getFullYear()) + " POS-CFX ", 1
   /* TEXT */
-  ), _hoisted_3]);
+  )]);
 }
 
 /***/ }),
@@ -42221,19 +42235,23 @@ var _hoisted_35 = {
 };
 var _hoisted_36 = {
   key: 0,
-  "class": "alert alert-success mt-3"
+  "class": "alert alert-danger mt-3"
 };
 var _hoisted_37 = {
+  key: 1,
+  "class": "alert alert-success mt-3"
+};
+var _hoisted_38 = {
   "class": "d-flex"
 };
 
-var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "bi-check-circle-fill text-success fs-2"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_39 = {
+var _hoisted_40 = {
   "class": "ps-3"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -42345,7 +42363,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , _hoisted_34)], 8
   /* PROPS */
-  , _hoisted_18), $data.success ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [_hoisted_38, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('registration_instruction_sent')), 1
+  , _hoisted_18), $data.errorMessage ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.errorMessage), 1
+  /* TEXT */
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.success ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [_hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('registration_instruction_sent')), 1
   /* TEXT */
   )])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 32
   /* HYDRATE_EVENTS */
@@ -42601,6 +42621,8 @@ __webpack_require__.r(__webpack_exports__);
   repeat_password: "Repeat password",
   passwords_mismatch: "Passwords do not match",
   registration_instruction_sent: "An instruction to complete the registration has been sent to the specified email address",
+  email_already_registered: "This email is already registered",
+  registration_error: "Registration error",
   password_reset: "Password reset",
   new_password: "New password",
   enter_registered_email: "Enter the email that your account is registered to",
@@ -42745,6 +42767,8 @@ __webpack_require__.r(__webpack_exports__);
   repeat_password: "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u0435 \u043F\u0430\u0440\u043E\u043B\u044C",
   passwords_mismatch: "\u041F\u0430\u0440\u043E\u043B\u0438 \u043D\u0435 \u0441\u043E\u0432\u043F\u0430\u0434\u0430\u044E\u0442",
   registration_instruction_sent: "\u041D\u0430 \u0443\u043A\u0430\u0437\u0430\u043D\u043D\u044B\u0439 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u044B\u0439 \u0430\u0434\u0440\u0435\u0441 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0430 \u0438\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u044F \u0434\u043B\u044F \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u0438\u044F \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438",
+  email_already_registered: "\u0414\u0430\u043D\u043D\u044B\u0439 email \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u043D",
+  registration_error: "\u041E\u0448\u0438\u0431\u043A\u0430 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438",
   password_reset: "\u0421\u0431\u0440\u043E\u0441 \u043F\u0430\u0440\u043E\u043B\u044F",
   new_password: "\u041D\u043E\u0432\u044B\u0439 \u043F\u0430\u0440\u043E\u043B\u044C",
   save_new_password: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u043D\u043E\u0432\u044B\u0439 \u043F\u0430\u0440\u043E\u043B\u044C",

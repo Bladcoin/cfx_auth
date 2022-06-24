@@ -97,6 +97,9 @@
 								<span class="spinner spinner-border spinner-border-sm" v-if="isLoading"></span>
 							</button>
 						</fieldset>
+						<div class="alert alert-danger mt-3" v-if="errorMessage">
+							{{ errorMessage }}
+						</div>
 						<div class="alert alert-success mt-3" v-if="success">
 							<div class="d-flex">
 								<i class="bi-check-circle-fill text-success fs-2"></i>
@@ -132,7 +135,7 @@ export default {
 			isLoading: false,
 			submitted: false,
 			success: false,
-			errorMessages: null,
+			errorMessage: '',
 			form: {
 				name: '',
 				email: '',
@@ -188,18 +191,31 @@ export default {
 				this.isLoading = false
 				this.success = true
 			} catch (e) {
+				if (e?.response?.data?.message?.errorInfo[1] === 1062) {
+					this.errorMessage = this.$t('email_already_registered')
+				} else {
+					this.errorMessage = this.$t('registration_error')
+				}
 				this.isLoading = false
 			}
 		},
 		reset() {
 			this.submitted = false
 			this.success = false
-			this.errorMessages = null
+			this.errorMessage = ''
 			this.form.name = ''
 			this.form.email = ''
 			this.form.password = ''
 			this.form.repeatPassword = ''
 		},
-	}
+	},
+	watch: {
+		form: {
+			handler() {
+				this.errorMessage = ''
+			},
+			deep: true
+		},
+	},
 }
 </script>

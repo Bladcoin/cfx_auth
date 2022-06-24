@@ -81,6 +81,8 @@ export default {
 	repeat_password: `Повторите пароль`,
 	passwords_mismatch: `Пароли не совпадают`,
 	registration_instruction_sent: `На указанный электронный адрес отправлена инструкция для завершения регистрации`,
+	email_already_registered: `Данный email уже зарегистрирован`,
+	registration_error: `Ошибка регистрации`,
 	password_reset: `Сброс пароля`,
 	new_password: `Новый пароль`,
 	save_new_password: `Сохранить новый пароль`,
