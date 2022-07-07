@@ -1153,6 +1153,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 512
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.stakeCount]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
     "class": "position-relative btn btn-primary",
     onClick: _cache[1] || (_cache[1] = function () {
       return $options.stake && $options.stake.apply($options, arguments);
@@ -1167,6 +1168,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('my_rewards')), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
     "class": "position-relative btn btn-primary mt-2",
     onClick: _cache[2] || (_cache[2] = function () {
       return $options.claim && $options.claim.apply($options, arguments);
@@ -1195,6 +1197,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 512
   /* NEED_PATCH */
   ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.unstakeCount]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
     "class": "position-relative btn btn-primary",
     onClick: _cache[4] || (_cache[4] = function () {
       return $options.unstake && $options.unstake.apply($options, arguments);
@@ -1207,6 +1210,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$t('withdrawable')), 1
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
     "class": "position-relative btn btn-primary mt-2",
     onClick: _cache[5] || (_cache[5] = function () {
       return $options.withdraw && $options.withdraw.apply($options, arguments);

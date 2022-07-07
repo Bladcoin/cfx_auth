@@ -14,6 +14,7 @@
 							</div>
 							<div class="col-md-5 col-12 mb-2">
 								<button
+									type="button"
 									class="position-relative btn btn-primary"
 									@click="stake"
 									:disabled="!userInfo.connected || stakeLoading"
@@ -32,6 +33,7 @@
 							<span class="intro-title">{{ $t('my_rewards') }}</span>
 						</div>
 						<button
+							type="button"
 							class="position-relative btn btn-primary mt-2"
 							@click="claim"
 							:disabled="!userInfo.connected || claimLoading"
@@ -56,6 +58,7 @@
 							</div>
 							<div class="col-md-5 col-12">
 								<button
+									type="button"
 									class="position-relative btn btn-primary"
 									@click="unstake"
 									:disabled="!userInfo.connected || unstakeLoading"
@@ -71,6 +74,7 @@
 							<span class="intro-title">{{ $t('withdrawable') }}</span>
 						</div>
 						<button
+							type="button"
 							class="position-relative btn btn-primary mt-2"
 							@click="withdraw"
 							:disabled="!userInfo.connected || withdrawLoading"
